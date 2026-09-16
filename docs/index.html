@@ -2,12 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0F1115">
+  <meta name="color-scheme" content="dark">
   <title>AppsPerms — Android AppOps & Permissions Manager | Built in XyVerse</title>
   <meta name="description" content="AppsPerms: Pengelola izin tersembunyi (AppOps) modern & profesional untuk Android via Shizuku tanpa root. 100% Bebas Malware, 0 Izin Internet, Terverifikasi Clean di VirusTotal.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23171A21' stroke='%232C313B' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23FFB020'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%231A1206'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%231A1206'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
-    /* APK Exact Color Palette */
+    /* ===== APK Exact Color Palette ===== */
     :root {
       --bg: #0F1115;
       --surface: #171A21;
@@ -27,118 +29,219 @@
       --ignored: #6BA8FF;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --nav-h: 60px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    /* ===== Reset & Base (mobile-first) ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      /* jangkar tidak ketutup nav sticky */
+      scroll-padding-top: calc(var(--nav-h) + 12px);
+      -webkit-text-size-adjust: 100%;
+      /* safety net: tidak ada scroll horizontal (clip tidak merusak position: sticky) */
+      overflow-x: clip;
+    }
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font);
+      font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 60px;
+      overflow-x: clip;
+      min-height: 100vh;
+    }
+    img, svg { max-width: 100%; }
+    img { display: block; height: auto; }
+    a { color: inherit; }
+    code { font-family: var(--mono); font-size: 0.92em; }
+
+    :focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
-    /* Container */
     .container {
+      width: 100%;
       max-width: 980px;
-      margin: 0 auto;
-      padding: 0 20px;
+      margin-inline: auto;
+      padding-inline: 16px;
+    }
+    @media (min-width: 720px) {
+      .container { padding-inline: 20px; }
     }
 
-    /* Clean Minimalist Nav */
+    /* ===== Nav (sticky) ===== */
     nav {
-      height: 64px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid var(--outline);
-      background: rgba(15, 17, 21, 0.9);
-      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--outline);
+      background: rgba(15, 17, 21, 0.94);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
     }
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       width: 100%;
+      height: 100%;
     }
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       text-decoration: none;
       color: var(--text);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
+      min-width: 0;
+      white-space: nowrap;
     }
+    .nav-brand svg { flex: 0 0 auto; }
     .nav-tag {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       background: var(--surface-2);
       border: 1px solid var(--outline);
       color: var(--brand);
       padding: 2px 8px;
       border-radius: 6px;
       font-weight: 600;
+      white-space: nowrap;
     }
-    .nav-links {
-      display: flex;
-      gap: 20px;
+
+    /* Hamburger (mobile only) */
+    .nav-toggle {
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 11px;
+      color: var(--text);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
+    .nav-toggle:active { background: var(--surface-2); }
+    .nav-toggle .icon-close { display: none; }
+    .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+    .nav-toggle[aria-expanded="true"] .icon-burger { display: none; }
+
+    /* Drawer / list link */
+    .nav-links {
+      position: absolute;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--surface);
+      border-bottom: 1px solid var(--outline);
+      box-shadow: 0 20px 34px rgba(0, 0, 0, 0.55);
+    }
+    .nav-links.open { display: flex; }
     .nav-link {
+      display: flex;
+      align-items: center;
+      min-height: 46px;
+      padding: 10px 10px;
+      border-radius: 10px;
       color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
+      font-size: 0.95rem;
+      transition: color 0.2s, background 0.2s;
     }
-    .nav-link:hover { color: var(--text); }
+    .nav-link:active, .nav-link:hover { color: var(--text); background: var(--surface-2); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 11px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #1A1206;
+      background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
+      border: 1px solid #FFA500;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 3px 0 #9E6400;
+    }
 
-    /* Centered Hero — Ala AppOps by Rikka */
+    @media (min-width: 880px) {
+      .nav-toggle, .nav-cta { display: none; }
+      .nav-links {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 22px;
+        padding: 0;
+        background: none;
+        border: 0;
+        box-shadow: none;
+      }
+      .nav-link { min-height: 0; padding: 6px 0; border-radius: 0; font-size: 0.9rem; }
+      .nav-link:active, .nav-link:hover { background: none; }
+    }
+
+    /* ===== Hero ===== */
     .hero {
-      padding: 56px 0 40px;
+      padding: 28px 0 24px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-    .app-logo-wrap {
-      margin-bottom: 24px;
-      position: relative;
-    }
+    .app-logo-wrap { margin-bottom: 18px; }
     .app-logo {
-      width: 104px;
-      height: 104px;
-      border-radius: 26px;
+      width: 84px;
+      height: 84px;
+      border-radius: 22px;
       background: var(--surface);
       border: 2px solid var(--outline);
       display: grid;
       place-items: center;
-      box-shadow: 
+      box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.1),
         0 12px 30px rgba(0, 0, 0, 0.6),
         0 0 20px rgba(255, 176, 32, 0.15);
       transition: transform 0.2s;
     }
-    .app-logo:hover {
-      transform: scale(1.03);
-    }
+    .app-logo svg { width: 46px; height: 46px; }
     .hero-title {
-      font-size: clamp(2.4rem, 5vw, 3.4rem);
+      font-size: clamp(1.95rem, 8.5vw, 3.4rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 12px;
+      line-height: 1.12;
+      margin-bottom: 10px;
       color: #FFFFFF;
+      word-break: break-word;
     }
     .hero-tagline {
-      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      font-size: clamp(0.98rem, 3.6vw, 1.25rem);
       color: var(--text-dim);
       max-width: 620px;
-      margin: 0 auto 20px;
+      margin: 0 auto 16px;
       font-weight: 400;
       line-height: 1.5;
+      text-wrap: balance;
     }
     .xyverse-badge {
       display: inline-flex;
@@ -149,149 +252,178 @@
       color: var(--text-dim);
       padding: 5px 14px;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 30px;
+      margin-bottom: 22px;
+      max-width: 100%;
     }
     .xyverse-badge span.dot {
       width: 7px;
       height: 7px;
+      flex: 0 0 auto;
       background: var(--brand);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--brand);
     }
 
-    /* Cloudflare 3D Glossy Button Style */
+    /* ===== Buttons ===== */
     .btn-group {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 34px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      margin-inline: auto;
+      margin-bottom: 20px;
     }
-    .btn-cf-glossy {
+    .btn-cf-glossy,
+    .btn-dark-glossy {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 14px 34px;
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 20px;
       font-family: inherit;
-      font-size: 1.05rem;
       font-weight: 700;
-      color: #1A1206;
       text-decoration: none;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0.15s ease-in-out;
+    }
+    .btn-cf-glossy {
+      font-size: 1rem;
+      color: #1A1206;
       background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
       border: 1px solid #FFA500;
-      border-radius: 12px;
-      box-shadow: 
+      box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.65),
         inset 0 -1px 0 rgba(0, 0, 0, 0.15),
         0 4px 0 #9E6400,
         0 8px 24px rgba(255, 176, 32, 0.35);
-      transition: all 0.15s ease-in-out;
-      cursor: pointer;
-      user-select: none;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
     }
-    .btn-cf-glossy:hover {
-      background: linear-gradient(180deg, #FFD273 0%, #FFB833 40%, #F09E0A 100%);
-      box-shadow: 
-        inset 0 1px 0 rgba(255, 255, 255, 0.75),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-        0 4px 0 #9E6400,
-        0 10px 28px rgba(255, 176, 32, 0.45);
-      transform: translateY(-1px);
-    }
-    .btn-cf-glossy:active {
-      transform: translateY(3px);
-      box-shadow: 
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 1px 0 #9E6400,
-        0 3px 8px rgba(255, 176, 32, 0.25);
-    }
-
     .btn-dark-glossy {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      padding: 13px 24px;
-      font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--text);
-      text-decoration: none;
       background: linear-gradient(180deg, #2A303C 0%, #1F242D 100%);
       border: 1px solid var(--outline-light);
-      border-radius: 12px;
-      box-shadow: 
+      box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.15),
         0 3px 0 #13171D,
         0 6px 16px rgba(0, 0, 0, 0.4);
-      transition: all 0.15s ease-in-out;
-      cursor: pointer;
     }
-    .btn-dark-glossy:hover {
-      background: linear-gradient(180deg, #323A48 0%, #252B36 100%);
-      border-color: #4B5565;
-      transform: translateY(-1px);
+    .btn-cf-glossy svg, .btn-dark-glossy svg { flex: 0 0 auto; }
+    .btn-cf-glossy:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 0 #9E6400, 0 3px 8px rgba(255,176,32,0.25); }
+    .btn-dark-glossy:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 0 #13171D, 0 2px 6px rgba(0,0,0,0.3); }
+    @media (hover: hover) {
+      .app-logo:hover { transform: scale(1.03); }
+      .btn-cf-glossy:hover {
+        background: linear-gradient(180deg, #FFD273 0%, #FFB833 40%, #F09E0A 100%);
+        transform: translateY(-1px);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -1px 0 rgba(0,0,0,0.15), 0 4px 0 #9E6400, 0 10px 28px rgba(255,176,32,0.45);
+      }
+      .btn-dark-glossy:hover {
+        background: linear-gradient(180deg, #323A48 0%, #252B36 100%);
+        border-color: #4B5565;
+        transform: translateY(-1px);
+      }
     }
-    .btn-dark-glossy:active {
-      transform: translateY(2px);
-      box-shadow: 
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 1px 0 #13171D,
-        0 2px 6px rgba(0, 0, 0, 0.3);
+    /* State saat unduhan disiapkan */
+    .btn-cf-glossy.is-loading, .btn-dark-glossy.is-loading {
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .btn-cf-glossy.is-loading::after {
+      content: "";
+      width: 16px; height: 16px;
+      border: 2px solid rgba(26,18,6,0.35);
+      border-top-color: #1A1206;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (min-width: 560px) {
+      .btn-group {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        max-width: 100%;
+      }
+      .btn-cf-glossy, .btn-dark-glossy { width: auto; }
+      .btn-cf-glossy { padding: 14px 32px; font-size: 1.05rem; }
+      .btn-dark-glossy { padding: 13px 22px; font-size: 0.95rem; }
     }
 
-    /* Trust Pills */
+    .req-line {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 10px;
+    }
+    .req-line span { white-space: nowrap; }
+    .dl-hint {
+      display: none;
+      font-size: 0.8rem;
+      color: var(--brand);
+      margin: -10px 0 16px;
+    }
+    .dl-hint.show { display: block; }
+
+    /* ===== Trust Pills ===== */
     .pill-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
+      width: 100%;
     }
     .pill {
       background: var(--surface);
       border: 1px solid var(--outline);
       color: var(--text-dim);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      padding: 5px 12px;
+      padding: 6px 12px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       gap: 6px;
+      line-height: 1.35;
+      text-align: left;
     }
-    .pill svg { color: var(--ok); }
+    .pill svg { color: var(--ok); flex: 0 0 auto; }
 
-    /* Section Styling */
-    section {
-      padding: 42px 0;
-    }
-    .sec-head {
-      margin-bottom: 24px;
-    }
+    /* ===== Sections ===== */
+    section { padding: 26px 0; }
+    .sec-head { margin-bottom: 18px; }
     .sec-title {
-      font-size: 1.45rem;
+      font-size: clamp(1.18rem, 5vw, 1.45rem);
       font-weight: 700;
       color: #FFFFFF;
       margin-bottom: 6px;
       letter-spacing: -0.01em;
+      line-height: 1.3;
     }
-    .sec-sub {
-      color: var(--text-dim);
-      font-size: 0.95rem;
-    }
+    .sec-sub { color: var(--text-dim); font-size: 0.92rem; }
 
-    /* Cards */
     .card {
       background: var(--surface);
       border: 1px solid var(--outline);
       border-radius: 16px;
-      padding: 24px;
+      padding: 18px;
       margin-bottom: 20px;
     }
 
@@ -303,139 +435,147 @@
       border-right: 1px solid var(--outline);
       border-bottom: 1px solid var(--outline);
       border-radius: 12px;
-      padding: 20px 24px;
+      padding: 18px;
     }
     .note-playstore h3 {
-      font-size: 1.1rem;
+      font-size: 1.03rem;
       font-weight: 700;
       color: #FFFFFF;
       margin-bottom: 8px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
+      line-height: 1.35;
     }
-    .note-playstore p {
-      color: var(--text-dim);
-      font-size: 0.92rem;
-      line-height: 1.6;
-    }
+    .note-playstore h3 svg { flex: 0 0 auto; margin-top: 3px; }
+    .note-playstore p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.62; }
     .note-playstore strong { color: var(--text); }
 
-    /* VirusTotal Scan Section */
-    .vt-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    /* ===== VirusTotal ===== */
+    .vt-wrap { display: flex; flex-direction: column; gap: 16px; }
     .vt-header-bar {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 14px;
       background: var(--surface-2);
       border: 1px solid var(--outline);
       border-radius: 12px;
-      padding: 14px 20px;
+      padding: 16px;
     }
-    .vt-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .vt-status-pill { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .score-badge {
       background: #0a2e1d;
       color: var(--ok);
       border: 1.5px solid var(--ok);
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       padding: 4px 12px;
       border-radius: 8px;
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
+    .vt-status-text { min-width: 0; }
+    .vt-status-text strong { color: #FFFFFF; font-size: 0.93rem; display: block; }
+    .vt-status-text .vendors { font-size: 0.78rem; color: var(--ok); }
+    .vt-header-bar .btn-dark-glossy { width: 100%; }
+
     .vt-img-box {
       border: 1px solid var(--outline);
       border-radius: 14px;
       overflow: hidden;
       background: #0F1115;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      position: relative;
     }
-    .vt-img-box img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .vt-img-box img { width: 100%; height: auto; }
     .vt-caption {
-      padding: 12px 18px;
+      padding: 12px 16px;
       background: var(--surface-2);
       border-top: 1px solid var(--outline);
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       color: var(--text-dim);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 3px;
+      word-break: break-word;
     }
 
-    /* Hash Table */
+    /* Hash list — jadi kartu bertumpuk di layar kecil */
     .hash-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.88rem;
-      margin-top: 8px;
+      font-size: 0.86rem;
+      display: block;
     }
-    .hash-table td {
-      padding: 10px 14px;
+    .hash-table tbody, .hash-table tr, .hash-table td { display: block; width: 100%; }
+    .hash-table tr {
+      padding: 12px 0;
       border-bottom: 1px solid var(--outline);
     }
-    .hash-table tr:last-child td { border-bottom: none; }
+    .hash-table tr:last-child { border-bottom: none; padding-bottom: 0; }
+    .hash-table tr:first-child { padding-top: 0; }
+    .hash-table td { padding: 0; border: 0; }
     .hash-table td.label {
       color: var(--text-dim);
       font-weight: 600;
-      width: 160px;
+      font-size: 0.76rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
     }
     .hash-table td.code {
       font-family: var(--mono);
       color: var(--brand);
+      font-size: 0.82rem;
+      line-height: 1.55;
       word-break: break-all;
+      overflow-wrap: anywhere;
+    }
+    .hash-table td.ok { color: var(--ok); font-weight: 600; font-size: 0.86rem; }
+
+    @media (min-width: 640px) {
+      .vt-header-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 14px 20px; }
+      .vt-header-bar .btn-dark-glossy { width: auto; padding: 8px 16px; font-size: 0.82rem; }
+      .vt-caption { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 18px; }
+      .hash-table { display: table; }
+      .hash-table tbody { display: table-row-group; }
+      .hash-table tr { display: table-row; padding: 0; border-bottom: 1px solid var(--outline); }
+      .hash-table tr:last-child { border-bottom: none; }
+      .hash-table td { display: table-cell; padding: 10px 14px; }
+      .hash-table td.label { width: 170px; margin: 0; text-transform: none; font-size: 0.88rem; letter-spacing: 0; }
+      .hash-table td.code { font-size: 0.86rem; }
     }
 
-    /* Features Grid (Professional AppOps) */
+    /* ===== Features ===== */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
     .feat-card {
       background: var(--surface);
       border: 1px solid var(--outline);
       border-radius: 14px;
-      padding: 20px;
+      padding: 18px;
       transition: border-color 0.2s;
     }
-    .feat-card:hover {
-      border-color: var(--outline-light);
-    }
+    .feat-card:hover { border-color: var(--outline-light); }
     .feat-card-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #FFFFFF;
       margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
+      line-height: 1.35;
     }
-    .feat-card-desc {
-      color: var(--text-dim);
-      font-size: 0.88rem;
-      line-height: 1.55;
-    }
+    .feat-card-title svg { flex: 0 0 auto; }
+    .feat-card-desc { color: var(--text-dim); font-size: 0.87rem; line-height: 1.58; }
+    .feat-card-desc code { color: var(--brand); }
 
-    /* Setup Steps */
-    .steps-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
+    /* ===== Steps ===== */
+    .steps-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
     .step-item {
       background: var(--surface);
       border: 1px solid var(--outline);
@@ -444,7 +584,7 @@
     }
     .step-badge {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       background: var(--surface-2);
       border: 1px solid var(--outline);
@@ -453,46 +593,60 @@
       border-radius: 6px;
       margin-bottom: 10px;
     }
-    .step-item h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 6px;
-    }
-    .step-item p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      line-height: 1.5;
+    .step-item h4 { font-size: 0.98rem; font-weight: 700; color: #FFFFFF; margin-bottom: 6px; }
+    .step-item p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.55; }
+    .step-item p code { color: var(--brand); word-break: break-all; }
+
+    @media (min-width: 700px) {
+      section { padding: 42px 0; }
+      .sec-head { margin-bottom: 24px; }
+      .card { padding: 24px; }
+      .note-playstore { padding: 20px 24px; }
+      .features-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+      .steps-list { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+      .hero { padding: 56px 0 40px; }
+      .app-logo { width: 104px; height: 104px; border-radius: 26px; }
+      .app-logo svg { width: 60px; height: 60px; }
+      .app-logo-wrap { margin-bottom: 24px; }
+      .xyverse-badge { margin-bottom: 30px; }
+      .btn-group { margin-bottom: 28px; }
+      .req-line { margin-bottom: 30px; }
     }
 
-    /* Footer */
+    /* ===== Footer ===== */
     footer {
       border-top: 1px solid var(--outline);
-      padding-top: 32px;
-      margin-top: 50px;
+      padding-top: 26px;
+      margin-top: 34px;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
     }
-    footer a {
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.2s;
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+    footer a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+    footer a:hover, footer a:active { color: var(--text); }
+
+    @media (min-width: 700px) {
+      footer { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 32px; margin-top: 50px; }
     }
-    footer a:hover { color: var(--text); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Minimal Nav -->
+  <!-- Nav -->
   <nav>
     <div class="container nav-inner">
       <a href="#" class="nav-brand">
-        <svg width="22" height="22" viewBox="0 0 108 108">
+        <svg width="22" height="22" viewBox="0 0 108 108" aria-hidden="true">
           <rect width="108" height="108" rx="24" fill="#171A21" stroke="#2C313B" stroke-width="4"/>
           <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" fill="none" stroke="#ECEFF4" stroke-width="6"/>
           <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
@@ -501,30 +655,38 @@
         AppsPerms
         <span class="nav-tag">XyVerse</span>
       </a>
-      <div class="nav-links">
+
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="navMenu">
+        <svg class="icon-burger" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="nav-links" id="navMenu">
+        <a href="#unduh" class="nav-link">Unduh</a>
         <a href="#fitur" class="nav-link">Fitur</a>
         <a href="#keamanan" class="nav-link">Audit VirusTotal</a>
         <a href="#kenapa-bukan-playstore" class="nav-link">Play Store?</a>
         <a href="#panduan" class="nav-link">Panduan</a>
         <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+        <a href="#unduh" class="nav-cta">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Unduh APK v1.2.0
+        </a>
       </div>
     </div>
   </nav>
 
   <main class="container">
 
-    <!-- Centered Hero Ala AppOps -->
-    <header class="hero">
+    <!-- Hero -->
+    <header class="hero" id="unduh">
       <div class="app-logo-wrap">
         <div class="app-logo">
-          <svg width="60" height="60" viewBox="0 0 108 108">
-            <!-- phone body -->
+          <svg viewBox="0 0 108 108" aria-hidden="true">
             <path d="M40,24h28a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-28a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" fill="none" stroke="#ECEFF4" stroke-width="5" />
-            <!-- overlay window -->
             <rect x="48" y="44" width="34" height="26" rx="6" fill="#FFB020" />
             <rect x="53" y="50" width="22" height="4" rx="2" fill="#1A1206" />
             <rect x="53" y="58" width="14" height="4" rx="2" fill="#1A1206" />
-            <!-- speaker line -->
             <path d="M49,31h10" stroke="#ECEFF4" stroke-width="4" stroke-linecap="round" />
           </svg>
         </div>
@@ -532,7 +694,7 @@
 
       <h1 class="hero-title">AppsPerms</h1>
       <p class="hero-tagline">
-        Pengelola AppOps & Izin Sistem Android Tingkat Lanjut via Shizuku tanpa Root.
+        Pengelola AppOps &amp; Izin Sistem Android Tingkat Lanjut via Shizuku tanpa Root.
       </p>
 
       <div class="xyverse-badge">
@@ -540,38 +702,43 @@
         Built in XyVerse · v1.2.0 Rilis Resmi
       </div>
 
-      <!-- Cloudflare 3D/2D Glossy Buttons -->
       <div class="btn-group">
-        <a href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-release.apk" class="btn-cf-glossy">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Release APK (1.82 MB)
+        <a id="btnRelease" href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-release.apk"
+           class="btn-cf-glossy" data-download="release" data-variant="release">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="dl-label">Download Release APK (1.82 MB)</span>
         </a>
-        <a href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-debug.apk" class="btn-dark-glossy">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Debug APK (5.8 MB)
-        </a>
-        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener" class="btn-dark-glossy">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          GitHub
+        <a id="btnDebug" href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-debug.apk"
+           class="btn-dark-glossy" data-download="debug" data-variant="debug">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="dl-label">Debug APK (5.80 MB)</span>
         </a>
       </div>
 
-      <!-- Trust Pills -->
+      <p class="dl-hint" id="dlHint" role="status" aria-live="polite"></p>
+
+      <p class="req-line">
+        <span>Android 7.0+</span><span aria-hidden="true">·</span>
+        <span>1.82 MB</span><span aria-hidden="true">·</span>
+        <span>Butuh aplikasi Shizuku</span><span aria-hidden="true">·</span>
+        <span>Gratis &amp; tanpa iklan</span>
+      </p>
+
       <div class="pill-row">
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
           0/72 Clean di VirusTotal
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
           Nol Izin Internet (Privasi Mutlak)
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
           Tanpa Root Permanen (Shizuku)
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
           Optimistic UI 0ms (Anti-Lag)
         </div>
       </div>
@@ -581,13 +748,13 @@
     <section id="kenapa-bukan-playstore">
       <div class="note-playstore">
         <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           Kenapa AppsPerms Tidak Ada di Google Play Store?
         </h3>
         <p>
           Biar transparan dari awal: <strong>bukan karena aplikasi ini ada virus, malware, atau melanggar keamanan</strong>.
           Alasannya adalah <strong>keterbatasan modal untuk biaya pendaftaran akun Google Play Console ($25 USD)</strong> dan proses birokrasi verifikasi korporasi Google yang sangat rumit untuk pengembang independen.
-          Selain itu, kebijakan Google Play saat ini sangat membatasi aplikasi pengelola izin sistem/Shizuku. 
+          Selain itu, kebijakan Google Play saat ini sangat membatasi aplikasi pengelola izin sistem/Shizuku.
           Dengan distribusi langsung via GitHub Releases, <strong>AppsPerms tetap 100% gratis, bebas monopoli, tanpa iklan, dan kode sumbernya terbuka untuk diaudit siapapun.</strong>
         </p>
       </div>
@@ -596,7 +763,7 @@
     <!-- Audit Keamanan & Screenshot VirusTotal -->
     <section id="keamanan">
       <div class="sec-head">
-        <h2 class="sec-title">Audit Keamanan & Hasil Scan Antivirus</h2>
+        <h2 class="sec-title">Audit Keamanan &amp; Hasil Scan Antivirus</h2>
         <p class="sec-sub">Uji integritas file rilis APK resmi terhadap 72 antivirus industri di VirusTotal.</p>
       </div>
 
@@ -604,46 +771,46 @@
         <div class="vt-header-bar">
           <div class="vt-status-pill">
             <span class="score-badge">0 / 72</span>
-            <div>
-              <strong style="color: #FFFFFF; font-size: 0.95rem;">100% Clean · No Security Vendors Flagged This File</strong>
-              <div style="font-size: 0.8rem; color: var(--ok);">Google Play Protect, Kaspersky, BitDefender, Microsoft, ESET, Sophos — Undetected</div>
+            <div class="vt-status-text">
+              <strong>100% Clean · No Security Vendors Flagged This File</strong>
+              <div class="vendors">Google Play Protect, Kaspersky, BitDefender, Microsoft, ESET, Sophos — Undetected</div>
             </div>
           </div>
-          <a href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="btn-dark-glossy" style="padding: 8px 16px; font-size: 0.82rem;">
+          <a href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="btn-dark-glossy">
             Verifikasi di VirusTotal ↗
           </a>
         </div>
 
-        <!-- Screenshot VirusTotal Asli -->
         <div class="vt-img-box">
-          <img src="images/virustotal-report.png" alt="Screenshot Hasil Scan VirusTotal AppsPerms 0/72 Clean">
+          <img src="images/virustotal-report.png" width="1400" height="820" loading="lazy" decoding="async" alt="Screenshot Hasil Scan VirusTotal AppsPerms 0/72 Clean">
           <div class="vt-caption">
-            <span>Hasil scan resmi: <code>AppsPerms-1.2.0-release.apk</code></span>
+            <span>Hasil scan resmi: <code>OverlayOps-1.2.0-release.apk</code></span>
             <span>Target SDK: 34 · Signed Keystore Resmi</span>
           </div>
         </div>
 
-        <!-- Hash Verifikasi -->
-        <div class="card" style="padding: 16px 20px;">
+        <div class="card">
           <table class="hash-table">
-            <tr>
-              <td class="label">SHA-256 APK</td>
-              <td class="code">3c9fadfdd7dde6317d921762d910d80dffaf5dcdd7c946610f2e390b48b3e43b</td>
-            </tr>
-            <tr>
-              <td class="label">Sertifikat Signing</td>
-              <td class="code">82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30</td>
-            </tr>
-            <tr>
-              <td class="label">Izin Internet</td>
-              <td style="color: var(--ok); font-weight: 600;">0 (Tidak meminta android.permission.INTERNET — Data aman)</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td class="label">SHA-256 APK</td>
+                <td class="code">3c9fadfdd7dde6317d921762d910d80dffaf5dcdd7c946610f2e390b48b3e43b</td>
+              </tr>
+              <tr>
+                <td class="label">Sertifikat Signing</td>
+                <td class="code">82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30</td>
+              </tr>
+              <tr>
+                <td class="label">Izin Internet</td>
+                <td class="ok">0 (Tidak meminta android.permission.INTERNET — Data aman)</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- Fitur Lengkap AppOps (Professional) -->
+    <!-- Fitur -->
     <section id="fitur">
       <div class="sec-head">
         <h2 class="sec-title">Kemampuan Pengelolaan Izin Lengkap</h2>
@@ -653,8 +820,8 @@
       <div class="features-grid">
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Real-Time 0ms & Anti-Lag
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Real-Time 0ms &amp; Anti-Lag
           </div>
           <p class="feat-card-desc">
             Menggunakan <em>Optimistic UI State</em> dan <em>Partial Payload Diffing</em>. Pergantian izin langsung bereaksi instan tanpa jeda pemrosesan latar belakang.
@@ -663,7 +830,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Kendali Penuh 19 AppOps
           </div>
           <p class="feat-card-desc">
@@ -673,7 +840,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
             Pemisah App Sistem vs User
           </div>
           <p class="feat-card-desc">
@@ -683,7 +850,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
             Mode Ignore (Bypass Crash)
           </div>
           <p class="feat-card-desc">
@@ -693,8 +860,8 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Backup & Restore Clipboard
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Backup &amp; Restore Clipboard
           </div>
           <p class="feat-card-desc">
             Ekspor seluruh konfigurasi izin ke format teks sederhana yang dapat disalin ke clipboard dan dipulihkan kembali sewaktu-waktu.
@@ -703,7 +870,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             Arsitektur Shell-First
           </div>
           <p class="feat-card-desc">
@@ -730,7 +897,7 @@
         <div class="step-item">
           <span class="step-badge">Langkah 2</span>
           <h4>Pasang AppsPerms</h4>
-          <p>Download file <code>AppsPerms-1.2.0-release.apk</code> di atas. Pasang di perangkatmu dan buka aplikasinya.</p>
+          <p>Download file <code>OverlayOps-1.2.0-release.apk</code> di atas (nama file mengikuti nama repo/app: <strong>OverlayOps</strong>, brand web: AppsPerms). Pasang di perangkatmu dan buka aplikasinya.</p>
         </div>
 
         <div class="step-item">
@@ -746,7 +913,7 @@
       <div>
         <strong>AppsPerms</strong> · Built in <strong>XyVerse</strong> by <strong>Xykal</strong> (@xykalnotkel).
       </div>
-      <div style="display: flex; gap: 16px;">
+      <div class="footer-links">
         <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener">GitHub Repo</a>
         <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener">Semua Rilis</a>
         <a href="#keamanan">Hasil VirusTotal</a>
@@ -754,6 +921,88 @@
     </footer>
 
   </main>
+
+  <script>
+    /* ===== Menu mobile ===== */
+    (function () {
+      var toggle = document.getElementById('navToggle');
+      var menu = document.getElementById('navMenu');
+      if (!toggle || !menu) return;
+
+      function setOpen(open) {
+        menu.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? 'Tutup menu navigasi' : 'Buka menu navigasi');
+      }
+
+      toggle.addEventListener('click', function () {
+        setOpen(!menu.classList.contains('open'));
+      });
+      // tutup setelah pilih link
+      menu.addEventListener('click', function (e) {
+        if (e.target.closest('a')) setOpen(false);
+      });
+      // tutup saat Escape / klik di luar / balik ke desktop
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+      });
+      document.addEventListener('click', function (e) {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) setOpen(false);
+      });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 880) setOpen(false);
+      });
+    })();
+
+    /* ===== Download → halaman Terima kasih ===== */
+    (function () {
+      var VERSION = '1.2.0';
+      var hint = document.getElementById('dlHint');
+
+      function go(id) {
+        var a = document.getElementById(id);
+        if (!a) return;
+        var url = a.getAttribute('href');
+        var variant = a.getAttribute('data-variant') || 'release';
+        var label = a.querySelector('.dl-label');
+        var original = label ? label.textContent : '';
+
+        // 1) mulai unduhan TANPA meninggalkan halaman (iframe tersembunyi,
+        //    GitHub mengirim Content-Disposition: attachment)
+        try {
+          var frame = document.createElement('iframe');
+          frame.style.cssText = 'display:none;width:0;height:0;border:0';
+          frame.setAttribute('aria-hidden', 'true');
+          frame.src = url;
+          document.body.appendChild(frame);
+        } catch (err) { /* lanjut saja, ada tombol unduh ulang di halaman terima kasih */ }
+
+        // 2) umpan balik di tombol
+        a.classList.add('is-loading');
+        if (label) label.textContent = 'Menyiapkan unduhan…';
+        if (hint) {
+          hint.textContent = 'Unduhan dimulai — membuka halaman terima kasih…';
+          hint.classList.add('show');
+        }
+
+        // 3) pindah ke halaman terima kasih
+        setTimeout(function () {
+          window.location.assign('thanks.html?v=' + encodeURIComponent(VERSION) + '&var=' + encodeURIComponent(variant) + '&auto=1');
+        }, 650);
+
+        // jaring pengaman: kalau navigasi dibatalkan, pulihkan tombol
+        setTimeout(function () {
+          a.classList.remove('is-loading');
+          if (label) label.textContent = original;
+        }, 4000);
+      }
+
+      var release = document.getElementById('btnRelease');
+      var debug = document.getElementById('btnDebug');
+      if (release) release.addEventListener('click', function (e) { e.preventDefault(); go('btnRelease'); });
+      if (debug) debug.addEventListener('click', function (e) { e.preventDefault(); go('btnDebug'); });
+    })();
+  </script>
 
 </body>
 </html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0F1115">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <title>Terima kasih sudah download! — AppsPerms | Built in XyVerse</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23171A21' stroke='%232C313B' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23FFB020'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%231A1206'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%231A1206'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0F1115;
+      --surface: #171A21;
+      --surface-2: #1F232C;
+      --surface-3: #282E3A;
+      --outline: #2C313B;
+      --outline-light: #3A4250;
+      --brand: #FFB020;
+      --text: #ECEFF4;
+      --text-dim: #9BA3AF;
+      --text-muted: #6B7280;
+      --ok: #3DDC84;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 50% -10%, rgba(255, 176, 32, 0.10), transparent 55%),
+        radial-gradient(circle at 10% 110%, rgba(61, 220, 132, 0.06), transparent 45%);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+    img, svg { max-width: 100%; }
+    a { color: inherit; }
+    code { font-family: var(--mono); }
+    :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+      margin-inline: auto;
+      padding-inline: 16px;
+    }
+
+    header.topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 0;
+      width: 100%;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .brand svg { flex: 0 0 auto; }
+    .topbar-link {
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      border: 1px solid var(--outline);
+      background: var(--surface);
+      padding: 8px 13px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .topbar-link:hover { color: var(--text); border-color: var(--outline-light); }
+
+    main { flex: 1 0 auto; width: 100%; padding-bottom: 30px; }
+
+    /* ===== Success badge ===== */
+    .success-badge {
+      width: 86px;
+      height: 86px;
+      margin: 14px auto 20px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 30%, #0f3b26, #0a2e1d);
+      border: 2px solid var(--ok);
+      box-shadow: 0 0 0 8px rgba(61, 220, 132, 0.08), 0 14px 34px rgba(0, 0, 0, 0.5);
+      animation: pop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+    }
+    .success-badge svg { width: 42px; height: 42px; }
+    .success-badge svg path {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: draw 0.5s 0.25s ease-out forwards;
+    }
+    @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    .hero-text { text-align: center; }
+    .hero-text h1 {
+      font-size: clamp(1.65rem, 7.5vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+      color: #FFFFFF;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+    .hero-text h1 .grad {
+      background: linear-gradient(180deg, #FFD273 0%, #FFB020 60%, #E69500 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--brand);
+    }
+    .hero-text p {
+      color: var(--text-dim);
+      font-size: clamp(0.94rem, 3.6vw, 1.05rem);
+      max-width: 560px;
+      margin: 0 auto 18px;
+      line-height: 1.6;
+    }
+    .hero-text p strong { color: var(--text); }
+
+    /* ===== Progress / status card ===== */
+    .dl-card {
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 6px 0 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+    .dl-body { flex: 1 1 auto; min-width: 0; }
+    .dl-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px 10px;
+    }
+    .spinner {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 auto;
+      border: 3px solid var(--surface-3);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+    .spinner.done { border-color: var(--ok); border-top-color: var(--ok); animation: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .dl-meta .title { font-weight: 700; font-size: 0.96rem; color: #FFFFFF; }
+    .dl-meta .sub { font-size: 0.82rem; color: var(--text-dim); word-break: break-word; }
+    .dl-card .variant-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--brand);
+      background: #3A2C0C;
+      border: 1px solid #6b5000;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    /* progress bar (indeterminate) */
+    .bar {
+      height: 4px;
+      width: 100%;
+      background: var(--surface-3);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 40%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--brand), transparent);
+      animation: slide 1.3s ease-in-out infinite;
+    }
+    .bar.stop span { animation: none; width: 100%; background: var(--ok); }
+    @keyframes slide { 0% { transform: translateX(-110%); } 100% { transform: translateX(320%); } }
+
+    /* ===== Buttons ===== */
+    .btn-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 20px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.96rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0.15s ease-in-out;
+    }
+    .btn-primary {
+      color: #1A1206;
+      background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
+      border-color: #FFA500;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 4px 0 #9E6400, 0 8px 24px rgba(255, 176, 32, 0.3);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    .btn-primary:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 0 #9E6400; }
+    .btn-ghost {
+      color: var(--text);
+      background: linear-gradient(180deg, #2A303C 0%, #1F242D 100%);
+      border-color: var(--outline-light);
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 3px 0 #13171D;
+    }
+    .btn-ghost:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 0 #13171D; }
+    .btn svg { flex: 0 0 auto; }
+
+    @media (hover: hover) {
+      .btn-primary:hover { background: linear-gradient(180deg, #FFD273 0%, #FFB833 40%, #F09E0A 100%); transform: translateY(-1px); }
+      .btn-ghost:hover { background: linear-gradient(180deg, #323A48 0%, #252B36 100%); border-color: #4B5565; transform: translateY(-1px); }
+    }
+    @media (min-width: 520px) {
+      .btn-row { flex-direction: row; }
+      .btn { width: auto; flex: 1 1 0; }
+    }
+
+    /* ===== Cards / steps ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.35;
+    }
+    .card h2 svg { flex: 0 0 auto; }
+
+    ol.steps { list-style: none; counter-reset: s; display: grid; gap: 12px; }
+    ol.steps li {
+      counter-increment: s;
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+    /* konten dibungkus agar ::before (nomor) & teks = tepat 2 grid item */
+    ol.steps li .t { min-width: 0; }
+    ol.steps li::before {
+      content: counter(s);
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 0.78rem;
+      font-family: var(--mono);
+    }
+    ol.steps li strong { color: var(--text); }
+    ol.steps li code { color: var(--brand); font-size: 0.82em; word-break: break-all; }
+
+    .warn-box {
+      border-left: 4px solid var(--brand);
+      background: var(--surface-2);
+      border-top: 1px solid var(--outline);
+      border-right: 1px solid var(--outline);
+      border-bottom: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .warn-box strong { color: var(--text); }
+
+    .hash {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--brand);
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: block;
+    }
+    .hash-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      color: var(--text-dim);
+      font-size: 0.79rem;
+      padding: 5px 11px;
+      border-radius: 8px;
+    }
+    .pill svg { color: var(--ok); flex: 0 0 auto; }
+
+    footer {
+      flex: 0 0 auto;
+      border-top: 1px solid var(--outline);
+      padding: 22px 0 calc(26px + env(safe-area-inset-bottom, 0px));
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+    footer a { color: var(--text-dim); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (min-width: 620px) {
+      footer { flex-direction: row; justify-content: space-between; align-items: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .success-badge svg path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="topbar">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 108 108" aria-hidden="true">
+          <rect width="108" height="108" rx="24" fill="#171A21" stroke="#2C313B" stroke-width="4"/>
+          <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" fill="none" stroke="#ECEFF4" stroke-width="6"/>
+          <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
+          <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
+        </svg>
+        AppsPerms
+      </a>
+      <a href="index.html" class="topbar-link">← Kembali ke Beranda</a>
+    </header>
+
+    <main>
+      <!-- Success -->
+      <div class="success-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+
+      <div class="hero-text">
+        <h1>Terima kasih sudah <span class="grad">download</span>! 🎉</h1>
+        <p>
+          Kamu baru saja mengunduh <strong>AppsPerms <span id="verText">v1.2.0</span></strong> —
+          pengelola AppOps &amp; izin sistem Android. Tanpa iklan, tanpa pelacak, tanpa izin internet.
+        </p>
+      </div>
+
+      <!-- Status unduhan -->
+      <div class="dl-card">
+        <div class="spinner" id="dlSpinner" aria-hidden="true"></div>
+        <div class="dl-body dl-meta">
+          <div class="dl-head">
+            <span class="title" id="dlTitle">Menyiapkan unduhan…</span>
+            <span class="variant-tag" id="varTag">Release</span>
+          </div>
+          <div class="sub" id="dlSub">File akan tersimpan di folder <strong>Download</strong> HP kamu.</div>
+          <div class="bar" id="dlBar"><span></span></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a id="retryBtn" class="btn btn-primary" href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-release.apk">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="retryLabel">Unduh ulang APK</span>
+        </a>
+        <a class="btn btn-ghost" href="index.html#panduan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Cara Pasang &amp; Pakai
+        </a>
+      </div>
+
+      <!-- Langkah pasang -->
+      <div class="card">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 2v13"/><path d="m19 9-7 7-7-7"/><path d="M5 21h14"/></svg>
+          Langkah Pasang (30 detik)
+        </h2>
+        <ol class="steps">
+          <li><span class="t">Buka <strong>folder Download</strong> di HP kamu, lalu ketuk file <code id="fileText">OverlayOps-1.2.0-release.apk</code>.</span></li>
+          <li><span class="t">Kalau muncul peringatan, aktifkan <strong>“Izinkan dari sumber ini”</strong> / <em>Install unknown apps</em> untuk aplikasi File Manager atau browser kamu. Ini normal untuk APK di luar Play Store.</span></li>
+          <li><span class="t">Selesaikan instalasi, lalu buka <strong>AppsPerms</strong> di launcher.</span></li>
+          <li><span class="t">Jalankan <strong>Shizuku</strong> (Wireless Debugging / root), lalu tekan <strong>Minta izin</strong> di dalam AppsPerms dan pilih <em>“Izinkan selalu”</em>.</span></li>
+          <li><span class="t">Selesai! Kamu sudah bisa mengatur 19 AppOps untuk semua aplikasi secara real-time.</span></li>
+        </ol>
+      </div>
+
+      <!-- Peringatan signature -->
+      <div class="warn-box">
+        <strong>⚠️ Baru pindah dari versi Debug ke Release?</strong><br>
+        Signature build release berbeda dari debug. Uninstall dulu versi debug/lama, baru pasang versi release, lalu berikan izin Shizuku sekali lagi.
+      </div>
+
+      <!-- Verifikasi -->
+      <div class="card">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Verifikasi Keaslian File
+        </h2>
+        <span class="hash-label">SHA-256 (rata-rata hash dari GitHub &amp; rilis resmi)</span>
+        <code class="hash" id="hashText">3c9fadfdd7dde6317d921762d910d80dffaf5dcdd7c946610f2e390b48b3e43b</code>
+        <div class="pill-row" style="margin-top: 14px;">
+          <span class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            0/72 Clean VirusTotal
+          </span>
+          <span class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            0 Izin Internet
+          </span>
+          <span class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Signed Keystore XyVerse
+          </span>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div><strong>AppsPerms</strong> · Built in <strong>XyVerse</strong> by <strong>Xykal</strong></div>
+      <div class="footer-links">
+        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener">Semua Rilis</a>
+        <a href="https://xykalnotkel.github.io/OverlayOps/" target="_blank" rel="noopener">Website</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var variant = params.get('var') === 'debug' ? 'debug' : 'release';
+      var version = params.get('v') || '1.2.0';
+      var auto = params.get('auto') === '1';
+
+      var RELEASE = {
+        file: 'OverlayOps-' + version + '-release.apk',
+        url: 'https://github.com/xykalnotkel/OverlayOps/releases/download/v' + version + '/OverlayOps-' + version + '-release.apk',
+        hash: '3c9fadfdd7dde6317d921762d910d80dffaf5dcdd7c946610f2e390b48b3e43b',
+        size: '1.82 MB (1.906.280 byte)',
+        tag: 'Release · Disarankan'
+      };
+      var DEBUG = {
+        file: 'OverlayOps-' + version + '-debug.apk',
+        url: 'https://github.com/xykalnotkel/OverlayOps/releases/download/v' + version + '/OverlayOps-' + version + '-debug.apk',
+        hash: 'b31dd98600b7ee7a8639160f6102aa403a6aec7a0c811f6617a45d427be0380c',
+        size: '5.80 MB',
+        tag: 'Debug · Troubleshooting'
+      };
+      var info = variant === 'debug' ? DEBUG : RELEASE;
+
+      // Isi metadata sesuai varian
+      document.getElementById('verText').textContent = 'v' + version;
+      document.getElementById('varTag').textContent = info.tag;
+      document.getElementById('fileText').textContent = info.file;
+      document.getElementById('hashText').textContent = info.hash;
+      document.getElementById('retryBtn').setAttribute('href', info.url);
+      document.getElementById('retryLabel').textContent = 'Unduh ulang ' + (variant === 'debug' ? 'Debug APK' : 'APK');
+      document.title = 'Terima kasih sudah download! — AppsPerms v' + version;
+
+      /* ===== Pemicu unduhan ===== */
+      var spinner = document.getElementById('dlSpinner');
+      var spinnerIsDone = false;
+
+      function markStarted(text, sub) {
+        // kalau tab sudah tidak aktif (unduhan sudah jalan), tampilkan status selesai
+        var hidden = document.hidden;
+        spinner.classList.add('done');
+        document.getElementById('dlBar').classList.add('stop');
+        document.getElementById('dlTitle').textContent = text || (hidden ? 'Unduhan sedang berjalan ✓' : 'Unduhan sudah dimulai ✓');
+        document.getElementById('dlSub').innerHTML = sub || ('Ukuran ' + info.size + ' — cek notifikasi browser / folder <strong>Download</strong>.');
+      }
+
+      function startDownload() {
+        try {
+          var frame = document.createElement('iframe');
+          frame.style.cssText = 'display:none;width:0;height:0;border:0';
+          frame.setAttribute('aria-hidden', 'true');
+          frame.setAttribute('title', 'Unduhan APK');
+          frame.src = info.url;
+          document.body.appendChild(frame);
+          // bersihkan kalau sudah tidak dipakai
+          setTimeout(function () { try { frame.remove(); } catch (e) {} }, 20000);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      if (auto) {
+        // Unduhan sudah dipicu dari halaman utama — cukup tampilkan konfirmasi.
+        setTimeout(function () { markStarted(); }, 400);
+      } else {
+        // Dibuka langsung (link dibagikan / refresh) → picu unduhan di sini.
+        var ok = startDownload();
+        setTimeout(function () {
+          markStarted(ok ? undefined : 'Unduhan tidak bisa dipicu otomatis',
+            ok ? undefined : 'Tekan tombol <strong>Unduh ulang APK</strong> di bawah untuk mengunduh manual.');
+        }, 1200);
+      }
+
+      // Kalau tab ditinggalkan (browser pindah ke unduhan), pastikan status tetap benar.
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden && !spinnerIsDone) markStarted();
+      });
+    })();
+  </script>
+
+</body>
+</html>
