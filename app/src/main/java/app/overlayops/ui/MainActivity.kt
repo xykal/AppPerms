@@ -243,34 +243,43 @@ class MainActivity : AppCompatActivity() {
         popup.menu.add(0, 5, 4, "Buka Settings overlay")
         popup.menu.add(0, 6, 5, "Tentang OverlayOps")
         popup.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                1 -> viewModel.refresh()
-                2 -> MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.device_report)
-                    .setMessage(viewModel.deviceReport())
-                    .setPositiveButton("Tutup", null)
-                    .show()
-
-                3 -> copyToClipboard(viewModel.deviceReport(), "Laporan perangkat")
-                4 -> openShizukuApp()
-                5 -> startActivitySafely(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
-                6 -> MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.about_title)
-                    .setMessage(
-                        "OverlayOps — pengelola AppOps ringan, fokus ke op " +
-                            "SYSTEM_ALERT_WINDOW (Display over other apps).\n\n" +
-                            "Cara kerja: app ini bicara langsung ke IAppOpsService lewat Shizuku " +
-                            "(atau root), sama seperti `adb shell appops`. Tidak ada data yang dikirim keluar.\n\n" +
-                            "Kalau refleksi binder diblokir ROM, otomatis pindah ke perintah `appops`."
-                    )
-                    .setPositiveButton("Tutup", null)
-                    .show()
-
-                else -> false
-            }
+            handleMenu(item.itemId)
             true
         }
         popup.show()
+    }
+
+    /** Semua cabang Unit supaya `when` sebagai statement tidak memicu warning. */
+    private fun handleMenu(id: Int) = when (id) {
+        1 -> viewModel.refresh()
+        2 -> showReportDialog()
+        3 -> copyToClipboard(viewModel.deviceReport(), "Laporan perangkat")
+        4 -> openShizukuApp()
+        5 -> startActivitySafely(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
+        6 -> showAboutDialog()
+        else -> Unit
+    }
+
+    private fun showReportDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.device_report)
+            .setMessage(viewModel.deviceReport())
+            .setPositiveButton("Tutup", null)
+            .show()
+    }
+
+    private fun showAboutDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.about_title)
+            .setMessage(
+                "OverlayOps — pengelola AppOps ringan, fokus ke op " +
+                    "SYSTEM_ALERT_WINDOW (Display over other apps).\n\n" +
+                    "Cara kerja: app ini bicara langsung ke IAppOpsService lewat Shizuku " +
+                    "(atau root), sama seperti `adb shell appops`. Tidak ada data yang dikirim keluar.\n\n" +
+                    "Kalau refleksi binder diblokir ROM, otomatis pindah ke perintah `appops`."
+            )
+            .setPositiveButton("Tutup", null)
+            .show()
     }
 
     private fun showModePicker(
