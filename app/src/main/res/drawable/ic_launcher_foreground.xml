@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+
+    <!-- phone body -->
+    <path
+        android:pathData="M40,26h28a8,8 0 0 1 8,8v40a8,8 0 0 1 -8,8h-28a8,8 0 0 1 -8,-8v-40a8,8 0 0 1 8,-8z"
+        android:fillColor="#00000000"
+        android:strokeColor="#ECEFF4"
+        android:strokeWidth="3.5" />
+
+    <!-- overlay window (display over other apps) -->
+    <path
+        android:pathData="M48,46h30a5,5 0 0 1 5,5v14a5,5 0 0 1 -5,5h-30a5,5 0 0 1 -5,-5v-14a5,5 0 0 1 5,-5z"
+        android:fillColor="#FFB020" />
+    <path
+        android:pathData="M52,52h22v4h-22z"
+        android:fillColor="#1A1206" />
+    <path
+        android:pathData="M52,60h14v4h-14z"
+        android:fillColor="#1A1206" />
+
+    <!-- speaker / home line -->
+    <path
+        android:pathData="M49,33h10"
+        android:strokeColor="#ECEFF4"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+</vector>

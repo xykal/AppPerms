@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">OverlayOps</string>
+    <string name="tab_apps">Aplikasi</string>
+    <string name="tab_overlay">Overlay</string>
+    <string name="search_hint">Cari aplikasi…</string>
+    <string name="filter_all">Semua</string>
+    <string name="filter_allowed">Diizinkan</string>
+    <string name="filter_denied">Diblokir</string>
+    <string name="filter_default">Default</string>
+    <string name="filter_system">Sistem</string>
+
+    <string name="status_allowed">Diizinkan</string>
+    <string name="status_denied">Diblokir</string>
+    <string name="status_default">Default</string>
+    <string name="status_ignored">Diabaikan</string>
+    <string name="status_foreground">Foreground</string>
+    <string name="status_unknown">Tidak diketahui</string>
+
+    <string name="mode_label">Mode akses</string>
+    <string name="mode_shizuku">Shizuku</string>
+    <string name="mode_root">Root</string>
+    <string name="mode_none">Belum tersambung</string>
+    <string name="mode_adb_hint">Jalankan lewat ADB — Shizuku akan otomatis terdeteksi</string>
+
+    <string name="request_permission">Minta izin Shizuku</string>
+    <string name="open_shizuku">Buka Shizuku</string>
+    <string name="setup_title">Sambungkan ke Shizuku</string>
+    <string name="setup_desc">OverlayOps butuh Shizuku (atau root) untuk membaca &amp; mengubah pengaturan AppOps yang tersembunyi — termasuk <b>Display over other apps</b> yang di Settings biasa tidak bisa diubah untuk app sistem.</string>
+    <string name="setup_step_1">1. Install <b>Shizuku</b> dari Play Store / GitHub.</string>
+    <string name="setup_step_2">2. Mulai Shizuku lewat ADB atau root.</string>
+    <string name="setup_step_3">3. Balik ke sini, lalu tekan Minta izin.</string>
+
+    <string name="overlay_title">Display over other apps</string>
+    <string name="overlay_desc">AppOps <b>SYSTEM_ALERT_WINDOW</b> — kontrol mana app yang boleh menggambar di atas aplikasi lain.</string>
+    <string name="search_overlay_hint">Cari app…</string>
+
+    <string name="no_issues">Tidak ada masalah</string>
+    <string name="device_report">Laporan perangkat</string>
+    <string name="about_title">Tentang</string>
+    <string name="copied">Copied: %1$s</string>
+    <string name="apply_failed">Gagal: %1$s</string>
+    <string name="refreshed">Diperbarui</string>
+    <string name="loading">Memuat…</string>
+    <string name="result_count">%1$d app</string>
+
+    <string name="legend_hint">Ketuk app untuk lihat detail. Tahan lama (long press) untuk ubah status.</string>
+    <string name="legend_overlay_hint">Tahan lama untuk ubah: Allow / Ignore / Deny / Default.</string>
+    <string name="app_detail">Detail app</string>
+    <string name="package_name">Nama paket</string>
+    <string name="uid">UID</string>
+    <string name="system_app">App sistem</string>
+    <string name="target_sdk">Target SDK</string>
+    <string name="last_used">Terakhir dipakai</string>
+    <string name="ops_list">AppOps terkait</string>
+    <string name="copy_pkg">Copy nama paket</string>
+    <string name="open_app_info">Buka App Info</string>
+    <string name="open_settings">Buka Settings overlay</string>
+</resources>
