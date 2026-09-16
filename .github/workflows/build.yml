@@ -124,5 +124,5 @@ jobs:
           generate_release_notes: true
           body: |
             APK debug OverlayOps. Butuh Shizuku untuk mengubah AppOps tersembunyi.
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
