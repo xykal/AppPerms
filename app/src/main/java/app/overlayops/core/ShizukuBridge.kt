@@ -1,13 +1,18 @@
 package app.overlayops.core
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import rikka.shizuku.Shizuku
+import java.lang.reflect.Method
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
- * Helper tipis di atas Shizuku: cek status, minta izin, dan jalankan shell
- * (dipakai sebagai jalur cadangan kalau refleksi binder diblokir ROM).
+ * Helper Shizuku: probe status akses, minta izin, dan jalankan perintah `appops`
+ * (jalur utama yang paling tahan-banting; binder dipakai sebagai bonus).
  */
 object ShizukuBridge {
 
@@ -16,24 +21,24 @@ object ShizukuBridge {
     const val REQUEST_CODE = 4210
     const val SHIZUKU_PACKAGE = "moe.shizuku.privileged.api"
 
+    // ---------------------------------------------------------------- status
+
     fun isBinderAlive(): Boolean = try {
         Shizuku.pingBinder()
     } catch (t: Throwable) {
-        Log.w(TAG, "pingBinder gagal", t)
         false
     }
 
     fun hasPermission(): Boolean = try {
-        isBinderAlive() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     } catch (t: Throwable) {
-        Log.w(TAG, "checkSelfPermission gagal", t)
         false
     }
 
-    fun isRoot(): Boolean = try {
-        hasPermission() && Shizuku.getUid() == 0
+    fun myUid(): Int = try {
+        Shizuku.getUid()
     } catch (t: Throwable) {
-        false
+        -1
     }
 
     fun version(): Int = try {
@@ -42,16 +47,40 @@ object ShizukuBridge {
         -1
     }
 
-    /** Shizuku versi < 11 tidak mendukung banyak API yang kita pakai. */
-    fun isTooOld(): Boolean = version() in 0..10
-
-    fun requestPermission() {
-        try {
-            Shizuku.requestPermission(REQUEST_CODE)
-        } catch (t: Throwable) {
-            Log.w(TAG, "requestPermission gagal", t)
-        }
+    fun isInstalledHuh(context: Context): Boolean = try {
+        context.packageManager.getPackageInfo(SHIZUKU_PACKAGE, 0)
+        true
+    } catch (t: Throwable) {
+        false
     }
+
+    /** Satu tembakan: semua informasi yang dibutuhkan UI untuk memutuskan pesan yang tepat. */
+    fun probe(context: Context, connectBridge: Boolean = true): AccessSnapshot {
+        val alive = isBinderAlive()
+        val allowed = alive && hasPermission()
+        val shellOk = allowed && shellAvailable
+
+        var bridgeReady = false
+        var bridgeError: String? = null
+        if (allowed && connectBridge) {
+            bridgeReady = AppOpsBridge.connect()
+            bridgeError = AppOpsBridge.lastError
+        }
+
+        return AccessSnapshot(
+            shizukuInstalled = isInstalledHuh(context),
+            binderAlive = alive,
+            permission = allowed,
+            uid = if (alive) myUid() else -1,
+            version = if (alive) version() else -1,
+            bridgeReady = bridgeReady,
+            bridgeError = bridgeError,
+            shellAvailable = shellOk,
+            shellError = if (!shellOk && allowed) "Shizuku.newProcess() tidak bisa diakses" else null,
+        )
+    }
+
+    fun requestPermission() = runCatching { Shizuku.requestPermission(REQUEST_CODE) }
 
     fun addBinderReceivedListener(listener: Shizuku.OnBinderReceivedListener) =
         runCatching { Shizuku.addBinderReceivedListenerSticky(listener) }
@@ -71,22 +100,34 @@ object ShizukuBridge {
     fun removePermissionResultListener(listener: Shizuku.OnRequestPermissionResultListener) =
         runCatching { Shizuku.removeRequestPermissionResultListener(listener) }
 
+    // ----------------------------------------------------------------- shell
+
     /**
-     * Jalankan perintah shell dengan hak akses Shizuku. Panggil dari thread IO.
-     *
      * Shizuku API 13 menyembunyikan Shizuku.newProcess (masih ada di class, tapi private),
-     * jadi dipanggil lewat refleksi. Kalau gagal, kita kembalikan null dan UI memberi tahu user.
+     * jadi dipanggil lewat refleksi. Kalau gagal, semua fungsi shell mati dan app
+     * jatuh ke jalur binder saja.
      */
-    private val newProcessMethod: java.lang.reflect.Method? by lazy {
+    private val newProcessMethod: Method? by lazy {
         runCatching {
             Shizuku::class.java
-                .getDeclaredMethod("newProcess", Array<String>::class.java, Array<String>::class.java, String::class.java)
+                .getDeclaredMethod(
+                    "newProcess",
+                    Array<String>::class.java,
+                    Array<String>::class.java,
+                    String::class.java,
+                )
                 .apply { isAccessible = true }
         }.onFailure { Log.w(TAG, "newProcess() tidak bisa diakses", it) }.getOrNull()
     }
 
     val shellAvailable: Boolean get() = newProcessMethod != null
 
+    data class ShellResult(val code: Int, val stdout: String, val stderr: String) {
+        val ok: Boolean get() = code == 0
+        val message: String get() = stderr.ifBlank { stdout }.trim().ifBlank { "exit $code" }
+    }
+
+    /** Jalankan perintah dengan hak akses Shizuku. Panggil dari thread IO. */
     fun shell(command: String): ShellResult? {
         val method = newProcessMethod ?: return null
         return try {
@@ -107,32 +148,11 @@ object ShizukuBridge {
         }
     }
 
-    data class ShellResult(val code: Int, val stdout: String, val stderr: String) {
-        val ok: Boolean get() = code == 0
-    }
-
-    // ---------- Perintah `appops` sebagai jalur cadangan ----------
-
-    fun shellSetOp(pkg: String, shellOp: String, status: OpStatus): String? {
-        val result = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
-            ?: return "perintah appops tidak bisa dijalankan"
-        if (!result.ok) return result.stderr.ifBlank { result.stdout }.trim().ifBlank { "exit ${result.code}" }
-        return null
-    }
-
-    fun shellGetOp(pkg: String, shellOp: String): OpStatus {
-        val result = shell("appops get $pkg $shellOp") ?: return OpStatus.UNKNOWN
-        val text = result.stdout.ifBlank { result.stderr }
-        if (text.isBlank() || text.contains("No operations", ignoreCase = true)) return OpStatus.DEFAULT
-        val line = text.lineSequence().firstOrNull { it.contains(shellOp) } ?: text.lineSequence().firstOrNull()
-            ?: return OpStatus.DEFAULT
-        val value = line.substringAfter(':', "").trim().substringBefore(';').trim()
-        return OpStatus.forShellName(value)
-    }
+    // ------------------------------------------------------- perintah appops
 
     /**
-     * Baca mode overlay untuk SEMUA paket sekaligus (4 perintah),
-     * jauh lebih cepat daripada memanggil per paket.
+     * Baca mode overlay SEMUA paket sekaligus (4 perintah) — jauh lebih cepat
+     * daripada satu perintah per paket.
      */
     fun shellQueryOverlayBulk(): Map<String, OpStatus>? {
         val map = HashMap<String, OpStatus>()
@@ -150,18 +170,83 @@ object ShizukuBridge {
         return if (anySuccess) map else null
     }
 
-    fun deviceSummary(): String {
-        val shizuku = if (isBinderAlive()) {
-            "aktif (v${version()}, uid=${runCatching { Shizuku.getUid() }.getOrDefault(-1)}, " +
-                "izin=${if (hasPermission()) "diberikan" else "belum"})"
-        } else "tidak berjalan"
+    /** Semua op milik satu paket dalam SATU perintah: `appops get <pkg>`. */
+    fun shellReadOps(pkg: String): Map<String, OpStatus>? {
+        val result = shell("appops get $pkg") ?: return null
+        if (!result.ok) return null
+        val parsed = parseAppOpsGet(result.stdout)
+        if (parsed.isEmpty()) return null
+        return parsed
+    }
+
+    /**
+     * Parser `appops get <pkg>` yang toleran terhadap perbedaan ROM.
+     * Contoh baris yang ditangani:
+     *   SYSTEM_ALERT_WINDOW: allow
+     *   RUN_ANY_IN_BACKGROUND: ignore; time=+1m2s
+     *   Uid mode: RUN_ANY_IN_BACKGROUND: foreground
+     */
+    fun parseAppOpsGet(output: String): Map<String, OpStatus> {
+        val map = HashMap<String, OpStatus>()
+        val namePattern = Regex("^[A-Z][A-Z0-9_]{2,}$")
+        output.lineSequence().forEach { raw ->
+            var line = raw.trim()
+            if (line.startsWith("Uid mode:", ignoreCase = true)) {
+                line = line.substringAfter(':').trim()
+            }
+            val idx = line.indexOf(':')
+            if (idx <= 0) return@forEach
+            val key = line.substring(0, idx).trim()
+            if (!namePattern.matches(key)) return@forEach
+            val rest = line.substring(idx + 1).trim()
+            val mode = rest.substringBefore(';').trim().substringBefore(' ').trim()
+            if (mode.isNotEmpty()) map[key] = OpStatus.forShellName(mode)
+        }
+        return map
+    }
+
+    /** Tulis satu op: `appops set --uid <pkg> <OP> <mode>`. */
+    fun shellSetOp(pkg: String, shellOp: String, status: OpStatus): String? {
+        val result = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
+            ?: return "perintah appops tidak bisa dijalankan (jalur shell mati)"
+        return if (result.ok) null else result.message
+    }
+
+    /** Baca satu op (fallback kalau `appops get <pkg>` tidak bisa diparse). */
+    fun shellGetOp(pkg: String, shellOp: String): OpStatus {
+        val result = shell("appops get $pkg $shellOp") ?: return OpStatus.UNKNOWN
+        val text = result.stdout.ifBlank { result.stderr }
+        if (text.isBlank() || text.contains("No operations", ignoreCase = true)) return OpStatus.DEFAULT
+        val parsed = parseAppOpsGet(text)
+        parsed[shellOp]?.let { return it }
+        val line = text.lineSequence().firstOrNull { it.contains(shellOp) } ?: return OpStatus.DEFAULT
+        return OpStatus.forShellName(line.substringAfter(':').trim().substringBefore(';'))
+    }
+
+    // ------------------------------------------------------------ diagnostics
+
+    fun deviceSummary(context: Context, snapshot: AccessSnapshot = probe(context)): String {
+        val shizuku = when {
+            !snapshot.shizukuInstalled -> "belum terinstall"
+            !snapshot.binderAlive -> "terinstall, tapi belum berjalan"
+            !snapshot.permission -> "berjalan (v${snapshot.version}), izin BELUM diberikan"
+            else -> "berjalan (v${snapshot.version}, uid=${snapshot.uid}, ${if (snapshot.isRoot) "root" else "shell"})"
+        }
         return buildString {
             append("Android ").append(Build.VERSION.RELEASE)
             append(" (SDK ").append(Build.VERSION.SDK_INT).append(")\n")
             append("Perangkat: ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append('\n')
             append("ROM: ").append(Build.DISPLAY).append('\n')
             append("Shizuku: ").append(shizuku).append('\n')
-            append("Bridge: ").append(AppOpsBridge.describe())
+            append("Status: ").append(snapshot.state.name).append('\n')
+            append("Jalur aktif: ").append(if (snapshot.preferShell) "perintah `appops` (shell)" else "binder IAppOpsService").append('\n')
+            append("Binder: ").append(if (snapshot.bridgeReady) "OK" else "gagal").append('\n')
+            snapshot.bridgeError?.let { append("  error binder: ").append(it).append('\n') }
+            append("Shell Shizuku: ").append(if (snapshot.shellAvailable) "OK" else "tidak tersedia").append('\n')
+            append("opCode(overlay): ").append(AppOpsBridge.opCode(OpCatalog.OVERLAY.op) ?: "belum ter-resolve (pakai fallback 24)").append('\n')
+            append("Timestamp: ").append(
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+            )
         }
     }
 }

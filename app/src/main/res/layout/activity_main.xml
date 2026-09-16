@@ -48,11 +48,10 @@
             android:background="@drawable/bg_chip_small"
             android:backgroundTint="@color/surface_2"
             android:clickable="true"
-            android:drawablePadding="6dp"
             android:focusable="true"
             android:paddingHorizontal="10dp"
             android:paddingVertical="6dp"
-            android:text="@string/mode_none"
+            android:text="@string/state_off"
             android:textColor="@color/on_surface_dim"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -68,7 +67,7 @@
             android:src="@drawable/ic_more" />
     </LinearLayout>
 
-    <!-- Kartu setup: tampil kalau Shizuku belum siap -->
+    <!-- Kartu setup: hanya saat benar-benar perlu -->
     <LinearLayout
         android:id="@+id/setupCard"
         style="@style/Card"
@@ -93,9 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="@string/setup_desc"
             android:textColor="@color/on_surface_dim"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="Shizuku belum berjalan…" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -161,17 +160,36 @@
             android:textSize="14sp" />
     </FrameLayout>
 
+    <!-- Filter 1: tipe app (terinstall / sistem) -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
         android:scrollbars="none">
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/filterGroup"
+            android:id="@+id/typeFilterGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="6dp"
+            app:singleLine="true"
+            app:singleSelection="true" />
+    </HorizontalScrollView>
+
+    <!-- Filter 2: status op -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:paddingHorizontal="16dp"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/statusFilterGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="6dp"
             app:singleLine="true"
             app:singleSelection="true" />
     </HorizontalScrollView>
@@ -216,7 +234,7 @@
 
             <TextView
                 android:id="@+id/emptyDesc"
-                android:layout_width="260dp"
+                android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
@@ -240,8 +258,8 @@
         android:background="@color/surface"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
-        android:text="@string/legend_overlay_hint"
         android:textColor="@color/on_surface_dim"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        tools:text="156 app · 12 overlay · 3 diizinkan · 2 diblokir" />
 
 </LinearLayout>

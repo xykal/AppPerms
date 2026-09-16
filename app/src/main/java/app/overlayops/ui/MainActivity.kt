@@ -4,18 +4,24 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,13 +29,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import app.overlayops.R
-import app.overlayops.core.AccessMode
+import app.overlayops.core.AccessSnapshot
+import app.overlayops.core.AccessState
+import app.overlayops.core.AppTypeFilter
 import app.overlayops.core.OpCatalog
 import app.overlayops.core.OpDef
 import app.overlayops.core.OpStatus
 import app.overlayops.core.ShizukuBridge
+import app.overlayops.core.SortMode
 import app.overlayops.core.StatusFilter
 import app.overlayops.databinding.ActivityMainBinding
 import app.overlayops.databinding.DialogAppDetailBinding
@@ -45,15 +55,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: AppListAdapter
 
     private var detailDialog: AlertDialog? = null
+    private var lastNotice: String? = null
 
-    private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
-        viewModel.connect { mode -> onAccessChanged(mode) }
-    }
-    private val binderDeadListener = Shizuku.OnBinderDeadListener {
-        viewModel.connect { mode -> onAccessChanged(mode) }
-    }
-    private val permissionListener = Shizuku.OnRequestPermissionResultListener { _, _ ->
-        viewModel.connect { mode -> onAccessChanged(mode) }
+    private val binderReceivedListener = Shizuku.OnBinderReceivedListener { probe("binder masuk") }
+    private val binderDeadListener = Shizuku.OnBinderDeadListener { probe("binder mati") }
+    private val permissionListener = Shizuku.OnRequestPermissionResultListener { _, granted ->
+        probe(if (granted == 0) "izin diberikan" else null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,17 +70,16 @@ class MainActivity : AppCompatActivity() {
 
         adapter = AppListAdapter(
             onOpen = { entry -> showAppDetail(entry) },
-            onChangeOverlay = { entry ->
-                showModePicker(entry, OpCatalog.OVERLAY, entry.overlayStatus) {
-                    viewModel.refresh(showSpinner = false)
-                }
-            },
+            onChangeOverlay = { entry -> pickOverlayStatus(entry) },
         )
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
+        binding.list.setHasFixedSize(false)
+        binding.list.itemAnimator = null
 
         buildTabs()
-        buildFilters()
+        buildTypeFilter()
+        buildStatusFilter()
 
         binding.search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) = Unit
@@ -90,10 +96,16 @@ class MainActivity : AppCompatActivity() {
         binding.modeChip.setOnClickListener { showConnectionDialog() }
         binding.menuButton.setOnClickListener { showMenu(it) }
         binding.btnGrant.setOnClickListener {
-            if (!ShizukuBridge.isBinderAlive()) {
-                toast("Shizuku belum berjalan — mulai dulu lewat ADB atau root")
-            } else {
-                ShizukuBridge.requestPermission()
+            when {
+                !ShizukuBridge.isBinderAlive() ->
+                    snack("Shizuku belum berjalan — mulai dulu lewat ADB atau root")
+
+                ShizukuBridge.hasPermission() -> {
+                    snack("Izin sudah ada, memeriksa ulang…")
+                    probe(null)
+                }
+
+                else -> ShizukuBridge.requestPermission()
             }
         }
         binding.btnOpenShizuku.setOnClickListener { openShizukuApp() }
@@ -110,7 +122,13 @@ class MainActivity : AppCompatActivity() {
         ShizukuBridge.addBinderReceivedListener(binderReceivedListener)
         ShizukuBridge.addBinderDeadListener(binderDeadListener)
         ShizukuBridge.addPermissionResultListener(permissionListener)
-        viewModel.connect { mode -> onAccessChanged(mode) }
+        probe(null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Izin bisa diberikan lewat app Shizuku saat kita di background -> cek ulang.
+        probe(null)
     }
 
     override fun onStop() {
@@ -127,121 +145,175 @@ class MainActivity : AppCompatActivity() {
 
     // ------------------------------------------------------------------- setup
 
+    private fun probe(notice: String?) {
+        lastNotice = notice
+        viewModel.refreshAccess { snapshot -> notice?.let { announce(snapshot) } }
+    }
+
+    private fun announce(snapshot: AccessSnapshot) {
+        when (snapshot.state) {
+            AccessState.SHIZUKU_OFF -> snack("Shizuku tidak berjalan")
+            AccessState.PERMISSION_DENIED -> snack("Izin Shizuku belum diberikan")
+            AccessState.BRIDGE_FAILED ->
+                snack("Gagal akses AppOps: ${snapshot.bridgeError ?: "tidak diketahui"}")
+
+            AccessState.SHELL_FALLBACK ->
+                snack("Mode shell aktif (binder gagal: ${snapshot.bridgeError ?: "?"})")
+
+            AccessState.READY_SHELL -> snack("Tersambung · Shizuku shell")
+            AccessState.READY_ROOT -> snack("Tersambung · Shizuku root")
+        }
+    }
+
     private fun buildTabs() = with(binding.tabs) {
         removeAllTabs()
-        addTab(newTab().setText(R.string.tab_overlay), 0, true)
-        addTab(newTab().setText(R.string.tab_apps), 1, false)
+        addTab(newTab().setText(getString(R.string.tab_overlay)), 0, true)
+        addTab(newTab().setText(getString(R.string.tab_apps)), 1, false)
         addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                viewModel.setTab(tab.position)
-                binding.hintBar.setText(
-                    if (tab.position == 0) R.string.legend_overlay_hint else R.string.legend_hint
-                )
-            }
-
+            override fun onTabSelected(tab: TabLayout.Tab) = viewModel.setTab(tab.position)
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
         })
     }
 
-    private fun buildFilters() {
-        binding.filterGroup.removeAllViews()
-        StatusFilter.entries.forEach { f ->
-            val chip = Chip(this).apply {
-                text = getString(f.labelRes)
-                isCheckable = true
-                isChecked = f == StatusFilter.ALL
-                setOnClickListener { viewModel.setFilter(f) }
-            }
-            binding.filterGroup.addView(chip)
+    private fun buildTypeFilter() {
+        binding.typeFilterGroup.removeAllViews()
+        AppTypeFilter.entries.forEach { f ->
+            binding.typeFilterGroup.addView(filterChip(getString(f.labelRes), f == AppTypeFilter.ALL) {
+                viewModel.setTypeFilter(f)
+            })
         }
     }
+
+    private fun buildStatusFilter() {
+        binding.statusFilterGroup.removeAllViews()
+        StatusFilter.entries.forEach { f ->
+            binding.statusFilterGroup.addView(filterChip(getString(f.labelRes), f == StatusFilter.ALL) {
+                viewModel.setStatusFilter(f)
+            })
+        }
+    }
+
+    private fun filterChip(text: String, checked: Boolean, onClick: () -> Unit) =
+        Chip(this).apply {
+            this.text = text
+            isCheckable = true
+            isChecked = checked
+            setOnClickListener { onClick() }
+        }
 
     // --------------------------------------------------------------- rendering
 
-    private fun render(state: UiState) {
-        binding.modeChip.text = when (state.accessMode) {
-            AccessMode.NONE -> getString(R.string.mode_none)
-            AccessMode.SHIZUKU_SHELL -> getString(R.string.mode_shizuku)
-            AccessMode.SHIZUKU_ROOT -> getString(R.string.mode_root)
+    private fun render(s: UiState) {
+        val state = s.snapshot.state
+        val color = ContextCompat.getColor(this, state.colorRes)
+
+        binding.modeChip.text = getString(state.chipRes)
+        binding.modeChip.setTextColor(color)
+        binding.modeChip.backgroundTintList =
+            ColorStateList.valueOf(ColorUtils.setAlphaComponent(color, 0x2E))
+
+        val needsSetup = state == AccessState.SHIZUKU_OFF ||
+            state == AccessState.PERMISSION_DENIED ||
+            state == AccessState.BRIDGE_FAILED
+        binding.setupCard.isVisible = needsSetup
+        if (needsSetup) {
+            binding.setupDesc.text = when (state) {
+                AccessState.SHIZUKU_OFF -> getString(R.string.setup_off)
+                AccessState.PERMISSION_DENIED -> getString(R.string.setup_permission)
+                else -> getString(R.string.setup_bridge_failed, s.snapshot.bridgeError ?: "?")
+            }
         }
-        binding.modeChip.setTextColor(
-            if (state.accessMode == AccessMode.NONE) getColor(R.color.deny) else getColor(R.color.ok)
+        binding.btnGrant.isEnabled = s.snapshot.binderAlive
+        binding.btnGrant.text = getString(
+            if (s.snapshot.binderAlive && s.snapshot.permission) R.string.recheck_permission
+            else R.string.request_permission
         )
-        binding.setupCard.isVisible = state.accessMode == AccessMode.NONE
+
         binding.swipe.isRefreshing = false
-        binding.progress.isVisible = state.loading && state.apps.isEmpty()
+        binding.progress.isVisible = s.loading && s.apps.isEmpty()
 
-        val allowed = state.apps.count { it.overlayStatus == OpStatus.ALLOWED }
-        val blocked = state.apps.count { it.overlayStatus == OpStatus.ERRORED || it.overlayStatus == OpStatus.IGNORED }
-        binding.subtitle.text = if (state.apps.isEmpty()) {
-            "Overlay manager via Shizuku"
-        } else {
-            "$allowed diizinkan · $blocked diblokir · ${state.apps.size} app"
-        }
+        binding.tabs.getTabAt(0)?.text = getString(R.string.tab_overlay_count, s.overlayCount)
+        binding.tabs.getTabAt(1)?.text = getString(R.string.tab_apps_count, s.apps.size)
 
-        val base = when (state.tab) {
-            0 -> state.apps.filter { it.declaresOverlay || it.overlayStatus.isExplicit }
-            else -> state.apps
-        }
-        val visible = base.filter { it.matches(state.query) && state.filter.accepts(it) }
-        adapter.submitList(visible)
+        adapter.submitList(s.items)
 
-        val empty = visible.isEmpty() && !state.loading
+        val empty = s.items.isEmpty() && !s.loading
         binding.emptyView.isVisible = empty
         if (empty) {
-            val noAccess = state.accessMode == AccessMode.NONE
-            binding.emptyTitle.text = when {
-                noAccess -> "Shizuku belum tersambung"
-                base.isEmpty() -> getString(R.string.no_issues)
-                else -> "Tidak ada hasil"
+            when {
+                !s.snapshot.canOperate -> {
+                    binding.emptyTitle.setText(R.string.empty_no_access)
+                    binding.emptyDesc.text = getString(R.string.empty_no_access_desc)
+                }
+
+                s.apps.isEmpty() -> {
+                    binding.emptyTitle.setText(R.string.empty_no_data)
+                    binding.emptyDesc.text = getString(R.string.empty_no_data_desc)
+                }
+
+                s.tab == 0 && s.query.isBlank() -> {
+                    binding.emptyTitle.setText(R.string.empty_no_explicit)
+                    binding.emptyDesc.text = getString(R.string.empty_no_explicit_desc)
+                }
+
+                else -> {
+                    binding.emptyTitle.setText(R.string.empty_no_result)
+                    binding.emptyDesc.text = getString(R.string.empty_no_result_desc)
+                }
             }
-            binding.emptyDesc.text = when {
-                noAccess -> "Ikuti langkah di kartu atas untuk menyambungkan Shizuku, lalu tarik layar untuk memuat ulang."
-                base.isEmpty() && state.tab == 0 ->
-                    "Belum ada app yang punya op overlay eksplisit. Buka tab Semua app untuk melihat seluruh daftar."
-                else -> "Coba ubah kata kunci atau filter."
+        }
+
+        binding.hintBar.text = when {
+            s.busy != null -> s.busy
+            s.query.isNotBlank() || s.typeFilter != AppTypeFilter.ALL || s.statusFilter != StatusFilter.ALL ->
+                getString(R.string.hint_filtered, s.apps.size, s.overlayCount, s.allowedCount, s.blockedCount)
+
+            else -> getString(R.string.hint_default, s.apps.size, s.overlayCount, s.allowedCount, s.blockedCount)
+        }
+    }
+
+    // ------------------------------------------------------------------ aksi
+
+    private fun pickOverlayStatus(entry: AppEntry) {
+        if (!viewModel.state.value.snapshot.canOperate) {
+            snack("Belum tersambung ke Shizuku")
+            return
+        }
+        ModeSheet.show(this, entry, OpCatalog.OVERLAY, entry.overlayStatus) { status ->
+            applyAndOfferUndo(entry, OpCatalog.OVERLAY, status, entry.overlayStatus)
+        }
+    }
+
+    private fun applyAndOfferUndo(entry: AppEntry, def: OpDef, status: OpStatus, previous: OpStatus) {
+        viewModel.applyStatus(entry, def, status) { error, _ ->
+            if (error == null) {
+                snackWithUndo(
+                    getString(R.string.applied, entry.label, getString(status.labelRes)),
+                ) {
+                    viewModel.applyStatus(entry, def, previous) { _, _ -> snack("Dikembalikan") }
+                }
+            } else {
+                showError(error)
             }
         }
     }
 
-    private fun onAccessChanged(mode: AccessMode) {
-        when (mode) {
-            AccessMode.SHIZUKU_ROOT, AccessMode.SHIZUKU_SHELL -> {
-                toast("Tersambung · ${mode.label}")
-                viewModel.refresh()
-            }
-
-            AccessMode.NONE -> if (ShizukuBridge.isBinderAlive()) {
-                toast("Izin Shizuku belum diberikan")
-            }
-        }
-    }
-
-    // ------------------------------------------------------------------ dialogs
-
-    private fun showConnectionDialog() {
-        val summary = viewModel.deviceReport()
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.mode_label))
-            .setMessage(summary)
-            .setPositiveButton(R.string.request_permission) { _, _ ->
-                if (ShizukuBridge.isBinderAlive()) ShizukuBridge.requestPermission()
-                else toast("Shizuku belum berjalan")
-            }
-            .setNeutralButton(R.string.open_shizuku) { _, _ -> openShizukuApp() }
-            .setNegativeButton("Tutup", null)
-            .show()
-    }
+    // ------------------------------------------------------------------ menu
 
     private fun showMenu(anchor: View) {
         val popup = PopupMenu(this, anchor)
+        val sortLabel = if (viewModel.state.value.sort == SortMode.NAME) "Status" else "Nama"
         popup.menu.add(0, 1, 0, "Muat ulang daftar")
-        popup.menu.add(0, 2, 1, "Laporan perangkat")
-        popup.menu.add(0, 3, 2, "Copy laporan")
-        popup.menu.add(0, 4, 3, "Buka app Shizuku")
-        popup.menu.add(0, 5, 4, "Buka Settings overlay")
-        popup.menu.add(0, 6, 5, "Tentang OverlayOps")
+        popup.menu.add(0, 7, 1, "Urutkan berdasarkan: $sortLabel")
+        popup.menu.add(0, 8, 2, "Aksi massal…")
+        popup.menu.add(0, 10, 3, "Backup konfigurasi (copy)")
+        popup.menu.add(0, 11, 4, "Restore dari backup")
+        popup.menu.add(0, 2, 5, "Laporan perangkat")
+        popup.menu.add(0, 3, 6, "Copy laporan")
+        popup.menu.add(0, 4, 7, "Buka app Shizuku")
+        popup.menu.add(0, 5, 8, "Buka Settings overlay")
+        popup.menu.add(0, 6, 9, "Tentang OverlayOps")
         popup.setOnMenuItemClickListener { item ->
             handleMenu(item.itemId)
             true
@@ -249,71 +321,158 @@ class MainActivity : AppCompatActivity() {
         popup.show()
     }
 
-    /** Semua cabang Unit supaya `when` sebagai statement tidak memicu warning. */
-    private fun handleMenu(id: Int) = when (id) {
-        1 -> viewModel.refresh()
-        2 -> showReportDialog()
-        3 -> copyToClipboard(viewModel.deviceReport(), "Laporan perangkat")
-        4 -> openShizukuApp()
-        5 -> startActivitySafely(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
-        6 -> showAboutDialog()
-        else -> Unit
+    private fun handleMenu(id: Int) {
+        when (id) {
+            1 -> viewModel.refresh()
+
+            2 -> MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.device_report)
+                .setMessage(viewModel.deviceReport())
+                .setPositiveButton("Tutup", null)
+                .show()
+
+            3 -> copyToClipboard(viewModel.deviceReport(), "Laporan perangkat")
+            4 -> openShizukuApp()
+            5 -> startActivitySafely(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
+            6 -> showAbout()
+            7 -> {
+                val next = if (viewModel.state.value.sort == SortMode.NAME) SortMode.STATUS else SortMode.NAME
+                viewModel.setSort(next)
+                snack("Urutan: ${getString(next.labelRes)}")
+            }
+
+            8 -> showBatchDialog()
+            10 -> copyToClipboard(viewModel.exportBackup(), "Backup OverlayOps")
+            11 -> showRestoreDialog()
+            else -> Unit
+        }
     }
 
-    private fun showReportDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.device_report)
-            .setMessage(viewModel.deviceReport())
-            .setPositiveButton("Tutup", null)
-            .show()
-    }
+    private fun showBatchDialog() {
+        val apps = viewModel.appsNow()
+        if (apps.isEmpty()) {
+            snack("Daftar app masih kosong")
+            return
+        }
+        val userApps = apps.filter { !it.isSystem && (it.declaresOverlay || it.overlayStatus.isExplicit) }
+        val declared = apps.filter { it.declaresOverlay }
 
-    private fun showAboutDialog() {
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.about_title)
-            .setMessage(
-                "OverlayOps — pengelola AppOps ringan, fokus ke op " +
-                    "SYSTEM_ALERT_WINDOW (Display over other apps).\n\n" +
-                    "Cara kerja: app ini bicara langsung ke IAppOpsService lewat Shizuku " +
-                    "(atau root), sama seperti `adb shell appops`. Tidak ada data yang dikirim keluar.\n\n" +
-                    "Kalau refleksi binder diblokir ROM, otomatis pindah ke perintah `appops`."
-            )
-            .setPositiveButton("Tutup", null)
-            .show()
-    }
-
-    private fun showModePicker(
-        entry: AppEntry,
-        def: OpDef,
-        current: OpStatus,
-        onApplied: (() -> Unit)? = null,
-    ) {
-        val choices = OpStatus.choices
-        val labels = choices.map { "${getString(it.labelRes)}  (${OpStatus.shellName(it)})" }.toTypedArray()
-        MaterialAlertDialogBuilder(this)
-            .setTitle("${def.title}\n${entry.label}")
-            .setSingleChoiceItems(labels, choices.indexOf(current)) { dialog, which ->
-                dialog.dismiss()
-                applyStatus(entry, def, choices[which], onApplied)
+            .setTitle(R.string.batch_title)
+            .setItems(
+                arrayOf(
+                    "Blokir overlay semua app user (${userApps.size})",
+                    "Izinkan overlay semua app yang meminta (${declared.size})",
+                    "Reset ke default semua yang eksplisit (${apps.count { it.overlayStatus.isExplicit }})",
+                ),
+            ) { _, which ->
+                when (which) {
+                    0 -> confirmBatch(userApps, OpStatus.ERRORED, "Blokir overlay")
+                    1 -> confirmBatch(declared, OpStatus.ALLOWED, "Izinkan overlay")
+                    else -> confirmBatch(
+                        apps.filter { it.overlayStatus.isExplicit },
+                        OpStatus.DEFAULT,
+                        "Reset ke default",
+                    )
+                }
             }
             .setNegativeButton("Batal", null)
             .show()
     }
 
-    private fun applyStatus(entry: AppEntry, def: OpDef, status: OpStatus, onApplied: (() -> Unit)?) {
-        viewModel.applyStatus(entry, def, status) { error ->
-            if (error == null) {
-                toast("${entry.label} · ${def.title} → ${getString(status.labelRes)}")
-                onApplied?.invoke()
-            } else {
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(R.string.apply_failed)
-                    .setMessage(error)
-                    .setPositiveButton("Tutup", null)
-                    .show()
-            }
+    private fun confirmBatch(entries: List<AppEntry>, status: OpStatus, title: String) {
+        if (entries.isEmpty()) {
+            snack("Tidak ada app yang cocok untuk aksi ini")
+            return
         }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setMessage(getString(R.string.batch_confirm, entries.size, getString(status.labelRes)))
+            .setPositiveButton("Jalankan") { _, _ ->
+                viewModel.batchApplyOverlay(entries, status) { applied, error, previous ->
+                    val message = if (error == null) {
+                        getString(R.string.batch_done, applied)
+                    } else {
+                        getString(R.string.batch_done_error, applied, error)
+                    }
+                    snackWithUndo(message) {
+                        viewModel.applyTargets(previous, "Mengembalikan") { count, err ->
+                            snack(if (err == null) "Dikembalikan: $count app" else "Sebagian gagal: $err")
+                        }
+                    }
+                }
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
+
+    private fun showRestoreDialog() {
+        val clipboardText = readClipboard()
+        val input = EditText(this).apply {
+            hint = "Tempel hasil backup di sini"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            minLines = 5
+            maxLines = 12
+            setTextColor(getColor(R.color.on_surface))
+            setHintTextColor(getColor(R.color.on_surface_dim))
+            setPadding(0, dp(10), 0, 0)
+            if (clipboardText.contains("# OverlayOps backup")) setText(clipboardText)
+        }
+        val container = FrameLayout(this).apply {
+            setPadding(dp(20), dp(4), dp(20), 0)
+            addView(
+                input,
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                ),
+            )
+        }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.restore_title)
+            .setMessage(R.string.restore_desc)
+            .setView(container)
+            .setPositiveButton("Terapkan") { _, _ ->
+                val pairs = viewModel.parseBackup(input.text.toString())
+                if (pairs.isEmpty()) {
+                    showError("Tidak ada baris valid di teks itu")
+                    return@setPositiveButton
+                }
+                viewModel.restoreFrom(pairs) { applied, skipped, error ->
+                    val msg = buildString {
+                        append("Restore: $applied app")
+                        if (skipped > 0) append(" · $skipped dilewati (tidak terpasang)")
+                        error?.let { append(" · error: $it") }
+                    }
+                    snack(msg)
+                }
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun showConnectionDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.connection_title)
+            .setMessage(viewModel.deviceReport())
+            .setPositiveButton(R.string.request_permission) { _, _ ->
+                if (ShizukuBridge.isBinderAlive()) ShizukuBridge.requestPermission()
+                else snack("Shizuku belum berjalan")
+            }
+            .setNeutralButton(R.string.open_shizuku) { _, _ -> openShizukuApp() }
+            .setNegativeButton("Tutup", null)
+            .show()
+    }
+
+    private fun showAbout() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.about_title)
+            .setMessage(getString(R.string.about_body))
+            .setPositiveButton("Tutup", null)
+            .show()
+    }
+
+    // ---------------------------------------------------------------- detail
 
     private fun showAppDetail(entry: AppEntry) {
         val b = DialogAppDetailBinding.inflate(layoutInflater)
@@ -336,7 +495,7 @@ class MainActivity : AppCompatActivity() {
                 text = getString(R.string.loading)
                 setTextColor(getColor(R.color.on_surface_dim))
                 textSize = 12f
-                setPadding(0, 12, 0, 12)
+                setPadding(0, dp(12), 0, dp(12))
             }
         )
 
@@ -355,7 +514,7 @@ class MainActivity : AppCompatActivity() {
         if (ops.isEmpty()) {
             b.opsContainer.addView(
                 TextView(this).apply {
-                    text = "Tidak bisa membaca AppOps (Shizuku belum siap?)"
+                    setText(R.string.ops_unavailable)
                     setTextColor(getColor(R.color.deny))
                     textSize = 12f
                 }
@@ -368,26 +527,27 @@ class MainActivity : AppCompatActivity() {
             row.opDesc.text = "${def.op}\n${def.description}"
             row.opStatus.bindStatusChip(status)
             row.opRow.setOnClickListener {
-                showModePicker(entry, def, status) {
-                    // baca ulang semua op supaya chip menampilkan mode yang benar-benar tersimpan
+                ModeSheet.show(this, entry, def, status) { picked ->
+                    applyAndOfferUndo(entry, def, picked, status)
                     viewModel.readOps(entry) { fresh -> renderOps(b, entry, fresh) }
-                    viewModel.refresh(showSpinner = false)
                 }
             }
             b.opsContainer.addView(row.root)
         }
     }
 
-    // ------------------------------------------------------------------ helpers
+    // --------------------------------------------------------------- helpers
 
     private fun openShizukuApp() {
-        val pm = packageManager
-        val intent = pm.getLaunchIntentForPackage(ShizukuBridge.SHIZUKU_PACKAGE)
+        val intent = packageManager.getLaunchIntentForPackage(ShizukuBridge.SHIZUKU_PACKAGE)
         if (intent != null) {
             startActivitySafely(intent)
         } else {
             startActivitySafely(
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=${ShizukuBridge.SHIZUKU_PACKAGE}"))
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=${ShizukuBridge.SHIZUKU_PACKAGE}"),
+                )
             )
         }
     }
@@ -400,17 +560,40 @@ class MainActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } catch (t: Throwable) {
-            toast("Tidak bisa membuka: ${t.message}")
+            snack("Tidak bisa membuka: ${t.message}")
         }
     }
 
     private fun copyToClipboard(text: String, label: String) {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboard.setPrimaryClip(ClipData.newPlainText(label, text))
-        toast(getString(R.string.copied, label))
+        snack(getString(R.string.copied, label))
     }
 
-    private fun toast(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun readClipboard(): String {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = clipboard.primaryClip ?: return ""
+        return if (clip.itemCount > 0) clip.getItemAt(0).coerceToText(this).toString() else ""
+    }
 
+    private fun showError(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.apply_failed)
+            .setMessage(message)
+            .setPositiveButton("Tutup", null)
+            .show()
+    }
+
+    private fun snack(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun snackWithUndo(message: String, onUndo: () -> Unit) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction(R.string.undo) { onUndo() }
+            .setActionTextColor(getColor(R.color.brand))
+            .show()
+    }
+
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }

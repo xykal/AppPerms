@@ -19,3 +19,9 @@ local.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# Signing (jangan pernah masuk repo)
+*.jks
+*.keystore
+keystore.b64
+app-signing/

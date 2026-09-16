@@ -16,9 +16,9 @@ concurrency:
 
 jobs:
   build:
-    name: Assemble debug APK
+    name: Assemble APK (debug + release)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
@@ -38,34 +38,62 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Compile
+      # Keystore release disimpan sebagai GitHub Secret (base64), bukan di repo.
+      - name: Siapkan keystore release
+        id: keystore
+        run: |
+          set -euo pipefail
+          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "have=yes" >> "$GITHUB_OUTPUT"
+            echo "keystore release tersedia ✓"
+          else
+            echo "have=no" >> "$GITHUB_OUTPUT"
+            echo "::warning::Secret KEYSTORE_BASE64 belum ada — build release dilewati, hanya debug."
+          fi
+
+      - name: Build debug
         run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain
 
-      - name: Siapkan artefak (universal + ABI)
+      - name: Build release (signed + minified)
+        if: steps.keystore.outputs.have == 'yes'
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: bash ./gradlew :app:assembleRelease --no-daemon --console=plain
+
+      - name: Kumpulkan artefak + fingerprint
         id: artifact
         run: |
           set -euo pipefail
-          APK=app/build/outputs/apk/debug/app-debug.apk
+          BT="$ANDROID_HOME/build-tools/34.0.0"
           VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
           NAME="OverlayOps-$VERSION"
           mkdir -p out
 
-          cp "$APK" "out/$NAME-debug.apk"
+          DEBUG_APK=app/build/outputs/apk/debug/app-debug.apk
+          cp "$DEBUG_APK" "out/$NAME-debug.apk"
 
-          # Deteksi apakah APK punya native library
-          if unzip -l "$APK" | grep -qE 'lib/(arm|x86)'; then
+          if [ -f app/build/outputs/apk/release/app-release.apk ]; then
+            cp app/build/outputs/apk/release/app-release.apk "out/$NAME-release.apk"
+            echo "signed=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "signed=no" >> "$GITHUB_OUTPUT"
+          fi
+
+          # APK ini tidak punya native lib -> satu file jalan di semua ABI.
+          # Blok di bawah otomatis bikin varian per-ABI kalau nanti ada .so.
+          if unzip -l "$DEBUG_APK" | grep -qE 'lib/(arm|x86)'; then
             echo "native=yes" >> "$GITHUB_OUTPUT"
-            echo "APK punya native lib -> bikin varian per-ABI"
-
             sign_abi() {
               ABI="$1"; OUT="out/$NAME-$ABI.apk"
-              cp "$APK" "$OUT"
+              cp "$DEBUG_APK" "$OUT"
               for OTHER in arm64-v8a armeabi-v7a x86 x86_64; do
-                if [ "$OTHER" != "$ABI" ]; then zip -q -d "$OUT" "lib/$OTHER/*" >/dev/null 2>&1 || true; fi
+                [ "$OTHER" != "$ABI" ] && zip -q -d "$OUT" "lib/$OTHER/*" >/dev/null 2>&1 || true
               done
-              # hapus signature lama, sejajarkan, lalu tanda tangan ulang pakai debug keystore runner
               zip -q -d "$OUT" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA' >/dev/null 2>&1 || true
-              BT="$ANDROID_HOME/build-tools/34.0.0"
               "$BT/zipalign" -f -p 4 "$OUT" "$OUT.aligned"
               KS="$RUNNER_TEMP/debug.keystore"
               keytool -genkeypair -keystore "$KS" -storepass android -keypass android \
@@ -74,33 +102,36 @@ jobs:
               "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --key-pass pass:android \
                 --ks-key-alias androiddebugkey --out "$OUT" "$OUT.aligned"
               rm -f "$OUT.aligned"
-              echo "  -> $OUT"
             }
-
             for ABI in arm64-v8a armeabi-v7a x86 x86_64; do sign_abi "$ABI"; done
           else
             echo "native=no" >> "$GITHUB_OUTPUT"
             cat > out/CATATAN-ABI.txt <<EOF
           $NAME tidak mengandung native library (.so) — semuanya kode Java/Kotlin.
           Artinya SATU APK ini jalan di semua arsitektur:
-            - armeabi-v7a  (32-bit ARM)   ✔
-            - arm64-v8a    (64-bit ARM)   ✔
-            - x86 / x86_64 (emulator)     ✔
-          Jadi tidak perlu build terpisah per-ABI; file per-ABI akan identik byte-per-byte.
-          Silakan pakai: $NAME-debug.apk
-          (Workflow ini otomatis bikin varian per-ABI kalau nanti ada .so ditambahkan.)
+            - armeabi-v7a  (32-bit ARM)   OK
+            - arm64-v8a    (64-bit ARM)   OK
+            - x86 / x86_64 (emulator)     OK
+          Jadi tidak perlu build terpisah per-ABI.
           EOF
           fi
 
-          # ringkasan di Step Summary
+          # Fingerprint sertifikat yang dipakai (buat didaftarkan di Google/Firebase)
           {
             echo "## Hasil build OverlayOps $VERSION"
             echo
             echo "| file | ukuran | sha256 |"
             echo "|---|---|---|"
             for f in out/*.apk; do
-              printf '| %s | %s | %s |\n' "$(basename "$f")" \
-                "$(du -h "$f" | cut -f1)" "$(sha256sum "$f" | cut -c1-16)…"
+              printf '| %s | %s | %s |\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" "$(sha256sum "$f" | cut -c1-32)…"
+            done
+            echo
+            for f in out/*.apk; do
+              echo "### Fingerprint: $(basename "$f")"
+              echo '```'
+              "$BT/apksigner" verify --print-certs "$f" 2>/dev/null \
+                | grep -Ei "Signer #1 certificate (DN|SHA-1|SHA-256)" || echo "(tidak terbaca)"
+              echo '```'
             done
             echo
             echo "versionName: \`$VERSION\` · commit: \`$GITHUB_SHA\`"
@@ -111,7 +142,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OverlayOps-debug-${{ github.run_number }}
+          name: OverlayOps-${{ github.run_number }}
           path: out/*
           if-no-files-found: error
           retention-days: 30
@@ -123,6 +154,12 @@ jobs:
           files: out/*.apk
           generate_release_notes: true
           body: |
-            APK debug OverlayOps. Butuh Shizuku untuk mengubah AppOps tersembunyi.
+            APK OverlayOps — pengelola AppOps (Display over other apps) via Shizuku.
+
+            - `OverlayOps-*-release.apk` → signed keystore resmi, di-minify (R8), **disarankan**
+            - `OverlayOps-*-debug.apk` → buat troubleshooting
+
+            Catatan: versi release memakai signature berbeda dari build debug sebelumnya,
+            jadi uninstall dulu versi debug sebelum pasang yang ini.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

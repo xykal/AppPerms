@@ -1,12 +1,12 @@
 # OverlayOps
 
-Aplikasi Android untuk mengelola **AppOps tersembunyi** — fokus utama: op
+Aplikasi Android untuk mengelola **AppOps tersembunyi** — fokus utama op
 `SYSTEM_ALERT_WINDOW` (**Display over other apps**), plus 18 op lain (kamera, mikrofon,
 clipboard, lokasi, wakelock, dst).
 
-Terinspirasi dari [App Ops by Rikka](https://appops.rikka.app/). Bedanya: ini versi ringan
-(~1.350 baris Kotlin, tanpa Hilt/Room/Compose) yang khusus membedah satu op secara mendalam
-dan tetap pakai **Shizuku** supaya jalan tanpa root permanen.
+Terinspirasi dari [App Ops by Rikka](https://appops.rikka.app/). Bedanya: versi ringan
+(~1.700 baris Kotlin, tanpa Hilt/Room/Compose) yang khusus membedah overlay secara mendalam,
+dan **tanpa root permanen** karena memakai Shizuku.
 
 ---
 
@@ -14,147 +14,171 @@ dan tetap pakai **Shizuku** supaya jalan tanpa root permanen.
 
 | | |
 |---|---|
-| **APK langsung (paling cepat)** | **[OverlayOps-1.0.0-debug.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.0.0/OverlayOps-1.0.0-debug.apk)** |
-| Halaman release | https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.0.0 |
+| **Release APK (disarankan)** | **[OverlayOps-1.1.0-release.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.1.0/OverlayOps-1.1.0-release.apk)** |
+| Debug APK (troubleshooting) | [OverlayOps-1.1.0-debug.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.1.0/OverlayOps-1.1.0-debug.apk) |
+| Halaman release | https://github.com/xykalnotkel/OverlayOps/releases |
 | Build log CI | https://github.com/xykalnotkel/OverlayOps/actions |
-| sha256 | `065c0637b12892c3321c5f8885b388a1d1f355033e4053fa39733ce9d3fdc2c3` · 5,8 MB · debug-signed |
+
+**Versi release** sudah di-minify R8 + resource shrink (**1,9 MB**, dari 5,8 MB versi debug)
+dan ditandatangani keystore resmi:
+
+```
+SHA-256 : 82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30
+SHA-1   : 99:55:67:5C:19:0C:BB:4B:0F:D5:08:94:74:08:D2:B8:92:22:69:FF
+```
+
+Pakai SHA-1 di atas kalau perlu daftar di Google Cloud Console (OAuth client Android /
+Firebase) — **bukan** SHA debug lagi.
+
+> ⚠️ Signature release berbeda dari build debug sebelumnya → **uninstall dulu versi debug**,
+> baru pasang versi release. Setelah install ulang, kasih izin Shizuku sekali lagi
+> (dibuka otomatis lewat dialog saat pertama jalan).
 
 ### Soal armeabi-v7a / arm64-v8a
 
-APK ini **tidak mengandung native library (`.so`) sama sekali** — semuanya kode Java/Kotlin.
-Buktinya di build log: `mergeDebugNativeLibs NO-SOURCE`.
-
-Artinya **satu APK ini jalan di semua arsitektur**:
-
-| ABI | status |
-|---|---|
-| `armeabi-v7a` (32-bit ARM) | ✔ jalan |
-| `arm64-v8a` (64-bit ARM) | ✔ jalan |
-| `x86` / `x86_64` (emulator) | ✔ jalan |
-
-Jadi split per-ABI tidak ada gunanya di sini: file `-armeabi-v7a.apk` dan `-arm64-v8a.apk`
-akan **identik byte-per-byte** dengan APK universal ini (beda nama saja), dan malah bikin
-bingung saat install. Kalau nanti ada `.so` ditambahkan, workflow
-(`.github/workflows/build.yml`) otomatis mendeteksi dan membuat varian per-ABI
-lewat `zip -d lib/<abi-lain>/` + re-sign, tanpa perlu diubah.
-
-> **Status:** build CI di GitHub Actions **hijau** (run #3 & #5). Belum diuji di perangkat
-> nyata, jadi setelah install buka menu **⫶ → Laporan perangkat** untuk memastikan
-> backend-nya `BINDER` dan kode op overlay ter-resolve (harusnya `24`).
+APK ini **tidak punya native library (`.so`)** — semua kode Java/Kotlin
+(bukti di build log: `mergeReleaseNativeLibs NO-SOURCE`). Artinya satu APK jalan di
+`armeabi-v7a`, `arm64-v8a`, dan `x86/x86_64`. Varian per-ABI akan identik byte-per-byte,
+jadi tidak dibuatkan. Workflow otomatis bikin split per-ABI kalau nanti ada `.so`.
 
 ---
 
-## 1. Kenapa perlu Shizuku?
+## 🆕 Yang baru di 1.1.0
 
-`SYSTEM_ALERT_WINDOW` (dan op-op lain) disimpan di `AppOpsService` sebagai "mode" per
-(uid, package, op). Untuk membaca/mengubahnya app harus memegang
-`MANAGE_APP_OPS_MODES` — permission yang **hanya dipegang shell (uid 2000) dan root**.
-App biasa yang memanggil `AppOpsManager.setMode()` untuk paket lain akan kena
-`SecurityException`.
+**Perbaikan penting — pesan status yang salah**
+Sebelumnya app sering bilang *"Izin Shizuku belum diberikan"* padahal izinnya sudah kamu kasih.
+Penyebabnya: kalau refleksi ke `IAppOpsService` gagal (dibatasi ROM/Android versi tertentu),
+app diam-diam jalan lewat jalur shell tapi UI-nya menyalahkan izin. Sekarang status dipisah jelas
+dan pesannya jujur:
 
-Shizuku menyelesaikan ini dengan meminjamkan identitas shell/root lewat binder:
-app kita tetap app biasa, tapi panggilan binder-nya dieksekusi sebagai shell.
-
-```
-┌──────────────┐   binder via Shizuku   ┌──────────────────┐   asInterface()   ┌─────────────────┐
-│  OverlayOps  │ ─────────────────────► │  uid 2000 / 0    │ ────────────────► │  AppOpsService  │
-│  (uid 10xxx) │  ShizukuBinderWrapper  │  Shizuku server  │  IAppOpsService   │  (system_server)│
-└──────────────┘                        └──────────────────┘                   └─────────────────┘
-```
-
-Jadi tidak ada root, tidak ada Magisk, dan tidak ada ADB yang permanen.
-
-## 2. Fitur
-
-| Fitur | Keterangan |
+| Chip | Artinya |
 |---|---|
-| Tab **Overlay** | Daftar app yang punya op overlay eksplisit atau meminta izin overlay di manifest |
-| Tab **Aplikasi** | Semua app terpasang (termasuk app sistem & yang dinonaktifkan) |
-| Ubah mode per app | `Allow` / `Ignore` / `Deny` / `Default` / `Foreground` — ketuk chip status, atau tahan lama di baris |
-| Mode **Ignore** | Bikin op "dianggap belum dijawab" alih-alih diblokir keras — lebih jarang bikin app crash |
-| Detail app | 19 AppOp + status masing-masing, uid, targetSdk, badge app sistem |
-| Cari & filter | Cari nama/paket, filter Diizinkan / Diblokir / Default / Sistem |
-| Laporan perangkat | Versi Android, status Shizuku, backend aktif, kode op hasil resolusi — buat debug |
-| Jalur cadangan | Kalau refleksi binder diblokir ROM, otomatis pindah ke perintah `appops` lewat shell Shizuku |
+| 🔴 `Shizuku mati` | Shizuku belum dijalankan |
+| 🔴 `Izin belum` | Shizuku jalan, app belum diizinkan |
+| 🟠 `Mode shell` | Izin ada, binder gagal → otomatis pakai perintah `appops` (tetap jalan!) |
+| 🟢 `Shizuku · shell` / `· root` | Semua lancar lewat binder |
 
-## 3. Cara pakai
+Ditambah: status diperiksa ulang tiap app dibuka kembali (`onResume`), jadi kalau izin diberikan
+dari app Shizuku (di background) chip-nya langsung berubah tanpa restart. Menu **⫶ → Laporan
+perangkat** kini menampilkan jalur mana yang aktif + error persisnya.
 
-1. **Install Shizuku** (`moe.shizuku.privileged.api`) dari Play Store atau GitHub.
-2. **Mulai Shizuku**:
-   - *Root*: buka Shizuku → "Start via root".
-   - *Tanpa root (Android 11+)*: aktifkan **Wireless debugging**, pairing dari app Shizuku,
-     lalu Start. Alternatif klasik lewat kabel:
-     `adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh`
-3. **Install OverlayOps**: `adb install -r apk/OverlayOps-1.0.0-debug.apk`
-   (atau copy APK-nya ke HP dan pasang manual — debug-signed, aman di-sideload).
-4. Buka app → kartu **"Sambungkan ke Shizuku"** → **Minta izin** → setujui.
-5. Selesai. Ketuk app untuk lihat detail, ketuk chip status (atau tahan lama) untuk ubah mode.
+**Arsitektur jadi shell-first**
+Baca/tulis kini default lewat perintah resmi `appops` (stabil di semua ROM), binder dipakai
+kalau refleksi berhasil. Efeknya:
+- daftar app dimuat lewat 4 perintah (`appops query-op`) untuk semua paket — bukan 1 perintah per app
+- detail app = **satu** perintah (`appops get <pkg>`) untuk semua op, dulu 19 panggilan
+- tulis pakai `appops set --uid <pkg> <OP> <mode>`
 
-> Catatan: kode op overlay = **24** (`OP_SYSTEM_ALERT_WINDOW`). Setara dengan
-> `adb shell appops set --uid <paket> SYSTEM_ALERT_WINDOW allow`.
+**Filter & pemisah (request kamu)**
+- Chip filter **tipe**: `Semua` / `Terinstall` / `Sistem`
+- Chip filter **status**: `Semua status` / `Diizinkan` / `Diblokir` / `Default`
+- **Pemisah section** "APP TERINSTALL (n)" dan "APP SISTEM (n)" dengan pembatas + jumlah
+- Menu **⫶ → Urutkan berdasarkan**: Nama ⇄ Status (yang eksplisit naik ke atas)
 
-## 4. Struktur kode
+**UX**
+- **Bottom sheet** ubah mode dengan penjelasan tiap opsi (allow/ignore/deny/default/foreground)
+  dan peringatan khusus kalau app-nya memang minta izin overlay
+- **Snackbar + tombol Batal (undo)** untuk setiap perubahan — termasuk undo aksi massal
+- Tab menampilkan jumlah: `Overlay · 12` / `Semua app · 156`
+- Hint bar dinamis: total app · overlay · diizinkan · diblokir, dan progress saat aksi massal
+- Empty state yang spesifik (belum tersambung / belum ada data / tidak ada hasil)
+
+**Fitur baru**
+- **Aksi massal**: blokir overlay semua app user · izinkan semua yang minta overlay · reset ke default
+- **Backup & restore** via clipboard (format `namapaket=status`), restore melewati app yang tak terpasang
+- Detail app: copy paket, buka App Info, buka Settings overlay, lintas 19 AppOp
+
+**Optimasi**
+- Release di-minify R8 + shrink resources: **5,8 MB → 1,9 MB**
+- Ikon app di-cache (`LruCache`) — refresh tidak lagi load ulang ratusan ikon
+- `itemAnimator` dimatikan + `setHasFixedSize`, binder call dihemat
+
+---
+
+## 🔧 Kenapa perlu Shizuku?
+
+`SYSTEM_ALERT_WINDOW` (dan op lain) disimpan di `AppOpsService` sebagai mode per (uid, package, op).
+Untuk membacanya app harus memegang `MANAGE_APP_OPS_MODES` — permission yang **hanya dipegang
+shell (uid 2000) dan root**. Shizuku meminjamkan identitas itu:
+
+```
+┌──────────────┐    perintah `appops` / binder    ┌──────────────────┐        ┌─────────────────┐
+│  OverlayOps  │ ───────────────────────────────► │  uid 2000 / 0    │ ─────► │  AppOpsService  │
+│  (uid 10xxx) │        via Shizuku server        │  Shizuku server  │        │  (system_server)│
+└──────────────┘                                  └──────────────────┘        └─────────────────┘
+```
+
+Tanpa root, tanpa Magisk, tanpa ADB permanen. Jalur tulis setara dengan:
+`adb shell appops set --uid <paket> SYSTEM_ALERT_WINDOW allow|ignore|deny|default|foreground`
+
+## 🚀 Cara pakai
+
+1. Install **Shizuku** (`moe.shizuku.privileged.api`) — Play Store atau GitHub.
+2. Mulai Shizuku:
+   - *root*: buka Shizuku → "Start via root"
+   - *tanpa root (Android 11+)*: aktifkan **Wireless debugging** → pairing dari app Shizuku → Start
+   - *lewat kabel*: `adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh`
+3. Install OverlayOps (lihat tabel Download).
+4. Buka app → kalau muncul kartu **Sambungkan ke Shizuku** → **Minta izin** → setujui.
+5. Ketuk app untuk detail · ketuk chip status atau tahan lama di baris untuk ubah mode.
+6. Cek **⫶ → Laporan perangkat** buat memastikan jalur aktif (`binder` atau `shell`).
+
+## 🔍 Troubleshooting
+
+| Gejala | Penyebab & solusi |
+|---|---|
+| Chip merah **Izin belum**, dialog tidak muncul | Buka app Shizuku → **Authorized applications** → aktifkan OverlayOps. Setelah itu balik ke app (status auto-refresh). |
+| Chip oranye **Mode shell** | Refleksi binder diblokir ROM. Semua fitur tetap jalan lewat `appops`; tak perlu diapa-apakan. |
+| Chip merah **Akses gagal** | Izin ada tapi binder & shell dua-duanya gagal. Kirim isi **Laporan perangkat** untuk ditelusuri. |
+| Perubahan tidak terasa | Beberapa app mewajibkan restart agar override overlay berlaku. Beberapa ROM juga punya "Restricted settings" — keluarkan app-nya dari situ. |
+| Status `Tidak diketahui` | Op tidak tersedia di ROM tersebut; kode op di-resolve lewat 3 cara (refleksi `strOpToOp`, peta `opToName`, fallback hardcoded). |
+
+## 🧱 Struktur kode
 
 ```
 app/src/main/java/app/overlayops/
+├── OverlayOpsApp.kt          # pasang HiddenApiBypass sedini mungkin
 ├── core/
-│   ├── AppOpsBridge.kt     # refleksi IAppOpsService lewat ShizukuBinderWrapper (jalur utama)
-│   ├── ShizukuBridge.kt    # cek/izin Shizuku + shell `appops` (jalur cadangan)
-│   ├── OpCatalog.kt        # daftar AppOp + kode AOSP-nya
-│   └── OpStatus.kt         # mode 0..4 → ALLOWED/IGNORED/ERRORED/DEFAULT/FOREGROUND
-├── data/AppsRepository.kt  # PackageManager + baca status overlay (bulk: `appops query-op`)
+│   ├── AppOpsBridge.kt       # refleksi IAppOpsService via ShizukuBinderWrapper (opsional)
+│   ├── ShizukuBridge.kt      # probe status izin + jalur shell `appops` (utama)
+│   ├── AccessState.kt        # state koneksi + filter tipe + mode urut
+│   ├── OpCatalog.kt          # 19 AppOp + kode AOSP
+│   └── OpStatus.kt           # mode 0..4 → ALLOWED/IGNORED/ERRORED/DEFAULT/FOREGROUND
+├── data/AppsRepository.kt    # PackageManager, cache ikon, baca/tulis/batch, backup
 ├── model/AppEntry.kt
-└── ui/                     # MainActivity, MainViewModel, AppListAdapter, ChipStyle
+└── ui/                       # MainActivity, MainViewModel, AppListAdapter, ModeSheet, ListItems
 ```
 
-Bagian paling menarik ada di `AppOpsBridge.kt`:
-
-```kotlin
-val raw: IBinder = SystemServiceHelper.getSystemService("appops")
-val asInterface = Class.forName("android.app.AppOpsManager\$IAppOpsService\$Stub")
-val svc = asInterface.getMethod("asInterface", IBinder::class.java)
-    .invoke(null, ShizukuBinderWrapper(raw))
-svc.checkOperation(op, uid, pkg)   // baca
-svc.setMode(op, uid, pkg, mode)    // tulis
-```
-
-Kelas `IAppOpsService` itu hidden API, jadi sebelum dipakai app memasang
-`HiddenApiBypass.addHiddenApiExemptions("Landroid/", ...)` (library LSPosed) —
-persis seperti yang dilakukan App Ops aslinya.
-
-## 5. Build sendiri
+## 🛠️ Build sendiri
 
 Butuh JDK 17 + Android SDK (platform 34, build-tools 34.0.0).
 
 ```bash
-# cara cepat (Linux/mac, macOS pakai JDK 17 dari Homebrew)
 export JAVA_HOME=/path/to/jdk17
 export ANDROID_HOME=/path/to/android-sdk
-./gradlew assembleDebug          # atau: gradle assembleDebug
-# hasil: app/build/outputs/apk/debug/app-debug.apk
+bash ./gradlew assembleDebug      # app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Di `build.sh` sudah ada setup lengkap yang dipakai untuk membuat APK di folder `apk/`.
-Kalau dibuka di **Android Studio** (Ladybug+), `local.properties` akan di-sesuaikan otomatis
-ke SDK lokal kamu — file itu memang environment-specific.
+Build release yang ditandatangani (tanpa menaruh keystore di repo):
 
-Dependency: `dev.rikka.shizuku:api:13.1.5`, `:provider:13.1.5`,
-`org.lsposed.hiddenapibypass:hiddenapibypass:4.3`, AndroidX + Material3.
+```bash
+export KEYSTORE_PATH=/path/keystore.jks
+export KEYSTORE_PASSWORD=...
+export KEY_PASSWORD=...      # PKCS12: sama dengan KEYSTORE_PASSWORD
+export KEY_ALIAS=...
+bash ./gradlew assembleRelease
+```
 
-## 6. Batasan & rencana lanjutan
+CI (`.github/workflows/build.yml`) membaca keystore dari GitHub Secrets:
+`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `KEY_ALIAS`. Kalau secret belum ada,
+build release dilewati dan hanya debug yang dibuat — jadi fork tetap bisa build.
 
-- **`Shizuku.newProcess` di-private-kan di API 13** → jalur shell memanggilnya via refleksi.
-  Kalau Shizuku mengubah implementasinya, jalur cadangan bisa mati (jalur utama binder tetap jalan).
-  Solusi jangka panjang: pindah ke **Shizuku UserService**.
-- Refleksi `IAppOpsService` bergantung pada nama method AOSP; ROM yang mengubahnya
-  (beberapa ROM Cina) bisa gagal → UI akan menampilkan status "Tidak diketahui".
-  Kode op punya fallback hardcoded (overlay = 24) supaya tetap jalan.
-- Belum ada: template/batch (misal "blokir overlay semua app user"), backup-restore,
-  pencatatan waktu akses terakhir (`noteOperation`) butuh thread watcher,
-  dan multi-user (hanya user saat ini).
-- Belum ada automated test; verifikasi dilakukan lewat menu Laporan perangkat di HP.
+Semua proses jalan lokal di HP: **tidak ada permission internet**, tidak ada analytics.
 
-## 7. Privasi
+## 📋 Rencana lanjutan
 
-Semua proses jalan lokal di HP. Tidak ada network permission di manifest, tidak ada
-analytics, tidak ada data yang keluar dari perangkat.
+- Template/batch bernama (mis. "mode hemat baterai": blokir overlay + wakelock sekaligus)
+- Riwayat perubahan + waktu akses terakhir per op (`noteOperation` butuh watcher)
+- Dukungan multi-user / work profile
+- Migrasi binder ke Shizuku UserService (agar tidak bergantung pada refleksi `newProcess`)
+- Patch `targetSdk` ke 35/36 untuk Android 15/16

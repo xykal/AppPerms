@@ -3,6 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+// Keystore release diambil dari environment (dipakai di CI lewat GitHub Secrets).
+// Kalau tidak tersedia (misal build lokal biasa), build release akan unsigned.
+val keystorePath: String? = System.getenv("KEYSTORE_PATH")
+val hasReleaseKeystore: Boolean =
+    !keystorePath.isNullOrBlank() && File(keystorePath).exists()
+
 android {
     namespace = "app.overlayops"
     compileSdk = 34
@@ -11,18 +17,39 @@ android {
         applicationId = "app.overlayops"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
         vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = File(keystorePath!!)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+                enableV2Signing = true
+                enableV3Signing = true
+            }
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            if (hasReleaseKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             applicationIdSuffix = ""
+            isMinifyEnabled = false
         }
     }
 

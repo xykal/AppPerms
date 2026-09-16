@@ -7,22 +7,43 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.overlayops.databinding.ItemAppBinding
+import app.overlayops.databinding.ItemHeaderBinding
 import app.overlayops.model.AppEntry
 
 class AppListAdapter(
     private val onOpen: (AppEntry) -> Unit,
     private val onChangeOverlay: (AppEntry) -> Unit,
-) : ListAdapter<AppEntry, AppListAdapter.VH>(DIFF) {
+) : ListAdapter<ListItem, RecyclerView.ViewHolder>(DIFF) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(
-        ItemAppBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-        onOpen,
-        onChangeOverlay,
-    )
+    override fun getItemViewType(position: Int): Int = when (getItem(position)) {
+        is ListItem.Header -> TYPE_HEADER
+        is ListItem.App -> TYPE_APP
+    }
 
-    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(getItem(position))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return if (viewType == TYPE_HEADER) {
+            HeaderVH(ItemHeaderBinding.inflate(inflater, parent, false))
+        } else {
+            AppVH(ItemAppBinding.inflate(inflater, parent, false), onOpen, onChangeOverlay)
+        }
+    }
 
-    class VH(
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is ListItem.Header -> (holder as HeaderVH).bind(item)
+            is ListItem.App -> (holder as AppVH).bind(item.entry)
+        }
+    }
+
+    class HeaderVH(private val b: ItemHeaderBinding) : RecyclerView.ViewHolder(b.root) {
+        fun bind(item: ListItem.Header) = with(b) {
+            headerTitle.text = item.title
+            headerCount.text = item.count.toString()
+        }
+    }
+
+    class AppVH(
         private val b: ItemAppBinding,
         private val onOpen: (AppEntry) -> Unit,
         private val onChangeOverlay: (AppEntry) -> Unit,
@@ -33,7 +54,7 @@ class AppListAdapter(
             pkg.text = item.packageName
             icon.setImageDrawable(item.icon)
             badgeUid.text = "uid ${item.uid}"
-            badgeSystem.isVisible = item.isSystem
+            badgeSystem.isVisible = item.isSystem && false
             badgeDeclares.isVisible = item.declaresOverlay
             statusChip.bindStatusChip(item.overlayStatus)
 
@@ -47,9 +68,12 @@ class AppListAdapter(
     }
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<AppEntry>() {
-            override fun areItemsTheSame(old: AppEntry, new: AppEntry) = old.packageName == new.packageName
-            override fun areContentsTheSame(old: AppEntry, new: AppEntry) = old == new
+        private const val TYPE_HEADER = 0
+        private const val TYPE_APP = 1
+
+        private val DIFF = object : DiffUtil.ItemCallback<ListItem>() {
+            override fun areItemsTheSame(old: ListItem, new: ListItem) = old.key == new.key
+            override fun areContentsTheSame(old: ListItem, new: ListItem) = old == new
         }
     }
 }
