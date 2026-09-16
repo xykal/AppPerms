@@ -39,7 +39,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Compile
-        run: ./gradlew :app:assembleDebug --no-daemon --console=plain
+        run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain
 
       - name: Siapkan artefak (universal + ABI)
         id: artifact
