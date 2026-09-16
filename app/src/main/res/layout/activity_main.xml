@@ -36,9 +36,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
+                android:text="@string/app_subtitle"
                 android:textColor="@color/on_surface_dim"
-                android:textSize="11sp"
-                tools:text="Overlay manager via Shizuku" />
+                android:textSize="11sp" />
         </LinearLayout>
 
         <TextView

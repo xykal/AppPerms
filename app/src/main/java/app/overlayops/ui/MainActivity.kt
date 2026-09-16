@@ -285,16 +285,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyAndOfferUndo(entry: AppEntry, def: OpDef, status: OpStatus, previous: OpStatus) {
+    private fun applyAndOfferUndo(
+        entry: AppEntry,
+        def: OpDef,
+        status: OpStatus,
+        previous: OpStatus,
+        onUndoCallback: (() -> Unit)? = null,
+    ) {
         viewModel.applyStatus(entry, def, status) { error, _ ->
             if (error == null) {
                 snackWithUndo(
                     getString(R.string.applied, entry.label, getString(status.labelRes)),
                 ) {
-                    viewModel.applyStatus(entry, def, previous) { _, _ -> snack("Dikembalikan") }
+                    viewModel.applyStatus(entry, def, previous) { _, _ ->
+                        snack("Dikembalikan")
+                        onUndoCallback?.invoke()
+                    }
                 }
             } else {
                 showError(error)
+                onUndoCallback?.invoke()
             }
         }
     }
@@ -521,15 +531,21 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
-        ops.forEach { (def, status) ->
+        ops.forEach { (def, initialStatus) ->
             val row = ItemOpBinding.inflate(layoutInflater, b.opsContainer, false)
             row.opTitle.text = def.title
             row.opDesc.text = "${def.op}\n${def.description}"
-            row.opStatus.bindStatusChip(status)
+            row.opStatus.bindStatusChip(initialStatus)
+            var currentStatus = initialStatus
             row.opRow.setOnClickListener {
-                ModeSheet.show(this, entry, def, status) { picked ->
-                    applyAndOfferUndo(entry, def, picked, status)
-                    viewModel.readOps(entry) { fresh -> renderOps(b, entry, fresh) }
+                ModeSheet.show(this, entry, def, currentStatus) { picked ->
+                    val prev = currentStatus
+                    currentStatus = picked
+                    row.opStatus.bindStatusChip(picked)
+                    applyAndOfferUndo(entry, def, picked, prev) {
+                        currentStatus = prev
+                        row.opStatus.bindStatusChip(prev)
+                    }
                 }
             }
             b.opsContainer.addView(row.root)

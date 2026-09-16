@@ -92,7 +92,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    /** Ubah mode satu op. `onDone` menerima (error, statusLama) — statusLama dipakai untuk undo. */
+    /** Ubah mode satu op. Optimistic UI update: langsung ubah status di UI seketika tanpa jeda. */
     fun applyStatus(
         entry: AppEntry,
         def: OpDef,
@@ -100,20 +100,31 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         onDone: (error: String?, previous: OpStatus) -> Unit,
     ) {
         val previous = entry.overlayStatus
+        if (previous == status) {
+            onDone(null, previous)
+            return
+        }
+
+        // Optimistic UI update: langsung ubah status di list seketika (0 ms feedback)
+        if (def.op == OpCatalog.OVERLAY.op) {
+            patchEntry(entry.packageName) { it.copy(overlayStatus = status) }
+        }
+
         val preferShell = _state.value.snapshot.preferShell
         viewModelScope.launch {
             val error = withContext(Dispatchers.IO) {
                 runCatching { repo.writeOp(entry, def, status, preferShell) }
                     .getOrElse { it.message ?: it.javaClass.simpleName }
             }
-            if (error == null && def.op == OpCatalog.OVERLAY.op) {
-                patchEntry(entry.packageName) { it.copy(overlayStatus = status) }
+            if (error != null && def.op == OpCatalog.OVERLAY.op) {
+                // Eksekusi gagal -> rollback ke status semula
+                patchEntry(entry.packageName) { it.copy(overlayStatus = previous) }
             }
             onDone(error, previous)
         }
     }
 
-    /** Inti aksi massal: terapkan status ke banyak app sekaligus, dengan progress. */
+    /** Inti aksi massal: terapkan status ke banyak app sekaligus, dengan progress & optimistic update. */
     fun applyTargets(
         targets: List<Pair<AppEntry, OpStatus>>,
         label: String,
@@ -122,6 +133,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         if (targets.isEmpty()) return
         val preferShell = _state.value.snapshot.preferShell
         _state.update { it.copy(busy = "$label 0/${targets.size}…") }
+
+        // Optimistic update all targets seketika
+        val targetMap = targets.associate { it.first.packageName to it.second }
+        _state.update { s ->
+            s.copy(apps = s.apps.map { entry ->
+                targetMap[entry.packageName]?.let { entry.copy(overlayStatus = it) } ?: entry
+            }).recompute()
+        }
+
         viewModelScope.launch {
             var applied = 0
             var firstError: String? = null
@@ -132,9 +152,14 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                     }.getOrElse { it.message ?: it.javaClass.simpleName }
                     if (error == null) {
                         applied++
-                        patchEntry(entry.packageName) { it.copy(overlayStatus = status) }
-                    } else if (firstError == null) {
-                        firstError = "${entry.label}: $error"
+                    } else {
+                        if (firstError == null) firstError = "${entry.label}: $error"
+                        // Rollback untuk entry yang gagal
+                        _state.update { s ->
+                            s.copy(apps = s.apps.map {
+                                if (it.packageName == entry.packageName) entry else it
+                            }).recompute()
+                        }
                     }
                     _state.update { it.copy(busy = "$label ${index + 1}/${targets.size}…") }
                 }

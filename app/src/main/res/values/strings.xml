@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">OverlayOps</string>
+    <string name="app_subtitle">Built in XyVerse · via Shizuku</string>
 
     <!-- tab & pencarian -->
     <string name="tab_overlay">Overlay</string>
@@ -99,5 +100,5 @@
     <!-- laporan & tentang -->
     <string name="device_report">Laporan perangkat</string>
     <string name="about_title">Tentang OverlayOps</string>
-    <string name="about_body">OverlayOps — pengelola AppOps ringan yang fokus ke SYSTEM_ALERT_WINDOW (Display over other apps) dan 18 op terkait (kamera, mikrofon, clipboard, lokasi, dst).\n\nCara kerja: baca/tulis lewat perintah `appops` dengan hak akses Shizuku, atau lewat binder IAppOpsService kalau refleksi berhasil. Sama seperti `adb shell appops`.\n\nTanpa izin internet: tidak ada data yang keluar dari perangkat. Tanpa root permanen.</string>
+    <string name="about_body">OverlayOps — pengelola AppOps ringan yang fokus ke SYSTEM_ALERT_WINDOW (Display over other apps) dan 18 op terkait (kamera, mikrofon, clipboard, lokasi, dst).\n\nBuilt in XyVerse (@xykalnotkel)\n\nCara kerja: baca/tulis langsung via Shizuku tanpa root permanen. Super responsif, 100% transparan, tanpa iklan, dan tanpa izin internet (data tidak pernah keluar dari perangkat).</string>
 </resources>

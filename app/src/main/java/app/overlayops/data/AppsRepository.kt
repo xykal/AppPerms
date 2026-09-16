@@ -40,11 +40,22 @@ class AppsRepository(private val context: Context) {
             emptyList()
         }
 
+        // Ambil himpunan paket yang meminta izin overlay dalam 1 batch call (bukan N IPC calls)
+        val declaredOverlaySet: Set<String> = runCatching {
+            pm.getInstalledPackages(PackageManager.GET_PERMISSIONS)
+                .asSequence()
+                .filter { pi ->
+                    pi.requestedPermissions?.any { it == android.Manifest.permission.SYSTEM_ALERT_WINDOW } == true
+                }
+                .mapNotNull { it.packageName }
+                .toSet()
+        }.getOrElse { emptySet() }
+
         // Satu tembakan untuk semua paket (4 perintah), bukan satu perintah per app.
         val bulk: Map<String, OpStatus>? = if (preferShell) ShizukuBridge.shellQueryOverlayBulk() else null
 
         return infos.asSequence()
-            .mapNotNull { info -> toEntry(info, bulk, preferShell) }
+            .mapNotNull { info -> toEntry(info, bulk, declaredOverlaySet, preferShell) }
             .sortedBy { it.labelLower }
             .toList()
     }
@@ -52,13 +63,18 @@ class AppsRepository(private val context: Context) {
     private fun toEntry(
         info: ApplicationInfo,
         bulk: Map<String, OpStatus>?,
+        declaredOverlaySet: Set<String>,
         preferShell: Boolean,
     ): AppEntry? {
         val pkg = info.packageName ?: return null
         val isSystem = (info.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
         val label = runCatching { pm.getApplicationLabel(info).toString() }.getOrDefault(pkg)
         val enabled = info.enabled
-        val declaresOverlay = declaresOverlayPermission(pkg)
+        val declaresOverlay = if (declaredOverlaySet.isNotEmpty()) {
+            declaredOverlaySet.contains(pkg)
+        } else {
+            declaresOverlayPermission(pkg)
+        }
         val icon = iconFor(pkg, info)
 
         val status = when {

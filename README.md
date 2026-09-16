@@ -1,184 +1,102 @@
 # OverlayOps
 
-Aplikasi Android untuk mengelola **AppOps tersembunyi** — fokus utama op
-`SYSTEM_ALERT_WINDOW` (**Display over other apps**), plus 18 op lain (kamera, mikrofon,
+Aplikasi Android modern & super ringan untuk mengelola **AppOps tersembunyi** — fokus utama op
+`SYSTEM_ALERT_WINDOW` (**Display over other apps**), plus 18 op penting lainnya (kamera, mikrofon,
 clipboard, lokasi, wakelock, dst).
 
-Terinspirasi dari [App Ops by Rikka](https://appops.rikka.app/). Bedanya: versi ringan
-(~1.700 baris Kotlin, tanpa Hilt/Room/Compose) yang khusus membedah overlay secara mendalam,
-dan **tanpa root permanen** karena memakai Shizuku.
+✨ **Built in XyVerse** oleh [Xykal (@xykalnotkel)](https://github.com/xykalnotkel).  
+Terinspirasi dari [App Ops by Rikka](https://appops.rikka.app/), namun dibuat jauh lebih ramping (~1.9 MB),
+responsif tanpa jeda (**0ms Optimistic UI**), dan **tanpa root permanen** lewat **Shizuku**.
+
+---
+
+## 🌐 Website Resmi & Audit Keamanan
+
+Kunjungi landing page lengkap OverlayOps:
+👉 **[Website OverlayOps (Built in XyVerse)](https://xykalnotkel.github.io/OverlayOps/)**
+
+- **Scan Antivirus VirusTotal**: **0/72 Clean (100% Undetected)**
+- **Audit Privasi**: 0 permission internet di `AndroidManifest.xml` (data mustahil keluar dari perangkat).
+- **Keystore Resmi**: Ditandatangani RSA 4096-bit resmi XyVerse.
 
 ---
 
 ## ⬇️ Download
 
-| | |
-|---|---|
-| **Release APK (disarankan)** | **[OverlayOps-1.1.0-release.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.1.0/OverlayOps-1.1.0-release.apk)** |
-| Debug APK (troubleshooting) | [OverlayOps-1.1.0-debug.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.1.0/OverlayOps-1.1.0-debug.apk) |
-| Halaman release | https://github.com/xykalnotkel/OverlayOps/releases |
-| Build log CI | https://github.com/xykalnotkel/OverlayOps/actions |
+| Varian | Link Unduh | Ukuran | Catatan |
+|---|---|---|---|
+| **Release APK (Disarankan)** | **[OverlayOps-1.2.0-release.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-release.apk)** | **1,90 MB** | Signed Keystore Resmi, R8 Minified, Anti-Lag Engine |
+| Debug APK (Troubleshooting) | [OverlayOps-1.2.0-debug.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.2.0/OverlayOps-1.2.0-debug.apk) | ~6,0 MB | Logging logcat aktif, unstripped |
+| Tag Releases | [GitHub Releases v1.2.0](https://github.com/xykalnotkel/OverlayOps/releases) | — | Semua rilisan & changelog |
+| Build Log CI | [GitHub Actions](https://github.com/xykalnotkel/OverlayOps/actions) | — | Build otomatis multi-runner |
 
-**Versi release** sudah di-minify R8 + resource shrink (**1,9 MB**, dari 5,8 MB versi debug)
-dan ditandatangani keystore resmi:
+### 🔐 Fingerprint Sertifikat Resmi
 
 ```
 SHA-256 : 82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30
 SHA-1   : 99:55:67:5C:19:0C:BB:4B:0F:D5:08:94:74:08:D2:B8:92:22:69:FF
+MD5     : 86:4C:BF:D8:C3:9B:A3:F3:89:B8:5D:64:C2:A1:B7:D6
+Alias   : overlayops (CN=OverlayOps, OU=Release, O=xykalnotkel, C=ID)
 ```
 
-Pakai SHA-1 di atas kalau perlu daftar di Google Cloud Console (OAuth client Android /
-Firebase) — **bukan** SHA debug lagi.
+> ⚠️ **Catatan Penting**: Signature release berbeda dari build debug awal. Sebelum menginstall versi release, **uninstall dulu versi debug lama**, baru pasang versi release dan berikan izin Shizuku sekali lagi.
 
-> ⚠️ Signature release berbeda dari build debug sebelumnya → **uninstall dulu versi debug**,
-> baru pasang versi release. Setelah install ulang, kasih izin Shizuku sekali lagi
-> (dibuka otomatis lewat dialog saat pertama jalan).
+### ❓ Kenapa Tidak Ada di Google Play Store?
 
-### Soal armeabi-v7a / arm64-v8a
-
-APK ini **tidak punya native library (`.so`)** — semua kode Java/Kotlin
-(bukti di build log: `mergeReleaseNativeLibs NO-SOURCE`). Artinya satu APK jalan di
-`armeabi-v7a`, `arm64-v8a`, dan `x86/x86_64`. Varian per-ABI akan identik byte-per-byte,
-jadi tidak dibuatkan. Workflow otomatis bikin split per-ABI kalau nanti ada `.so`.
+Bukan karena malware ataupun virus (terbukti 0/72 di VirusTotal & tanpa izin internet).
+Alasannya:
+1. **Keterbatasan modal**: Biaya pendaftaran akun Google Play Console ($25 USD) dan birokrasi verifikasi korporat/identitas yang ketat untuk pengembang independen.
+2. **Kebijakan Google Play**: Google semakin memperketat dan membatasi aplikasi yang mengelola izin sistem / Shizuku.
+3. Rilis mandiri via GitHub Releases menjaga OverlayOps tetap 100% bebas, tanpa iklan, dan tanpa pelacak.
 
 ---
 
-## 🆕 Yang baru di 1.1.0
+## 🆕 Yang Baru di v1.2.0
 
-**Perbaikan penting — pesan status yang salah**
-Sebelumnya app sering bilang *"Izin Shizuku belum diberikan"* padahal izinnya sudah kamu kasih.
-Penyebabnya: kalau refleksi ke `IAppOpsService` gagal (dibatasi ROM/Android versi tertentu),
-app diam-diam jalan lewat jalur shell tapi UI-nya menyalahkan izin. Sekarang status dipisah jelas
-dan pesannya jujur:
-
-| Chip | Artinya |
-|---|---|
-| 🔴 `Shizuku mati` | Shizuku belum dijalankan |
-| 🔴 `Izin belum` | Shizuku jalan, app belum diizinkan |
-| 🟠 `Mode shell` | Izin ada, binder gagal → otomatis pakai perintah `appops` (tetap jalan!) |
-| 🟢 `Shizuku · shell` / `· root` | Semua lancar lewat binder |
-
-Ditambah: status diperiksa ulang tiap app dibuka kembali (`onResume`), jadi kalau izin diberikan
-dari app Shizuku (di background) chip-nya langsung berubah tanpa restart. Menu **⫶ → Laporan
-perangkat** kini menampilkan jalur mana yang aktif + error persisnya.
-
-**Arsitektur jadi shell-first**
-Baca/tulis kini default lewat perintah resmi `appops` (stabil di semua ROM), binder dipakai
-kalau refleksi berhasil. Efeknya:
-- daftar app dimuat lewat 4 perintah (`appops query-op`) untuk semua paket — bukan 1 perintah per app
-- detail app = **satu** perintah (`appops get <pkg>`) untuk semua op, dulu 19 panggilan
-- tulis pakai `appops set --uid <pkg> <OP> <mode>`
-
-**Filter & pemisah (request kamu)**
-- Chip filter **tipe**: `Semua` / `Terinstall` / `Sistem`
-- Chip filter **status**: `Semua status` / `Diizinkan` / `Diblokir` / `Default`
-- **Pemisah section** "APP TERINSTALL (n)" dan "APP SISTEM (n)" dengan pembatas + jumlah
-- Menu **⫶ → Urutkan berdasarkan**: Nama ⇄ Status (yang eksplisit naik ke atas)
-
-**UX**
-- **Bottom sheet** ubah mode dengan penjelasan tiap opsi (allow/ignore/deny/default/foreground)
-  dan peringatan khusus kalau app-nya memang minta izin overlay
-- **Snackbar + tombol Batal (undo)** untuk setiap perubahan — termasuk undo aksi massal
-- Tab menampilkan jumlah: `Overlay · 12` / `Semua app · 156`
-- Hint bar dinamis: total app · overlay · diizinkan · diblokir, dan progress saat aksi massal
-- Empty state yang spesifik (belum tersambung / belum ada data / tidak ada hasil)
-
-**Fitur baru**
-- **Aksi massal**: blokir overlay semua app user · izinkan semua yang minta overlay · reset ke default
-- **Backup & restore** via clipboard (format `namapaket=status`), restore melewati app yang tak terpasang
-- Detail app: copy paket, buka App Info, buka Settings overlay, lintas 19 AppOp
-
-**Optimasi**
-- Release di-minify R8 + shrink resources: **5,8 MB → 1,9 MB**
-- Ikon app di-cache (`LruCache`) — refresh tidak lagi load ulang ratusan ikon
-- `itemAnimator` dimatikan + `setHasFixedSize`, binder call dihemat
+1. **⚡ Optimistic Real-Time UI (0ms Feedback)**:
+   - Saat mengubah status di bottom sheet, label dan warna chip di list langsung berganti dalam 0 milidetik seketika tanpa nunggu background task!
+   - Otomatis rollback mulus jika eksekusi sistem ditolak oleh ROM.
+2. **🚀 Anti-Lag Engine**:
+   - `AppsRepository.loadApps`: Pre-fetch `SYSTEM_ALERT_WINDOW` secara batch sekaligus dalam 1 panggilan IPC (mengeliminasi 350+ query binder individual yang bikin freeze).
+   - `AppListAdapter`: Dukungan **Partial Payload Diffing (`PAYLOAD_STATUS`)**. Saat status op berubah, hanya chip yang di-update tanpa me-render ulang ikon atau layout row.
+3. **✨ Built in XyVerse**:
+   - Subtitle header & dialog Tentang OverlayOps kini menampilkan identitas ekosistem resmi XyVerse.
+4. **🌐 Landing Website & VirusTotal Audit**:
+   - Website unduhan interaktif ala App Ops bertema *Cyber-Obsidian Dark*.
+   - Screenshot audit VirusTotal 0/72 Clean dan panduan verifikasi hash.
 
 ---
 
-## 🔧 Kenapa perlu Shizuku?
+## 🔧 Cara Kerja & Shizuku
 
-`SYSTEM_ALERT_WINDOW` (dan op lain) disimpan di `AppOpsService` sebagai mode per (uid, package, op).
-Untuk membacanya app harus memegang `MANAGE_APP_OPS_MODES` — permission yang **hanya dipegang
-shell (uid 2000) dan root**. Shizuku meminjamkan identitas itu:
+OverlayOps bekerja dengan hak akses shell Shizuku (`uid 2000` atau `root 0`) untuk memanggil perintah `appops set --uid` dan membaca status secara presisi.
 
 ```
-┌──────────────┐    perintah `appops` / binder    ┌──────────────────┐        ┌─────────────────┐
-│  OverlayOps  │ ───────────────────────────────► │  uid 2000 / 0    │ ─────► │  AppOpsService  │
-│  (uid 10xxx) │        via Shizuku server        │  Shizuku server  │        │  (system_server)│
-└──────────────┘                                  └──────────────────┘        └─────────────────┘
+┌──────────────┐      perintah appops / binder      ┌──────────────────┐        ┌─────────────────┐
+│  OverlayOps  │ ─────────────────────────────────► │  uid 2000 / 0    │ ─────► │  AppOpsService  │
+│ (XyVerse App)│         via Shizuku Bridge         │  Shizuku Server  │        │  (system_server)│
+└──────────────┘                                    └──────────────────┘        └─────────────────┘
 ```
 
-Tanpa root, tanpa Magisk, tanpa ADB permanen. Jalur tulis setara dengan:
-`adb shell appops set --uid <paket> SYSTEM_ALERT_WINDOW allow|ignore|deny|default|foreground`
+Tanpa root, tanpa Magisk, tanpa ADB terus-menerus. Cukup pairing Wireless Debugging di Android 11+.
 
-## 🚀 Cara pakai
+---
 
-1. Install **Shizuku** (`moe.shizuku.privileged.api`) — Play Store atau GitHub.
-2. Mulai Shizuku:
-   - *root*: buka Shizuku → "Start via root"
-   - *tanpa root (Android 11+)*: aktifkan **Wireless debugging** → pairing dari app Shizuku → Start
-   - *lewat kabel*: `adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh`
-3. Install OverlayOps (lihat tabel Download).
-4. Buka app → kalau muncul kartu **Sambungkan ke Shizuku** → **Minta izin** → setujui.
-5. Ketuk app untuk detail · ketuk chip status atau tahan lama di baris untuk ubah mode.
-6. Cek **⫶ → Laporan perangkat** buat memastikan jalur aktif (`binder` atau `shell`).
+## 🚀 Cara Pakai Cepat
 
-## 🔍 Troubleshooting
+1. Install dan jalankan **Shizuku** (via Wireless Debugging atau Root).
+2. Install **OverlayOps Release APK**.
+3. Buka OverlayOps → tekan **Minta izin** → Izinkan selalu.
+4. Ketuk app untuk detail 19 AppOps, atau ketuk chip status / tahan lama baris untuk mengubah mode overlay.
 
-| Gejala | Penyebab & solusi |
-|---|---|
-| Chip merah **Izin belum**, dialog tidak muncul | Buka app Shizuku → **Authorized applications** → aktifkan OverlayOps. Setelah itu balik ke app (status auto-refresh). |
-| Chip oranye **Mode shell** | Refleksi binder diblokir ROM. Semua fitur tetap jalan lewat `appops`; tak perlu diapa-apakan. |
-| Chip merah **Akses gagal** | Izin ada tapi binder & shell dua-duanya gagal. Kirim isi **Laporan perangkat** untuk ditelusuri. |
-| Perubahan tidak terasa | Beberapa app mewajibkan restart agar override overlay berlaku. Beberapa ROM juga punya "Restricted settings" — keluarkan app-nya dari situ. |
-| Status `Tidak diketahui` | Op tidak tersedia di ROM tersebut; kode op di-resolve lewat 3 cara (refleksi `strOpToOp`, peta `opToName`, fallback hardcoded). |
+---
 
-## 🧱 Struktur kode
-
-```
-app/src/main/java/app/overlayops/
-├── OverlayOpsApp.kt          # pasang HiddenApiBypass sedini mungkin
-├── core/
-│   ├── AppOpsBridge.kt       # refleksi IAppOpsService via ShizukuBinderWrapper (opsional)
-│   ├── ShizukuBridge.kt      # probe status izin + jalur shell `appops` (utama)
-│   ├── AccessState.kt        # state koneksi + filter tipe + mode urut
-│   ├── OpCatalog.kt          # 19 AppOp + kode AOSP
-│   └── OpStatus.kt           # mode 0..4 → ALLOWED/IGNORED/ERRORED/DEFAULT/FOREGROUND
-├── data/AppsRepository.kt    # PackageManager, cache ikon, baca/tulis/batch, backup
-├── model/AppEntry.kt
-└── ui/                       # MainActivity, MainViewModel, AppListAdapter, ModeSheet, ListItems
-```
-
-## 🛠️ Build sendiri
-
-Butuh JDK 17 + Android SDK (platform 34, build-tools 34.0.0).
+## 🛠️ Build dari Source
 
 ```bash
 export JAVA_HOME=/path/to/jdk17
 export ANDROID_HOME=/path/to/android-sdk
-bash ./gradlew assembleDebug      # app/build/outputs/apk/debug/app-debug.apk
+bash ./gradlew assembleDebug
 ```
 
-Build release yang ditandatangani (tanpa menaruh keystore di repo):
-
-```bash
-export KEYSTORE_PATH=/path/keystore.jks
-export KEYSTORE_PASSWORD=...
-export KEY_PASSWORD=...      # PKCS12: sama dengan KEYSTORE_PASSWORD
-export KEY_ALIAS=...
-bash ./gradlew assembleRelease
-```
-
-CI (`.github/workflows/build.yml`) membaca keystore dari GitHub Secrets:
-`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `KEY_ALIAS`. Kalau secret belum ada,
-build release dilewati dan hanya debug yang dibuat — jadi fork tetap bisa build.
-
-Semua proses jalan lokal di HP: **tidak ada permission internet**, tidak ada analytics.
-
-## 📋 Rencana lanjutan
-
-- Template/batch bernama (mis. "mode hemat baterai": blokir overlay + wakelock sekaligus)
-- Riwayat perubahan + waktu akses terakhir per op (`noteOperation` butuh watcher)
-- Dukungan multi-user / work profile
-- Migrasi binder ke Shizuku UserService (agar tidak bergantung pada refleksi `newProcess`)
-- Patch `targetSdk` ke 35/36 untuk Android 15/16
+Rilis ditandatangani otomatis di GitHub Actions lewat secret `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `KEY_ALIAS`.

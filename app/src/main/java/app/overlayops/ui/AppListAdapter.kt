@@ -36,6 +36,21 @@ class AppListAdapter(
         }
     }
 
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>,
+    ) {
+        if (payloads.isNotEmpty() && payloads.contains(PAYLOAD_STATUS) && holder is AppVH) {
+            val item = getItem(position)
+            if (item is ListItem.App) {
+                holder.updateStatusOnly(item.entry)
+                return
+            }
+        }
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
     class HeaderVH(private val b: ItemHeaderBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: ListItem.Header) = with(b) {
             headerTitle.text = item.title
@@ -65,15 +80,44 @@ class AppListAdapter(
                 true
             }
         }
+
+        fun updateStatusOnly(item: AppEntry) = with(b) {
+            statusChip.bindStatusChip(item.overlayStatus)
+            statusChip.setOnClickListener { onChangeOverlay(item) }
+            rowRoot.setOnLongClickListener {
+                onChangeOverlay(item)
+                true
+            }
+        }
     }
 
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_APP = 1
+        const val PAYLOAD_STATUS = "payload_status"
 
         private val DIFF = object : DiffUtil.ItemCallback<ListItem>() {
             override fun areItemsTheSame(old: ListItem, new: ListItem) = old.key == new.key
-            override fun areContentsTheSame(old: ListItem, new: ListItem) = old == new
+            override fun areContentsTheSame(old: ListItem, new: ListItem): Boolean {
+                if (old is ListItem.App && new is ListItem.App) {
+                    return old.entry.overlayStatus == new.entry.overlayStatus &&
+                        old.entry.label == new.entry.label &&
+                        old.entry.declaresOverlay == new.entry.declaresOverlay &&
+                        old.entry.isSystem == new.entry.isSystem
+                }
+                return old == new
+            }
+
+            override fun getChangePayload(old: ListItem, new: ListItem): Any? {
+                if (old is ListItem.App && new is ListItem.App) {
+                    if (old.entry.packageName == new.entry.packageName &&
+                        old.entry.overlayStatus != new.entry.overlayStatus
+                    ) {
+                        return PAYLOAD_STATUS
+                    }
+                }
+                return null
+            }
         }
     }
 }
