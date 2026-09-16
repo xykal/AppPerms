@@ -8,9 +8,39 @@ Terinspirasi dari [App Ops by Rikka](https://appops.rikka.app/). Bedanya: ini ve
 (~1.350 baris Kotlin, tanpa Hilt/Room/Compose) yang khusus membedah satu op secara mendalam
 dan tetap pakai **Shizuku** supaya jalan tanpa root permanen.
 
-> **Status:** `assembleDebug` **sukses**, APK siap pasang: [`apk/OverlayOps-1.0.0-debug.apk`](apk/OverlayOps-1.0.0-debug.apk).
-> Belum diuji di perangkat nyata (sandbox ini tidak punya Android), jadi jalankan dulu
-> menu **⫶ → Laporan perangkat** setelah install untuk memastikan bridge-nya konek.
+---
+
+## ⬇️ Download
+
+| | |
+|---|---|
+| **APK langsung (paling cepat)** | **[OverlayOps-1.0.0-debug.apk](https://github.com/xykalnotkel/OverlayOps/releases/download/v1.0.0/OverlayOps-1.0.0-debug.apk)** |
+| Halaman release | https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.0.0 |
+| Build log CI | https://github.com/xykalnotkel/OverlayOps/actions |
+| sha256 | `065c0637b12892c3321c5f8885b388a1d1f355033e4053fa39733ce9d3fdc2c3` · 5,8 MB · debug-signed |
+
+### Soal armeabi-v7a / arm64-v8a
+
+APK ini **tidak mengandung native library (`.so`) sama sekali** — semuanya kode Java/Kotlin.
+Buktinya di build log: `mergeDebugNativeLibs NO-SOURCE`.
+
+Artinya **satu APK ini jalan di semua arsitektur**:
+
+| ABI | status |
+|---|---|
+| `armeabi-v7a` (32-bit ARM) | ✔ jalan |
+| `arm64-v8a` (64-bit ARM) | ✔ jalan |
+| `x86` / `x86_64` (emulator) | ✔ jalan |
+
+Jadi split per-ABI tidak ada gunanya di sini: file `-armeabi-v7a.apk` dan `-arm64-v8a.apk`
+akan **identik byte-per-byte** dengan APK universal ini (beda nama saja), dan malah bikin
+bingung saat install. Kalau nanti ada `.so` ditambahkan, workflow
+(`.github/workflows/build.yml`) otomatis mendeteksi dan membuat varian per-ABI
+lewat `zip -d lib/<abi-lain>/` + re-sign, tanpa perlu diubah.
+
+> **Status:** build CI di GitHub Actions **hijau** (run #3 & #5). Belum diuji di perangkat
+> nyata, jadi setelah install buka menu **⫶ → Laporan perangkat** untuk memastikan
+> backend-nya `BINDER` dan kode op overlay ter-resolve (harusnya `24`).
 
 ---
 
