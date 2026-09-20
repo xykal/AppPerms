@@ -5,12 +5,17 @@ import android.os.Looper
 import java.util.concurrent.Executors
 
 /**
- * Eksekutor perintah tweak (`wm`, `settings`, `am`, `pm`) lewat shell Shizuku.
+ * OPTIMIZED v1.5 - Safe Tuning Only
  *
- * Pola: semua panggilan shell jalan DI SERIAL executor (satu-satu, supaya perintah
+ * Perubahan optimasi:
+ * - HAPUS fitur berbahaya: am kill-all, pm trim-caches, protectApp (RUN_IN_BACKGROUND/deviceidle whitelist)
+ *   yang bikin HP panas, lag, dan ngekill app diam-diam.
+ * - Hanya sisa fitur AMAN: wm size/density (dengan auto-revert 15 detik) + animasi global.
+ * - Executor tetap single-thread + daemon agar tidak bocor memori.
+ *
+ * Semua panggilan shell jalan DI SERIAL executor (satu-satu, supaya perintah
  * `wm` yang bergantian tidak adu cepat dengan reset otomatis), hasilnya dikirim balik
- * ke main thread. `onDone(null)` = sukses; pesan error = teks mentah dari ROM,
- * sengaja tidak diterjemahkan supaya user bisa menyalinnya saat cari solusi.
+ * ke main thread. `onDone(null)` = sukses; pesan error = teks mentah dari ROM.
  */
 object TweaksBridge {
 
@@ -99,24 +104,6 @@ object TweaksBridge {
         }
     }
 
-    // ------------------------------------------------------------- "booster"
-
-    /** `am kill-all` — sistem hanya menghapus proses CACHED, app foreground aman. */
-    fun killBackground(onDone: (String?) -> Unit) {
-        io {
-            val error = run("am kill-all")
-            postMain { onDone(error) }
-        }
-    }
-
-    /** Trim cache seluruh app sampai device punya ruang longgar sebesar `targetBytes`. */
-    fun trimCaches(targetBytes: Long, onDone: (String?) -> Unit) {
-        io {
-            val error = run("pm trim-caches $targetBytes")
-            postMain { onDone(error) }
-        }
-    }
-
     /** Pulihkan snapshot persis; null berarti hapus override dan kembali ke bawaan Android. */
     fun restoreTuning(size: Pair<Int, Int>?, density: Int?, animation: Float?, onDone: (String?) -> Unit) {
         val sizeCmd = size?.let { "wm size ${it.first}x${it.second}" } ?: "wm size reset"
@@ -125,41 +112,11 @@ object TweaksBridge {
         applyWithCallback(listOfNotNull(sizeCmd, densityCmd, animCmd).joinToString(" && "), onDone)
     }
 
-    // ------------------------------------------------------ app terlindungi
-
-    fun protectApp(packageName: String, onDone: (String?) -> Unit) {
-        val pkg = shellQuote(packageName)
-        applyWithCallback(
-            "appops set $pkg RUN_IN_BACKGROUND allow; " +
-                "appops set $pkg RUN_ANY_IN_BACKGROUND allow; " +
-                "am set-inactive $pkg false; cmd deviceidle whitelist +$pkg >/dev/null 2>&1 || true",
-            onDone,
-        )
-    }
-
-    fun unprotectApp(packageName: String, onDone: (String?) -> Unit) {
-        val pkg = shellQuote(packageName)
-        applyWithCallback(
-            "appops set $pkg RUN_IN_BACKGROUND default; " +
-                "appops set $pkg RUN_ANY_IN_BACKGROUND default; " +
-                "cmd deviceidle whitelist -$pkg >/dev/null 2>&1 || true",
-            onDone,
-        )
-    }
-
-    /** Hanya menerima package hasil PackageManager; quote tetap dipakai sebagai lapisan kedua. */
-    private fun shellQuote(value: String): String = "'" + value.replace("'", "'\"'\"'") + "'"
-
-    // ------------------------------------------------- izin overlay utk diri
-
-    /**
-     * Perisai ghost-touch butuh jendela overlay; AppsPerms mengelola op itu sendiri.
-     * Jadi kalau op kita belum allow, kita minta lewat Shizuku — fitur makan sendiri 😄.
-     */
-    fun allowOwnOverlay(packageName: String, onDone: (String?) -> Unit) {
-        io {
-            val error = ShizukuBridge.shellSetOp(packageName, OpCatalog.OVERLAY.shell, OpStatus.ALLOWED)
-            postMain { onDone(error) }
-        }
-    }
+    // -------------------------------------------------------------
+    // REMOVED FOR SAFETY (v1.5 Optimized):
+    // - killBackground() -> am kill-all (bikin ngekill diam-diam, panas, lag reload loop)
+    // - trimCaches() -> pm trim-caches (bikin I/O spike, tidak perlu, sistem kelola sendiri)
+    // - protectApp()/unprotectApp() -> RUN_IN_BACKGROUND + deviceidle whitelist (bikin battery drain permanen, Doze rusak)
+    // - allowOwnOverlay() -> hanya untuk GhostGuard yang sudah dinonaktifkan
+    // Semua fungsi di atas dihapus agar tidak ada setting aneh yang bisa bikin HP panas/lag lagi.
 }

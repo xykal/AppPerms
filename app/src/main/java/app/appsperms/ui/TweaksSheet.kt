@@ -2,33 +2,27 @@ package app.appsperms.ui
 
 import android.app.Activity
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings as SystemSettings
-import android.view.LayoutInflater
-import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import app.appsperms.BuildConfig
 import app.appsperms.R
-import app.appsperms.core.GhostGuard
 import app.appsperms.core.Settings as AppPrefs
 import app.appsperms.core.TweaksBridge
 import app.appsperms.core.WmParser
 import app.appsperms.databinding.DialogResolutionBinding
 import app.appsperms.databinding.SheetTweaksBinding
-import app.appsperms.guard.GhostGuardService
 
 /**
- * Sheet "Tuning" v1.4 — empat kartu:
+ * Sheet "Tuning" v1.5 OPTIMIZED — Hanya 2 kartu AMAN:
  *  1. Resolusi & DPI (wm size / wm density) dengan pengaman auto-revert 15 dtk;
  *  2. Animasi global 0x / 0.5x / 1x;
- *  3. Booster ringan (am kill-all, pm trim-caches);
- *  4. Perisai anti ghost-touch (lihat [GhostGuardService]).
+ *  3. Snapshot & diagnostics (aman, tidak ada kill/whitelist)
+ *
+ * DIHAPUS permanen (bikin panas/lag/ngekill diam-diam):
+ *  - Booster ringan (am kill-all, pm trim-caches)
+ *  - Perisai anti ghost-touch (overlay WindowManager)
+ *  - Proteksi app / profil whitelist (deviceidle)
  *
  * Semua perintah berat lewat [TweaksBridge] (executor serial + callback main-thread).
  * Konfirmasi "tetap pakai?" disimpan di companion supaya countdown tetap jalan
@@ -48,15 +42,12 @@ object TweaksSheet {
 
     fun show(activity: Activity, canOperate: Boolean, onNotify: (String) -> Unit) {
         val dialog = BottomSheetDialog(activity)
-        val b = SheetTweaksBinding.inflate(LayoutInflater.from(activity))
+        val b = SheetTweaksBinding.inflate(android.view.LayoutInflater.from(activity))
         dialog.setContentView(b.root)
 
-        val handler = Handler(Looper.getMainLooper())
-        // v1.4.2: dua fitur yang bisa mengganggu sentuhan / me-reload proses dinonaktifkan.
-        AppPrefs.setGuardEnabled(activity, false)
-        GhostGuardService.syncFromSettings(activity)
-        (b.btnKillBg.parent?.parent as? android.view.View)?.isVisible = false
-        (b.guardSwitch.parent?.parent as? android.view.View)?.isVisible = false
+        // v1.5: Pastikan sisa setting berbahaya bersih
+        AppPrefs.cleanDeprecatedKeys(activity)
+
         fun alive() = !activity.isFinishing && !activity.isDestroyed
 
         // ------------------------------------------------------------ tampilan
@@ -125,60 +116,7 @@ object TweaksSheet {
                 }
             }
 
-        // ----------------------------------------------- proteksi & profil aman
-        fun refreshProtected() {
-            val pkg = AppPrefs.protectedApp(activity)
-            val label = pkg?.let { runCatching {
-                activity.packageManager.getApplicationLabel(activity.packageManager.getApplicationInfo(it, 0)).toString()
-            }.getOrNull() }
-            b.protectedAppStatus.text = if (pkg == null) activity.getString(R.string.protected_app_none)
-                else activity.getString(R.string.protected_app_value, label ?: pkg)
-            b.btnClearProtected.isEnabled = pkg != null
-        }
-        refreshProtected()
-
-        b.btnPickProtected.setOnClickListener {
-            if (!canOperate) return@setOnClickListener onNotify(activity.getString(R.string.tweaks_need_shizuku))
-            val pm = activity.packageManager
-            val apps = pm.getInstalledApplications(0)
-                .filter { pm.getLaunchIntentForPackage(it.packageName) != null && it.packageName != BuildConfig.APPLICATION_ID }
-                .map { pm.getApplicationLabel(it).toString() to it.packageName }
-                .sortedBy { it.first.lowercase() }
-            MaterialAlertDialogBuilder(activity).setTitle(R.string.protected_app_pick)
-                .setItems(apps.map { "${it.first}\n${it.second}" }.toTypedArray()) { _, which ->
-                    val (label, pkg) = apps[which]
-                    TweaksBridge.protectApp(pkg) { err ->
-                        if (err == null) AppPrefs.setProtectedApp(activity, pkg)
-                        refreshProtected()
-                        onNotify(if (err == null) activity.getString(R.string.protected_app_done, label)
-                            else activity.getString(R.string.tweaks_apply_fail, err))
-                    }
-                }.setNegativeButton(R.string.dialog_cancel, null).show()
-        }
-        b.btnClearProtected.setOnClickListener {
-            val pkg = AppPrefs.protectedApp(activity) ?: return@setOnClickListener
-            TweaksBridge.unprotectApp(pkg) { err ->
-                if (err == null) AppPrefs.setProtectedApp(activity, null)
-                refreshProtected()
-                onNotify(if (err == null) activity.getString(R.string.protected_app_removed)
-                    else activity.getString(R.string.tweaks_apply_fail, err))
-            }
-        }
-
-        fun confirmProfile(name: String, scale: Float) {
-            MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.profiles_title)
-                .setMessage(activity.getString(R.string.profile_confirm, name))
-                .setPositiveButton(R.string.dialog_apply) { _, _ ->
-                    TweaksBridge.setAnimScales(scale) { err ->
-                        onNotify(if (err == null) activity.getString(R.string.tweaks_anim_set, formatScale(scale))
-                            else activity.getString(R.string.tweaks_apply_fail, err))
-                    }
-                }.setNegativeButton(R.string.dialog_cancel, null).show()
-        }
-        b.btnProfileGaming.setOnClickListener { confirmProfile(b.btnProfileGaming.text.toString(), 0.5f) }
-        b.btnProfileBattery.setOnClickListener { confirmProfile(b.btnProfileBattery.text.toString(), 1f) }
-
+        // ------------------------------------------------------------- snapshot aman
         b.btnSnapshot.setOnClickListener {
             TweaksBridge.readDisplay { info, err ->
                 if (err != null) return@readDisplay onNotify(activity.getString(R.string.tweaks_apply_fail, err))
@@ -207,161 +145,11 @@ object TweaksSheet {
         }
         b.btnTweakDiagnostics.setOnClickListener {
             TweaksBridge.readDisplay { info, _ -> TweaksBridge.readAnimScales { anim ->
-                val pkg = AppPrefs.protectedApp(activity) ?: "—"
                 MaterialAlertDialogBuilder(activity).setTitle(R.string.tweak_diag_title)
                     .setMessage(activity.getString(R.string.tweak_diag_body, formatDisplay(activity, info),
-                        anim?.let(::formatScale) ?: "?", pkg))
+                        anim?.let(::formatScale) ?: "?"))
                     .setPositiveButton(R.string.dialog_close, null).show()
             } }
-        }
-
-        // ---------------------------------------------------------- "booster"
-        b.btnKillBg.setOnClickListener {
-            if (!canOperate) {
-                onNotify(activity.getString(R.string.tweaks_need_shizuku))
-                return@setOnClickListener
-            }
-            busy(b.btnKillBg, onNotify) { done ->
-                TweaksBridge.killBackground { err ->
-                    done(
-                        if (err == null) activity.getString(R.string.tweaks_kill_done)
-                        else activity.getString(R.string.tweaks_apply_fail, err),
-                    )
-                }
-            }
-        }
-        b.btnTrimCache.setOnClickListener {
-            if (!canOperate) {
-                onNotify(activity.getString(R.string.tweaks_need_shizuku))
-                return@setOnClickListener
-            }
-            busy(b.btnTrimCache, onNotify) { done ->
-                // Target: sisakan ruang longgar 750 MB. Sistem yang memutuskan
-                // cache mana yang boleh dibuang — aman untuk semua ROM.
-                TweaksBridge.trimCaches(750L * 1024 * 1024) { err ->
-                    done(
-                        if (err == null) activity.getString(R.string.tweaks_trim_done)
-                        else activity.getString(R.string.tweaks_apply_fail, err),
-                    )
-                }
-            }
-        }
-
-        // -------------------------------------------------------- ghost guard
-        b.guardSwitch.isChecked = AppPrefs.guardEnabled(activity)
-        b.guardTestSwitch.isChecked = AppPrefs.guardTestMode(activity)
-
-        val sideChips = HashMap<GhostGuard.Side, Chip>()
-        listOf(
-            GhostGuard.Side.TOP to R.string.guard_side_top,
-            GhostGuard.Side.BOTTOM to R.string.guard_side_bottom,
-            GhostGuard.Side.LEFT to R.string.guard_side_left,
-            GhostGuard.Side.RIGHT to R.string.guard_side_right,
-        ).forEach { (side, labelRes) ->
-            val chip = Chip(activity).apply {
-                text = activity.getString(labelRes)
-                isCheckable = true
-                isChecked = side in AppPrefs.guardSides(activity)
-                setOnClickListener {
-                    val set = sideChips.filterValues { it.isChecked }.keys.toSet()
-                    AppPrefs.setGuardSides(activity, if (set.isEmpty()) setOf(side) else set)
-                    if (AppPrefs.guardEnabled(activity)) GhostGuardService.syncFromSettings(activity)
-                }
-            }
-            b.guardSidesGroup.addView(chip)
-            sideChips[side] = chip
-        }
-
-        b.guardSeek.max = GhostGuard.MAX_THICKNESS_DP - GhostGuard.MIN_THICKNESS_DP
-        b.guardSeek.progress = AppPrefs.guardThicknessDp(activity) - GhostGuard.MIN_THICKNESS_DP
-        b.guardThicknessLabel.text =
-            activity.getString(R.string.guard_thickness_value, AppPrefs.guardThicknessDp(activity))
-        b.guardSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(sb: SeekBar?, p: Int, fromUser: Boolean) {
-                b.guardThicknessLabel.text =
-                    activity.getString(R.string.guard_thickness_value, p + GhostGuard.MIN_THICKNESS_DP)
-            }
-
-            override fun onStartTrackingTouch(sb: SeekBar?) = Unit
-
-            override fun onStopTrackingTouch(sb: SeekBar?) {
-                val dp = (sb?.progress ?: 0) + GhostGuard.MIN_THICKNESS_DP
-                val sides = AppPrefs.guardSides(activity)
-                val fraction = coverFraction(activity, dp, sides)
-                if (fraction > GhostGuard.MAX_COVER_FRACTION) {
-                    onNotify(activity.getString(R.string.guard_too_thick, (fraction * 100).toInt()))
-                }
-                AppPrefs.setGuardThicknessDp(activity, dp)
-                if (AppPrefs.guardEnabled(activity)) GhostGuardService.syncFromSettings(activity)
-            }
-        })
-
-        b.guardTestSwitch.setOnCheckedChangeListener { _, checked ->
-            AppPrefs.setGuardTestMode(activity, checked)
-            if (AppPrefs.guardEnabled(activity)) GhostGuardService.syncFromSettings(activity)
-        }
-
-        fun refreshPermUi() {
-            val canDraw = SystemSettings.canDrawOverlays(activity)
-            b.guardPermRow.isVisible = !canDraw
-            b.guardGrantBtn.isEnabled = canOperate
-            b.guardPermText.setText(
-                if (canOperate) R.string.guard_perm_missing else R.string.guard_perm_no_shizuku,
-            )
-        }
-        refreshPermUi()
-
-        b.guardGrantBtn.setOnClickListener {
-            b.guardGrantBtn.isEnabled = false
-            TweaksBridge.allowOwnOverlay(BuildConfig.APPLICATION_ID) { err ->
-                if (!alive()) return@allowOwnOverlay
-                if (err != null) {
-                    b.guardGrantBtn.isEnabled = true
-                    onNotify(activity.getString(R.string.tweaks_apply_fail, err))
-                    return@allowOwnOverlay
-                }
-                // Grant bisa baru terlihat setelah PMS sinkron — cek ulang beberapa kali.
-                var tries = 0
-                val poll = object : Runnable {
-                    override fun run() {
-                        tries++
-                        if (SystemSettings.canDrawOverlays(activity)) {
-                            refreshPermUi()
-                            onNotify(activity.getString(R.string.guard_grant_ok))
-                            if (AppPrefs.guardEnabled(activity)) GhostGuardService.syncFromSettings(activity)
-                        } else if (tries < 8) {
-                            handler.postDelayed(this, 400)
-                        } else {
-                            refreshPermUi()
-                            onNotify(activity.getString(R.string.guard_grant_restart))
-                        }
-                        if (alive()) b.guardGrantBtn.isEnabled = true
-                    }
-                }
-                handler.postDelayed(poll, 400)
-            }
-        }
-
-        b.guardSwitch.setOnCheckedChangeListener { _, checked ->
-            AppPrefs.setGuardEnabled(activity, checked)
-            GhostGuardService.syncFromSettings(activity)
-            if (checked) {
-                // Service mungkin langsung berhenti lagi (overlay belum boleh) —
-                // beri jeda, lalu baca kenyataan dari service.
-                handler.postDelayed({
-                    if (!alive()) return@postDelayed
-                    val err = GhostGuardService.lastError
-                    when {
-                        GhostGuardService.isRunning -> onNotify(activity.getString(R.string.guard_started))
-                        err != null -> {
-                            b.guardSwitch.isChecked = false
-                            onNotify(activity.getString(R.string.guard_start_fail, err))
-                        }
-                    }
-                }, 600)
-            } else {
-                onNotify(activity.getString(R.string.guard_stopped))
-            }
         }
 
         // Munculkan kembali konfirmasi countdown yang tertunda (mis. sheet dibuka
@@ -382,7 +170,7 @@ object TweaksSheet {
         canOperate: Boolean,
         onNotify: (String) -> Unit,
     ) {
-        val rb = DialogResolutionBinding.inflate(LayoutInflater.from(activity))
+        val rb = DialogResolutionBinding.inflate(android.view.LayoutInflater.from(activity))
         val physical = info.physicalW?.let { w -> info.physicalH?.let { h -> w to h } }
         val physicalDensity = info.physicalDensity
 
@@ -595,34 +383,5 @@ object TweaksSheet {
         0f -> "0×"
         1f -> "1× (bawaan)"
         else -> "${v}×"
-    }
-
-    private fun coverFraction(
-        activity: Activity,
-        thicknessDp: Int,
-        sides: Set<GhostGuard.Side>,
-    ): Double {
-        val m = activity.resources.displayMetrics
-        return GhostGuard.coveredFraction(
-            m.widthPixels,
-            m.heightPixels,
-            GhostGuard.bands(m.widthPixels, m.heightPixels, (thicknessDp * m.density).toInt(), sides),
-        )
-    }
-
-    /** Kunci tombol selama perintah shell berjalan; done(msg) melepas + lapor. */
-    private fun busy(
-        btn: MaterialButton,
-        onNotify: (String) -> Unit,
-        work: ((String) -> Unit) -> Unit,
-    ) {
-        val label = btn.text.toString()
-        btn.isEnabled = false
-        btn.text = btn.context.getString(R.string.tweaks_busy)
-        work { msg ->
-            btn.text = label
-            btn.isEnabled = true
-            onNotify(msg)
-        }
     }
 }

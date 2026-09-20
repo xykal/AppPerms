@@ -28,7 +28,9 @@ import java.util.Locale
 class AppsRepository(private val context: Context) {
 
     private val pm: PackageManager = context.packageManager
-    private val iconCache = LruCache<String, Drawable>(300)
+    // OPTIMIZED v1.5: cache icon dikecilin 300 -> 80 agar hemat RAM, cegah OOM & panas.
+    // LruCache 80 entry ~ hemat ~8-12MB di HP RAM kecil, tetap mulus karena icon di-load ulang kalau perlu.
+    private val iconCache = LruCache<String, Drawable>(80)
 
     // ------------------------------------------------------------ daftar app
 

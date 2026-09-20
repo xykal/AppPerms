@@ -6,12 +6,15 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
-    <!-- v1.4 — Perisai anti ghost-touch memasang jendela overlay (dikelola app ini sendiri
-         lewat AppOps). Tetap TANPA izin internet seperti sebelumnya. -->
+    <!-- OPTIMIZED v1.5: SYSTEM_ALERT_WINDOW tetap perlu untuk KELOLA overlay app lain,
+         tapi TIDAK PERNAH dipakai untuk memasang overlay sendiri lagi (GhostGuard dimatikan).
+         Tetap TANPA izin internet seperti sebelumnya. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- v1.5: FOREGROUND_SERVICE dihapus karena GhostGuard dimatikan permanen.
+         Tidak ada lagi service yang bikin panas/boros baterai. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
 
     <application
         android:name=".AppsPermsApp"
@@ -51,22 +54,17 @@
             android:multiprocess="false"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
 
-        <!-- Perisai anti ghost-touch: foreground service yang menempelkan pita
-             penangkap sentuhan di tepi layar. specialUse = tidak ada tipe FGS yang
-             lebih cocok untuk "window guard" di API 34. -->
+        <!-- v1.5 OPTIMIZED: GhostGuard DINONAKTIFKAN PERMANEN (anti panas/lag).
+             Service tetap dideklarasikan enabled=false agar upgrade dari versi lama tidak crash,
+             tapi tidak akan pernah dijalankan. -->
         <service
             android:name=".guard.GhostGuardService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Ghost-touch guard bands drawn as touch-consuming overlays" />
-        </service>
+            android:enabled="false"
+            android:exported="false" />
 
-        <!-- Hanya menerima PendingIntent aksi dari notifikasi app ini sendiri -->
         <receiver
             android:name=".guard.GhostGuardReceiver"
+            android:enabled="false"
             android:exported="false" />
 
     </application>

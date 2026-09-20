@@ -15,8 +15,11 @@ enum class AppLanguage(val tag: String) {
 /**
  * Preferensi ringan berbasis SharedPreferences.
  *
- * Kenapa tidak pakai DataStore/Room? Karena app ini sengaja dibuat sekecil mungkin
- * (target < 2 MB) dan preferensinya cuma 4 nilai sederhana.
+ * OPTIMIZED v1.5: Fitur berbahaya dihapus.
+ * - guard_enabled / guard_sides / guard_thickness / guard_test -> DEPRECATED, selalu OFF (tidak dipakai lagi)
+ * - protected_app -> DEPRECATED (whitelist deviceidle bikin baterai boros permanen)
+ *
+ * Key lama tetap dibaca agar migrasi tidak crash, tapi setter/getter di-override jadi no-op / default aman.
  */
 object Settings {
 
@@ -25,6 +28,7 @@ object Settings {
     private const val KEY_CONFIRM_RISK = "confirm_risk"
     private const val KEY_SHARED_UID = "warn_shared_uid"
     private const val KEY_SORT = "default_sort"
+    // Deprecated keys - kept for reading old prefs to clean them
     private const val KEY_GUARD_ENABLED = "guard_enabled"
     private const val KEY_GUARD_SIDES = "guard_sides"
     private const val KEY_GUARD_THICKNESS = "guard_thickness"
@@ -90,11 +94,11 @@ object Settings {
 
     // -------------------------------------------------------- tuning aman
 
-    fun protectedApp(context: Context): String? =
-        prefs(context).getString(KEY_PROTECTED_APP, null)?.takeIf { it.isNotBlank() }
+    fun protectedApp(context: Context): String? = null // REMOVED: always null, tidak ada proteksi lagi
 
     fun setProtectedApp(context: Context, packageName: String?) {
-        prefs(context).edit().putString(KEY_PROTECTED_APP, packageName.orEmpty()).apply()
+        // no-op, hapus key lama jika ada
+        prefs(context).edit().remove(KEY_PROTECTED_APP).apply()
     }
 
     /** Snapshot kecil: size|density|anim. String kosong berarti nilai bawaan sistem. */
@@ -104,43 +108,46 @@ object Settings {
     }
 
     // -------------------------------------------------------- anti ghost touch
+    // DEPRECATED v1.5: Semua guard selalu OFF. Jangan pernah aktifkan foreground overlay lagi.
 
-    /** Master switch perisai. Mengubahnya saja TIDAK langsung start/stop service — UI yang memanggil sync. */
-    fun guardEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_GUARD_ENABLED, false)
+    /** Master switch perisai. Selalu false demi keamanan (tidak ada overlay yang menelan sentuhan). */
+    fun guardEnabled(context: Context): Boolean = false
 
     fun setGuardEnabled(context: Context, value: Boolean) {
-        prefs(context).edit().putBoolean(KEY_GUARD_ENABLED, value).apply()
+        // paksa false dan hapus key lama
+        prefs(context).edit().putBoolean(KEY_GUARD_ENABLED, false).apply()
     }
 
-    /** Sisi mana saja yang diberi pita. Default: bawah (paling sering kena ghost touch). */
-    fun guardSides(context: Context): Set<Side> {
-        val stored = prefs(context).getString(KEY_GUARD_SIDES, null)
-            ?: return setOf(Side.BOTTOM)
-        return stored.split(',').mapNotNull { name -> Side.entries.firstOrNull { it.name == name } }.toSet()
-    }
+    /** Sisi mana saja yang diberi pita. Default: bawah (tapi tidak dipakai karena guard mati). */
+    fun guardSides(context: Context): Set<Side> = setOf(Side.BOTTOM)
 
     fun setGuardSides(context: Context, sides: Set<Side>) {
-        val value = sides.joinToString(",") { it.name }
-        prefs(context).edit().putString(KEY_GUARD_SIDES, value).apply()
+        // no-op, bersihkan preference lama
+        prefs(context).edit().remove(KEY_GUARD_SIDES).apply()
     }
 
     /** Ketebalan pita dalam DP. */
-    fun guardThicknessDp(context: Context): Int =
-        prefs(context).getInt(KEY_GUARD_THICKNESS, 24)
-            .coerceIn(GhostGuard.MIN_THICKNESS_DP, GhostGuard.MAX_THICKNESS_DP)
+    fun guardThicknessDp(context: Context): Int = 24
 
     fun setGuardThicknessDp(context: Context, dp: Int) {
-        prefs(context).edit()
-            .putInt(KEY_GUARD_THICKNESS, dp.coerceIn(GhostGuard.MIN_THICKNESS_DP, GhostGuard.MAX_THICKNESS_DP))
-            .apply()
+        prefs(context).edit().remove(KEY_GUARD_THICKNESS).apply()
     }
 
     /** Mode uji: pita diberi warna agar terlihat. */
-    fun guardTestMode(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_GUARD_TEST, true)
+    fun guardTestMode(context: Context): Boolean = false
 
     fun setGuardTestMode(context: Context, value: Boolean) {
-        prefs(context).edit().putBoolean(KEY_GUARD_TEST, value).apply()
+        prefs(context).edit().remove(KEY_GUARD_TEST).apply()
+    }
+
+    /** Bersihkan semua key berbahaya saat migrasi ke v1.5 */
+    fun cleanDeprecatedKeys(context: Context) {
+        prefs(context).edit()
+            .remove(KEY_GUARD_ENABLED)
+            .remove(KEY_GUARD_SIDES)
+            .remove(KEY_GUARD_THICKNESS)
+            .remove(KEY_GUARD_TEST)
+            .remove(KEY_PROTECTED_APP)
+            .apply()
     }
 }

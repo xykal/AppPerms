@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Tweaks v1.4: resolusi & DPI (wm), animasi, booster ringan, dan perisai ghost-touch.
+<!-- Tweaks v1.5 OPTIMIZED: Hanya fitur AMAN yang tersisa.
+     - Resolusi & DPI (wm) + Animasi (settings global) = AMAN, ada auto-revert 15 detik
+     - DIHAPUS: Booster ringan (am kill-all / pm trim-caches) -> bikin ngekill diam-diam
+     - DIHAPUS: Perisai ghost-touch (overlay) -> bikin panas, lag sentuhan
+     - DIHAPUS: Proteksi app / profil whitelist -> bikin baterai boros, Doze rusak
      Semua aksi berat jalan lewat TweaksBridge; sheet ini murni tampil + umpan balik. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -176,14 +180,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ================= Ringan sekejap ================= -->
+        <!-- ================= Snapshot Aman ================= -->
         <TextView
             style="@style/SectionLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="14dp"
             android:paddingBottom="6dp"
-            android:text="@string/tweaks_boost" />
+            android:text="Snapshot &amp; Reset Aman" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -192,275 +196,78 @@
             android:orientation="vertical"
             android:padding="14dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Simpan kondisi layar &amp; animasi saat ini, bisa dipulihkan kapan saja. Semua perubahan bisa di-reset ke bawaan Android."
+                android:textColor="@color/on_surface_dim"
+                android:textSize="10sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnKillBg"
+                    android:id="@+id/btnSnapshot"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:minHeight="44dp"
-                    android:text="@string/tweaks_kill_bg"
-                    android:textSize="12sp"
+                    android:text="@string/snapshot_save"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTrimCache"
+                    android:id="@+id/btnRestoreSnapshot"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
                     android:minHeight="44dp"
-                    android:text="@string/tweaks_trim_cache"
-                    android:textSize="12sp"
+                    android:text="@string/snapshot_restore"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/tweaks_boost_note"
-                android:textColor="@color/on_surface_dim"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <!-- ================= Anti ghost touch ================= -->
-        <TextView
-            style="@style/SectionLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="14dp"
-            android:paddingBottom="6dp"
-            android:text="@string/guard_title" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
-            android:orientation="vertical"
-            android:padding="14dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/guard_switch"
-                        android:textColor="@color/on_surface"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/guard_switch_desc"
-                        android:textColor="@color/on_surface_dim"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/guardSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:minWidth="48dp"
-                    android:minHeight="44dp" />
-            </LinearLayout>
-
-            <!-- izin overlay utk diri sendiri -->
-            <LinearLayout
-                android:id="@+id/guardPermRow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_warning"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/guardPermText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/guard_perm_missing"
-                    android:textColor="@color/warn"
-                    android:textSize="11sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/guardGrantBtn"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:minHeight="40dp"
-                    android:text="@string/guard_grant"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/guard_sides"
-                android:textColor="@color/on_surface_dim"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/guardSidesGroup"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnTweakDiagnostics"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:singleLine="false"
-                app:singleSelection="false" />
+                android:minHeight="44dp"
+                android:text="@string/tweak_diagnostics"
+                android:textSize="11sp" />
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/guard_thickness"
-                    android:textColor="@color/on_surface_dim"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/guardThicknessLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/brand"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <SeekBar
-                android:id="@+id/guardSeek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:max="84"
-                android:minHeight="44dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/guard_test"
-                    android:textColor="@color/on_surface"
-                    android:textSize="13sp" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/guardTestSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="48dp"
-                    android:minHeight="44dp" />
-            </LinearLayout>
+        <!-- Info optimasi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/guard_note"
+                android:text="✓ v1.5 Optimized - Anti Panas &amp; Lag"
+                android:textColor="@color/brand"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Fitur berbahaya (Bunuh proses, Bersihkan cache, Perisai ghost-touch, Proteksi whitelist) sudah dihapus permanen agar HP tidak panas, tidak lag, dan tidak ngekill app diam-diam."
                 android:textColor="@color/on_surface_dim"
                 android:textSize="10sp" />
-        </LinearLayout>
-
-        <!-- ================= Tuning aman ================= -->
-        <TextView
-            style="@style/SectionLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="14dp"
-            android:paddingBottom="6dp"
-            android:text="@string/safe_tuning_title" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_card"
-            android:orientation="vertical"
-            android:padding="14dp">
-
-            <TextView android:id="@+id/protectedAppStatus"
-                android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="@string/protected_app_none" android:textColor="@color/on_surface" android:textSize="13sp" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" android:text="@string/protected_app_note"
-                android:textColor="@color/on_surface_dim" android:textSize="10sp" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" android:orientation="horizontal">
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnPickProtected"
-                    style="@style/Widget.Material3.Button.TonalButton" android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:layout_weight="1" android:minHeight="44dp"
-                    android:text="@string/protected_app_pick" android:textSize="11sp" app:cornerRadius="12dp" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnClearProtected"
-                    style="@style/Widget.Material3.Button.TextButton" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:layout_marginStart="6dp" android:minHeight="44dp"
-                    android:text="@string/protected_app_clear" android:textSize="11sp" />
-            </LinearLayout>
-
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" android:text="@string/profiles_title"
-                android:textColor="@color/on_surface" android:textSize="13sp" android:textStyle="bold" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="3dp" android:text="@string/profiles_note"
-                android:textColor="@color/on_surface_dim" android:textSize="10sp" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" android:orientation="horizontal">
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnProfileGaming"
-                    style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:layout_weight="1" android:minHeight="44dp"
-                    android:text="@string/profile_gaming" android:textSize="11sp" app:cornerRadius="12dp" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnProfileBattery"
-                    style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1"
-                    android:minHeight="44dp" android:text="@string/profile_battery" android:textSize="11sp" app:cornerRadius="12dp" />
-            </LinearLayout>
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" android:orientation="horizontal">
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnSnapshot"
-                    style="@style/Widget.Material3.Button.TonalButton" android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:layout_weight="1" android:minHeight="44dp"
-                    android:text="@string/snapshot_save" android:textSize="11sp" app:cornerRadius="12dp" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btnRestoreSnapshot"
-                    style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="0dp"
-                    android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_weight="1"
-                    android:minHeight="44dp" android:text="@string/snapshot_restore" android:textSize="11sp" app:cornerRadius="12dp" />
-            </LinearLayout>
-            <com.google.android.material.button.MaterialButton android:id="@+id/btnTweakDiagnostics"
-                style="@style/Widget.Material3.Button.TextButton" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="4dp" android:minHeight="44dp"
-                android:text="@string/tweak_diagnostics" android:textSize="11sp" />
         </LinearLayout>
 
         <TextView

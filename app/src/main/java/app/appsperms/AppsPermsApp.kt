@@ -10,6 +10,8 @@ import app.appsperms.guard.GhostGuardService
  * HiddenApiBypass dipasang sedini mungkin — sebelum method hidden (IAppOpsService)
  * pertama kali di-resolve, karena pembatasan hidden API di Android 9+ hanya bisa
  * dibuka selama proses masih "fresh".
+ *
+ * OPTIMIZED v1.5: Bersihkan semua setting berbahaya saat app start
  */
 class AppsPermsApp : Application() {
     override fun onCreate() {
@@ -18,12 +20,20 @@ class AppsPermsApp : Application() {
         // supaya tidak ada kedipan bahasa Indonesia lalu berubah.
         runCatching { Settings.applyStoredLanguage(this) }
             .onFailure { Log.w("AppsPermsApp", "gagal menerapkan bahasa", it) }
-        // v1.4.2 menghentikan fitur pita sentuh lama: pada sebagian perangkat pita
-        // tersebut justru menelan sentuhan normal. Upgrade harus langsung memulihkan layar.
+
+        // v1.5 OPTIMIZED: Matikan & bersihkan semua fitur berbahaya secara permanen
+        // - GhostGuard overlay (bikin panas, lag sentuhan, foreground service boros)
+        // - Protected app whitelist (bikin baterai boros, Doze rusak)
         runCatching {
+            Settings.cleanDeprecatedKeys(this)
             Settings.setGuardEnabled(this, false)
+            Settings.setProtectedApp(this, null)
+            // Pastikan service mati total, tidak ada overlay yang tertinggal
             GhostGuardService.syncFromSettings(this)
-        }.onFailure { Log.w("AppsPermsApp", "gagal mematikan guard lama", it) }
+            // Hapus notifikasi sisa jika ada
+            stopService(android.content.Intent(this, GhostGuardService::class.java))
+        }.onFailure { Log.w("AppsPermsApp", "gagal cleanup guard lama", it) }
+
         runCatching { AppOpsBridge.hiddenApiBypass() }
             .onFailure { Log.w("AppsPermsApp", "gagal pasang HiddenApiBypass", it) }
     }

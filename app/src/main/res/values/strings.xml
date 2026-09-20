@@ -204,11 +204,11 @@
     <string name="settings_sort">Urutan daftar saat dibuka</string>
     <string name="settings_footer">Versi %1$s (%2$d) · tanpa iklan · tanpa izin internet</string>
 
-    <!-- ================= v1.4 Tuning ================= -->
-    <string name="menu_tweaks">Tuning performa &amp; layar</string>
-    <string name="menu_tweaks_sub">Resolusi/DPI, animasi, pembersih, anti ghost-touch</string>
-    <string name="tweaks_title">Tuning</string>
-    <string name="tweaks_subtitle">Ubah resolusi &amp; DPI, percepat animasi, ringankan RAM — lewat shell Shizuku, tanpa root</string>
+    <!-- ================= v1.5 Tuning OPTIMIZED ================= -->
+    <string name="menu_tweaks">Tuning Aman</string>
+    <string name="menu_tweaks_sub">Resolusi/DPI &amp; animasi saja — tanpa pembersih/penguras baterai</string>
+    <string name="tweaks_title">Tuning Aman v1.5</string>
+    <string name="tweaks_subtitle">Hanya ubah resolusi &amp; DPI, percepat animasi — lewat shell Shizuku, tanpa root, tanpa ngekill diam-diam</string>
     <string name="tweaks_footer">Semua perubahan bersifat live dan bisa dibalik. Kalau ROM menolak perintah (MIUI/ColorOS kadang memblokir `wm`), buka menu → Laporan perangkat untuk melihat error aslinya.</string>
 
     <string name="tweaks_display">Resolusi &amp; DPI</string>
@@ -380,13 +380,14 @@
     <string name="snapshot_empty">Belum ada kondisi yang disimpan.</string>
     <string name="snapshot_restored">Kondisi sebelumnya dipulihkan ✓</string>
     <string name="tweak_diagnostics">Lihat diagnostik tweak</string>
-    <string name="tweak_diag_title">Diagnostik tuning</string>
+    <string name="tweak_diag_title">Diagnostik tuning — v1.5 Optimized</string>
     <string name="tweak_diag_body">Layar: %1$s
 Animasi: %2$s
-App terlindungi: %3$s
 
-Fitur penelan sentuhan: NONAKTIF
-Pembersih proses: NONAKTIF
-Tweak otomatis: TIDAK ADA</string>
+✓ Fitur penelan sentuhan: DIHAPUS PERMANEN
+✓ Pembersih proses: DIHAPUS PERMANEN  
+✓ Whitelist deviceidle: DIHAPUS PERMANEN
+✓ Tweak otomatis: TIDAK ADA (aman)
+Semua fitur berbahaya sudah dibersihkan.</string>
     <string name="snapshot_restore_confirm">Pulihkan resolusi, DPI, dan animasi persis ke kondisi yang terakhir disimpan?</string>
 </resources>

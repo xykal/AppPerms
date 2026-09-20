@@ -3,25 +3,17 @@ package app.appsperms.guard
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 
 /**
- * Penerima aksi notifikasi perisai (PAUSE / STOP).
- *
- * Sengaja receiver manifest yang non-exported + intent EKSPLISIT: satu-satunya
- * pengirim yang sah adalah PendingIntent milik app ini sendiri, jadi tidak ada
- * pihak luar yang bisa mematikan perisai diam-diam.
+ * OPTIMIZED v1.5 - DEPRECATED
+ * Receiver ini sudah tidak dipakai lagi karena GhostGuardService dimatikan permanen.
+ * Dipertahankan agar tidak crash saat PendingIntent lama masih ada, tapi isinya no-op.
  */
 class GhostGuardReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
-        val action = intent.action ?: return
-        if (action != GhostGuardService.ACTION_PAUSE && action != GhostGuardService.ACTION_STOP) return
-        // Service sedang foreground (aksi ini hanya datang dari notifikasinya),
-        // jadi startService biasa aman dari batasan Oreo.
-        runCatching {
-            context.startService(
-                Intent(context, GhostGuardService::class.java).setAction(action),
-            )
-        }
+        Log.i("GhostGuard-DEPRECATED", "Receiver dipanggil ${intent.action} -> diabaikan (fitur dimatikan)")
+        // No-op: jangan start service lagi
+        GhostGuardService.syncFromSettings(context)
     }
 }

@@ -204,11 +204,11 @@
     <string name="settings_sort">List order on open</string>
     <string name="settings_footer">Version %1$s (%2$d) · no ads · no internet permission</string>
 
-    <!-- ================= v1.4 Tweaks ================= -->
-    <string name="menu_tweaks">Performance &amp; display tweaks</string>
-    <string name="menu_tweaks_sub">Resolution/DPI, animations, cleaners, ghost-touch guard</string>
-    <string name="tweaks_title">Tweaks</string>
-    <string name="tweaks_subtitle">Change resolution &amp; DPI, speed up animations, free up RAM — via the Shizuku shell, no root</string>
+    <!-- ================= v1.5 Tweaks OPTIMIZED ================= -->
+    <string name="menu_tweaks">Safe Tuning</string>
+    <string name="menu_tweaks_sub">Resolution/DPI &amp; animations only — no cleaners/battery drain</string>
+    <string name="tweaks_title">Safe Tuning v1.5</string>
+    <string name="tweaks_subtitle">Only change resolution &amp; DPI, speed up animations — via Shizuku shell, no root, no silent kills</string>
     <string name="tweaks_footer">Every change is live and reversible. If your ROM refuses a command (MIUI/ColorOS sometimes block `wm`), open the menu → Device report to see the original error.</string>
 
     <string name="tweaks_display">Resolution &amp; DPI</string>
@@ -380,13 +380,14 @@
     <string name="snapshot_empty">No saved state yet.</string>
     <string name="snapshot_restored">Previous state restored ✓</string>
     <string name="tweak_diagnostics">View tweak diagnostics</string>
-    <string name="tweak_diag_title">Tuning diagnostics</string>
+    <string name="tweak_diag_title">Tuning diagnostics — v1.5 Optimized</string>
     <string name="tweak_diag_body">Display: %1$s
 Animations: %2$s
-Protected app: %3$s
 
-Touch-consuming feature: DISABLED
-Process cleaner: DISABLED
-Automatic tweaks: NONE</string>
+✓ Touch-consuming feature: REMOVED PERMANENTLY
+✓ Process cleaner: REMOVED PERMANENTLY
+✓ DeviceIdle whitelist: REMOVED PERMANENTLY
+✓ Automatic tweaks: NONE (safe)
+All dangerous features have been cleaned.</string>
     <string name="snapshot_restore_confirm">Restore resolution, DPI, and animations exactly to the last saved state?</string>
 </resources>
