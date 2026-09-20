@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Kelola -->
+    <group android:id="@+id/group_manage" android:checkableBehavior="none">
+        <item android:id="@+id/nav_refresh" android:icon="@drawable/ic_refresh" android:title="Muat ulang daftar" />
+        <item android:id="@+id/nav_sort" android:icon="@drawable/ic_sort" android:title="Urutkan daftar" />
+        <item android:id="@+id/nav_batch" android:icon="@drawable/ic_batch" android:title="Aksi massal" />
+        <item android:id="@+id/nav_terminal" android:icon="@drawable/ic_terminal" android:title="Terminal Shizuku" />
+        <item android:id="@+id/nav_backup" android:icon="@drawable/ic_backup" android:title="Backup konfigurasi" />
+        <item android:id="@+id/nav_restore" android:icon="@drawable/ic_restore" android:title="Restore dari backup" />
+    </group>
+    <!-- Diagnostik -->
+    <group android:id="@+id/group_diag" android:checkableBehavior="none">
+        <item android:id="@+id/nav_history" android:icon="@drawable/ic_history" android:title="Riwayat &amp; undo" />
+        <item android:id="@+id/nav_report" android:icon="@drawable/ic_report" android:title="Laporan perangkat" />
+        <item android:id="@+id/nav_copy_report" android:icon="@drawable/ic_copy" android:title="Salin laporan" />
+    </group>
+    <!-- Bantuan & Info -->
+    <group android:id="@+id/group_help" android:checkableBehavior="none">
+        <item android:id="@+id/nav_settings" android:icon="@drawable/ic_settings" android:title="Pengaturan" />
+        <item android:id="@+id/nav_shizuku" android:icon="@drawable/ic_shizuku" android:title="Buka app Shizuku" />
+        <item android:id="@+id/nav_overlay" android:icon="@drawable/ic_overlay" android:title="Settings overlay sistem" />
+        <item android:id="@+id/nav_about" android:icon="@drawable/ic_info" android:title="Tentang AppsPerms" />
+    </group>
+</menu>

@@ -44,6 +44,8 @@ import app.appsperms.core.Settings as AppPrefs
 import app.appsperms.core.ShizukuBridge
 import app.appsperms.core.SortMode
 import app.appsperms.core.StatusFilter
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import app.appsperms.databinding.ActivityMainBinding
 import app.appsperms.databinding.DialogAppDetailBinding
 import app.appsperms.databinding.ItemOpBinding
@@ -101,7 +103,9 @@ class MainActivity : AppCompatActivity() {
         binding.swipe.setProgressBackgroundColorSchemeColor(getColor(R.color.surface))
 
         binding.modeChip.setOnClickListener { showConnectionDialog() }
-        binding.menuButton.setOnClickListener { showMenuSheet() }
+        // v1.7: Menu jadi sidebar drawer dengan icon — seperti request user
+        binding.menuButton.setOnClickListener { binding.drawerLayout.openDrawer(GravityCompat.START) }
+        setupDrawer()
         // label untuk TalkBack — tombol ikon tanpa teks tidak terbaca tanpanya
         binding.menuButton.contentDescription = getString(R.string.cd_menu)
         binding.modeChip.contentDescription = getString(R.string.cd_status_chip)
@@ -155,6 +159,49 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         detailDialog?.dismiss()
         super.onDestroy()
+    }
+
+    // v1.7: Sidebar drawer dengan icon — handle back + item click
+    private fun setupDrawer() {
+        binding.navView.setNavigationItemSelectedListener { item ->
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            // Delay handleMenu biar drawer animasi selesai (lebih smooth)
+            binding.drawerLayout.postDelayed({
+                when (item.itemId) {
+                    R.id.nav_refresh -> handleMenu(MenuAction.REFRESH)
+                    R.id.nav_sort -> handleMenu(MenuAction.SORT)
+                    R.id.nav_batch -> handleMenu(MenuAction.BATCH)
+                    R.id.nav_terminal -> handleMenu(MenuAction.TERMINAL)
+                    R.id.nav_backup -> handleMenu(MenuAction.BACKUP)
+                    R.id.nav_restore -> handleMenu(MenuAction.RESTORE)
+                    R.id.nav_history -> handleMenu(MenuAction.HISTORY)
+                    R.id.nav_report -> handleMenu(MenuAction.REPORT)
+                    R.id.nav_copy_report -> handleMenu(MenuAction.COPY_REPORT)
+                    R.id.nav_settings -> handleMenu(MenuAction.SETTINGS)
+                    R.id.nav_shizuku -> handleMenu(MenuAction.SHIZUKU)
+                    R.id.nav_overlay -> handleMenu(MenuAction.OVERLAY_SETTINGS)
+                    R.id.nav_about -> handleMenu(MenuAction.ABOUT)
+                }
+            }, 200)
+            true
+        }
+        // Highlight terminal & shizuku dengan brand color + isi versi header
+        try {
+            binding.navView.menu.findItem(R.id.nav_terminal)?.icon?.setTint(getColor(R.color.brand))
+            binding.navView.menu.findItem(R.id.nav_shizuku)?.icon?.setTint(getColor(R.color.brand))
+            val header = binding.navView.getHeaderView(0)
+            header.findViewById<TextView>(R.id.navAppVersion)?.text =
+                "v${app.appsperms.BuildConfig.VERSION_NAME} · XyVerse"
+        } catch (_: Throwable) {}
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     // ------------------------------------------------------------------- setup
