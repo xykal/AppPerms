@@ -16,7 +16,7 @@ enum class MenuAction {
     REFRESH,
     SORT,
     BATCH,
-    TWEAKS,
+    TERMINAL,
     BACKUP,
     RESTORE,
     HISTORY,
@@ -62,7 +62,7 @@ object MenuSheet {
         row(kelola, context.getString(R.string.menu_refresh), context.getString(R.string.menu_refresh_sub), MenuAction.REFRESH)
         row(null, context.getString(R.string.menu_sort), context.getString(R.string.menu_sort_sub, sortLabel), MenuAction.SORT)
         row(null, context.getString(R.string.menu_batch), context.getString(R.string.menu_batch_sub), MenuAction.BATCH)
-        row(null, context.getString(R.string.menu_tweaks), context.getString(R.string.menu_tweaks_sub), MenuAction.TWEAKS)
+        row(null, context.getString(R.string.menu_terminal), context.getString(R.string.menu_terminal_sub), MenuAction.TERMINAL)
         row(null, context.getString(R.string.menu_backup), context.getString(R.string.menu_backup_sub), MenuAction.BACKUP)
         row(null, context.getString(R.string.menu_restore), context.getString(R.string.menu_restore_sub), MenuAction.RESTORE)
 

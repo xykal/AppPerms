@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface"
+    android:maxHeight="650dp"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="16dp">
+
+        <View
+            android:layout_width="36dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_chip_small" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Terminal Shizuku"
+                android:textColor="@color/on_surface"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chip_small"
+                android:backgroundTint="@color/brand_container"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="uid 2000"
+                android:textColor="@color/brand"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Jalankan perintah shell via Shizuku — seperti LADB / Brevent, tanpa PC. Coba ketik pm, appops, dumpsys, settings, wm, cmd."
+            android:textColor="@color/on_surface_dim"
+            android:textSize="11sp" />
+
+        <!-- Status koneksi -->
+        <TextView
+            android:id="@+id/termStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_card"
+            android:padding="10dp"
+            android:text="Memeriksa Shizuku…"
+            android:textColor="@color/on_surface_dim"
+            android:textSize="11sp" />
+
+        <!-- Preset chips -->
+        <TextView
+            style="@style/SectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="6dp"
+            android:text="Preset cepat (tap untuk isi)" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/termPresetGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="6dp"
+            app:chipSpacingVertical="6dp"
+            app:singleLine="false" />
+
+        <!-- Input -->
+        <TextView
+            style="@style/SectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:text="Perintah" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="mis. pm list packages -3"
+            app:boxBackgroundColor="@color/surface_2"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="@color/outline"
+            app:boxStrokeWidth="1dp"
+            app:hintTextColor="@color/on_surface_dim">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/termInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:hint="ketik perintah shell…"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:singleLine="false"
+                android:textColor="@color/on_surface"
+                android:textColorHint="@color/on_surface_dim"
+                android:textSize="13sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/termRun"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="44dp"
+                android:text="▶ Jalankan"
+                android:textSize="13sp"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/termClear"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:minHeight="44dp"
+                android:text="Bersihkan"
+                android:textSize="12sp"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/termCopy"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:text="Salin output"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/termHistoryClear"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:text="Hapus history"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Output -->
+        <TextView
+            style="@style/SectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="6dp"
+            android:text="Output" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="280dp"
+            android:background="@drawable/bg_card"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/termOutput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="Belum ada output. Jalankan perintah di atas.\n\nContoh:\n• pm list packages -3\n• appops get com.whatsapp\n• dumpsys deviceidle whitelist\n• settings get global window_animation_scale"
+                android:textColor="@color/on_surface"
+                android:textIsSelectable="true"
+                android:textSize="11sp" />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/termMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="exit: — · durasi: —"
+            android:textColor="@color/on_surface_dim"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_card"
+            android:padding="10dp"
+            android:text="💡 Tips Brevent/LADB: Semua perintah jalan sebagai shell (uid 2000). Untuk reset AppOps: appops set --uid &lt;paket&gt; &lt;OP&gt; default  •  Untuk whitelist: cmd deviceidle whitelist +&lt;paket&gt;  •  Hati-hati dengan wm size/density — selalu ada reset: wm size reset"
+            android:textColor="@color/on_surface_dim"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -262,4 +262,17 @@
         android:textSize="10sp"
         tools:text="156 app · 12 overlay · 3 diizinkan · 2 diblokir" />
 
+    <!-- FAB Terminal — quick access seperti Brevent/LADB -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabTerminal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:text="Terminal"
+        android:textColor="@color/bg"
+        app:backgroundTint="@color/brand"
+        app:icon="@android:drawable/ic_menu_send"
+        app:iconTint="@color/bg" />
+
 </LinearLayout>

@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.btnOpenShizuku.setOnClickListener { openShizukuApp() }
+        binding.fabTerminal.setOnClickListener { showTerminal() }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -372,19 +373,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * v1.4 — Tuning: resolusi & DPI, animasi, booster ringan, perisai ghost-touch.
-     * Notifikasi foreground service perisai butuh izin runtime di Android 13+,
-     * jadi kita minta sekaligus di awal (kalau ditolak, service tetap jalan —
-     * hanya notifikasinya yang tidak tampil).
+     * v1.6 — Terminal Shizuku (ganti Tuning yang berbahaya)
+     * Seperti LADB / Brevent: jalankan pm, appops, dumpsys tanpa PC
      */
-    private fun showTweaks() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
-        TweaksSheet.show(this, viewModel.state.value.snapshot.canOperate) { message ->
+    private fun showTerminal() {
+        TerminalSheet.show(this) { message ->
             snack(message)
         }
     }
@@ -428,7 +421,7 @@ class MainActivity : AppCompatActivity() {
 
             MenuAction.BATCH -> showBatchDialog()
 
-            MenuAction.TWEAKS -> showTweaks()
+            MenuAction.TERMINAL -> showTerminal()
 
             MenuAction.BACKUP -> copyToClipboard(
                 viewModel.exportBackup(),

@@ -204,12 +204,15 @@
     <string name="settings_sort">Urutan daftar saat dibuka</string>
     <string name="settings_footer">Versi %1$s (%2$d) · tanpa iklan · tanpa izin internet</string>
 
-    <!-- ================= v1.5 Tuning OPTIMIZED ================= -->
-    <string name="menu_tweaks">Tuning Aman</string>
-    <string name="menu_tweaks_sub">Resolusi/DPI &amp; animasi saja — tanpa pembersih/penguras baterai</string>
-    <string name="tweaks_title">Tuning Aman v1.5</string>
-    <string name="tweaks_subtitle">Hanya ubah resolusi &amp; DPI, percepat animasi — lewat shell Shizuku, tanpa root, tanpa ngekill diam-diam</string>
-    <string name="tweaks_footer">Semua perubahan bersifat live dan bisa dibalik. Kalau ROM menolak perintah (MIUI/ColorOS kadang memblokir `wm`), buka menu → Laporan perangkat untuk melihat error aslinya.</string>
+    <!-- ================= v1.6 Terminal (ganti Tuning berbahaya) ================= -->
+    <string name="menu_terminal">Terminal Shizuku</string>
+    <string name="menu_terminal_sub">Shell seperti LADB / Brevent — pm, appops, dumpsys tanpa PC</string>
+    <!-- legacy tweaks keys kept for compatibility (tidak dipakai lagi) -->
+    <string name="menu_tweaks">Terminal Shizuku</string>
+    <string name="menu_tweaks_sub">Dihapus di v1.6 — pakai Terminal Shizuku</string>
+    <string name="tweaks_title">Terminal Shizuku</string>
+    <string name="tweaks_subtitle">Hapus Tuning berbahaya — pakai Terminal Shizuku yang aman</string>
+    <string name="tweaks_footer">Tuning resolusi/DPI dihapus permanen di v1.6 karena berbahaya. Gunakan Terminal untuk perintah manual yang lebih aman &amp; transparan.</string>
 
     <string name="tweaks_display">Resolusi &amp; DPI</string>
     <string name="tweaks_display_note">Menurunkan resolusi membuat GPU bekerja lebih ringan (bisa lebih irit &amp; mulus di HP kentang), tapi teks jadi kurang tajam. Selalu ada auto-revert 15 detik kalau kamu tidak menekan \"Tetap\".</string>
