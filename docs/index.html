@@ -1781,6 +1781,14 @@
           if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
           var pl = document.getElementById('vtPillText');
           if (pl) pl.textContent = vt.detected + '/' + vt.total + ' Clean di VirusTotal';
+          var vd = document.getElementById('vtVerdict');
+          if (vd) {
+            if (vt.detected === 0) {
+              vd.innerHTML = '<span class="lang-id">100% Bersih · Tidak Ada Vendor Keamanan yang Menandai Berkas Ini</span><span class="lang-en">100% Clean · No Security Vendors Flagged This File</span>';
+            } else {
+              vd.textContent = vt.detected + ' vendor menandai — cek link sebelum install';
+            }
+          }
           var lk = document.getElementById('vtLink');
           if (lk && vt.permalink) lk.href = vt.permalink;
           var up = document.getElementById('vtUpdated');
