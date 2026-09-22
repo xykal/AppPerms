@@ -393,4 +393,31 @@ Animasi: %2$s
 ✓ Tweak otomatis: TIDAK ADA (aman)
 Semua fitur berbahaya sudah dibersihkan.</string>
     <string name="snapshot_restore_confirm">Pulihkan resolusi, DPI, dan animasi persis ke kondisi yang terakhir disimpan?</string>
+
+    <!-- Terminal (v1.6) i18n -->
+    <string name="term_status_not_running">⚠️ Shizuku belum jalan — buka Shizuku dulu via Wireless Debugging / Root</string>
+    <string name="term_status_no_permission">⚠️ Shizuku jalan tapi izin belum diberikan — tekan 'Minta izin' di halaman utama</string>
+    <string name="term_status_root_ready">✅ Shizuku root (uid 0) — semua perintah shell siap</string>
+    <string name="term_status_shell_ready">✅ Shizuku shell (uid 2000) — semua perintah shell siap</string>
+    <string name="term_hint_connect">Sambungkan Shizuku dulu...</string>
+    <string name="term_snack_type_first">Ketik perintah dulu</string>
+    <string name="term_snack_not_ready">Shizuku belum siap</string>
+    <string name="term_run_running">⏳ Menjalankan…</string>
+    <string name="term_output_waiting_shell">⏳ menunggu shell (uid %1$d)...</string>
+    <string name="term_meta_running">menjalankan...</string>
+    <string name="term_run_label">▶ Jalankan</string>
+    <string name="term_output_empty">Perintah kosong</string>
+    <string name="term_meta_exit">exit: %1$d %2$s · durasi: %3$dms · %4$d bytes</string>
+    <string name="term_output_cleared">Dibersihkan.
+
+Contoh:
+• pm list packages -3
+• appops get com.whatsapp
+• dumpsys deviceidle whitelist</string>
+    <string name="term_meta_idle">exit: — · durasi: —</string>
+    <string name="term_snack_copied">Output disalin</string>
+    <string name="term_snack_history_cleared">History sesi ini dibersihkan</string>
+    <string name="term_history_title">History perintah</string>
+    <string name="term_history_close">Tutup</string>
+    <string name="term_preset_check_screen">cek layar</string>
 </resources>

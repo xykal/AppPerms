@@ -62,7 +62,7 @@ object TerminalBridge {
         "dumpsys deviceidle whitelist" to "whitelist",
         "dumpsys window | grep -i overlay" to "dump overlay",
         "settings get global window_animation_scale" to "get anim",
-        "wm size; wm density" to "cek layar",
+        "wm size; wm density" to "check screen",
         "cmd deviceidle get deep" to "deep doze",
         "cmd appops get " to "appops get <pkg>",
     )
