@@ -519,6 +519,8 @@ class MainActivity : AppCompatActivity() {
         val canOperate = viewModel.state.value.snapshot.canOperate
         TweaksSheet.show(this, canOperate) { message -> snack(message) }
     }
+
+    private fun showBatchDialog() {
         val apps = viewModel.appsNow()
         if (apps.isEmpty()) {
             snack(getString(R.string.snack_no_apps))
