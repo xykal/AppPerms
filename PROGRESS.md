@@ -115,3 +115,34 @@
 **Next Step:**
 - Monitor build CI di GitHub Actions
 - Siapkan plumbing `--user` saat PR multi-profile dibuka oleh kontributor
+
+### 2026-09-22 - Migrasi Domain appsperms.xyverse.my.id, Web ID/EN & Tab Versi, dl CDN, Overhaul README Anti-Emoji
+**Status:** Done
+**Dikerjain oleh:** AI Agent + xykalnotkel
+
+**Yang dikerjain:**
+- Migrasi domain dari `appsperms.haekal.web.id` ke domain resmi `appsperms.xyverse.my.id` di seluruh codebase (`docs/index.html`, `docs/thanks.html`, `docs/CNAME`, `.github/workflows/build.yml`, `app/src/main/java/app/appsperms/ui/AboutSheet.kt`).
+- Redesain website `docs/index.html` dengan deteksi bahasa otomatis ID/EN (via `navigator.language` & `localStorage` tanpa flicker) + tombol toggle bahasa di navbar desktop & mobile.
+- Menambahkan tab "Semua Versi & Catatan Perubahan" interaktif dengan changelog mendalam per versi (v1.7.1, v1.7.0, v1.6.0, v1.5.0, v1.4.2, v1.3.0, v1.0.0) dalam dua bahasa (ID & EN).
+- Rute unduhan APK resmi diarahkan ke `dl.xyverse.my.id/AppsPerms-latest.apk` dan mirror CDN `dl.appsperms.xyverse.my.id`.
+- Overhaul total `README.md`: 100% anti-emoji (0 emoji), format bilingual terstruktur (ID / EN), badge style modern, section kontributor (@xykalnotkel, @BuddhaDiedLaughing, Rikka, LSPosed), dan lisensi open source Apache 2.0.
+- Menambahkan file `LICENSE` (Apache License 2.0).
+- Memperjelas dan mendokumentasikan aturan single-branding XyVerse di `CLAUDE.md`, `AGENTS.md`, dan `XYVERSE_GLOBAL_RULES.md`: hanya gunakan salah satu varian yang paling cocok ("Built-in XyVerse by Kall"), jangan gabungkan ketiganya sekaligus.
+
+**File yang diubah:**
+- `docs/CNAME` -> CNAME kustom `appsperms.xyverse.my.id`
+- `docs/index.html` -> bilingual ID/EN otomatis, tab Semua Versi + changelog, dl.xyverse CDN, single branding
+- `docs/thanks.html` -> update domain kanonikal dan link ke `appsperms.xyverse.my.id`
+- `app/src/main/java/app/appsperms/ui/AboutSheet.kt` -> update link website ke `appsperms.xyverse.my.id`
+- `.github/workflows/build.yml` -> update referensi domain di rilis & Cloudflare Pages step
+- `README.md` -> 100% anti-emoji, bilingual, badges, kontributor, lisensi, credit tunggal
+- `LICENSE` -> lisensi resmi Apache 2.0
+- `CLAUDE.md`, `AGENTS.md`, `XYVERSE_GLOBAL_RULES.md` -> dokumentasi aturan single branding
+- `PROGRESS.md` -> pencatatan log kemajuan terkini
+
+**Build & Release:**
+- Push ke branch main via GitHub Actions
+
+**Next Step:**
+- Monitor workflow CI dan verifikasi deployment Cloudflare Pages.
+

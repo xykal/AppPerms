@@ -163,7 +163,7 @@ jobs:
             echo
             echo "> ⚠️ **Mulai v1.3.0 nama paketnya berubah** (\`app.overlayops\` → \`app.appsperms\`). Uninstall versi lama dulu."
             echo
-            echo "Situs: https://appsperms.haekal.web.id/ · data scan: \`docs/data/virustotal.json\`"
+            echo "Situs: https://appsperms.xyverse.my.id/ · data scan: \`docs/data/virustotal.json\`"
           } > out/release-notes.md
 
           ls -lh out
@@ -305,7 +305,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_PAGES_PROJECT: appsperms
         run: |
-          # Situs kini di-serve Cloudflare Pages (appsperms.haekal.web.id).
+          # Situs kini di-serve Cloudflare Pages (appsperms.xyverse.my.id).
           # Deploy tiap run supaya data/hash/kartu hasil step di atas langsung
           # tayang — juga saat commit-balik docs ke main.
           if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then

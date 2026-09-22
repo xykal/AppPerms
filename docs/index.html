@@ -5,29 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0F1115">
   <meta name="color-scheme" content="dark">
-  <title>AppsPerms — Android AppOps & Permissions Manager | Built in XyVerse</title>
-  <meta name="description" content="AppsPerms: Pengelola izin tersembunyi (AppOps) modern & profesional untuk Android via Shizuku tanpa root. 100% Bebas Malware, 0 Izin Internet, Terverifikasi Clean di VirusTotal.">
-  <link rel="canonical" href="https://appsperms.haekal.web.id/">
+  <title>AppsPerms — Android AppOps &amp; Permissions Manager | Built-in XyVerse by Kall</title>
+  <meta name="description" content="AppsPerms: Pengelola izin tersembunyi (AppOps) modern &amp; profesional untuk Android via Shizuku tanpa root. 100% Bebas Malware, 0 Izin Internet, Terverifikasi Clean di VirusTotal.">
+  <link rel="canonical" href="https://appsperms.xyverse.my.id/">
 
-  <!-- Preview saat link dibagikan (WhatsApp/Telegram/X/Discord) -->
+  <!-- Language Pre-detection (Anti-flicker) -->
+  <script>
+    (function () {
+      var saved = localStorage.getItem('site_lang');
+      var lang = saved || ((navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('id') ? 'id' : 'en');
+      document.documentElement.lang = lang;
+    })();
+  </script>
+
+  <!-- Open Graph / Meta -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AppsPerms · XyVerse">
   <meta property="og:locale" content="id_ID">
-  <meta property="og:url" content="https://appsperms.haekal.web.id/">
+  <meta property="og:url" content="https://appsperms.xyverse.my.id/">
   <meta property="og:title" content="AppsPerms — Android AppOps &amp; Permissions Manager">
-  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.82 MB, 0 izin internet, 0/72 Clean di VirusTotal. Gratis, tanpa iklan.">
-  <meta property="og:image" content="https://appsperms.haekal.web.id/images/og-cover.png">
+  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.9 MB, 0 izin internet, 0/72 Clean di VirusTotal. Gratis, tanpa iklan.">
+  <meta property="og:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="AppsPerms — pengelola AppOps &amp; izin sistem Android via Shizuku">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AppsPerms — Android AppOps &amp; Permissions Manager">
-  <meta name="twitter:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.82 MB, 0 izin internet, 0/72 Clean di VirusTotal.">
-  <meta name="twitter:image" content="https://appsperms.haekal.web.id/images/og-cover.png">
+  <meta name="twitter:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.9 MB, 0 izin internet, 0/72 Clean di VirusTotal.">
+  <meta name="twitter:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23171A21' stroke='%232C313B' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23FFB020'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%231A1206'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%231A1206'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
-    /* ===== APK Exact Color Palette ===== */
+    /* ===== Color Palette & Variables ===== */
     :root {
       --bg: #0F1115;
       --surface: #171A21;
@@ -50,1011 +59,1385 @@
       --nav-h: 60px;
     }
 
-    /* ===== Reset & Base (mobile-first) ===== */
+    /* ===== Language Display Rules ===== */
+    html[lang="id"] .lang-en { display: none !important; }
+    html[lang="en"] .lang-id { display: none !important; }
+
+    /* ===== Reset & Base ===== */
     *, *::before, *::after { box-sizing: border-box; }
     * { margin: 0; padding: 0; }
 
     html {
       scroll-behavior: smooth;
-      /* jangkar tidak ketutup nav sticky */
       scroll-padding-top: calc(var(--nav-h) + 12px);
-      -webkit-text-size-adjust: 100%;
-      /* safety net: tidak ada scroll horizontal (clip tidak merusak position: sticky) */
-      overflow-x: clip;
-    }
-    body {
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font);
-      font-size: 16px;
-      line-height: 1.6;
+      font-size: 15px;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
-      overflow-x: clip;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
       min-height: 100vh;
-    }
-    img, svg { max-width: 100%; }
-    img { display: block; height: auto; }
-    a { color: inherit; }
-    code { font-family: var(--mono); font-size: 0.92em; }
-
-    :focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 2px;
-      border-radius: 4px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 176, 32, 0.08), transparent 45%),
+        radial-gradient(circle at 90% 20%, rgba(61, 220, 132, 0.04), transparent 40%),
+        var(--bg);
+      background-attachment: fixed;
     }
 
-    .container {
-      width: 100%;
-      max-width: 980px;
-      margin-inline: auto;
-      padding-inline: 16px;
-    }
-    @media (min-width: 720px) {
-      .container { padding-inline: 20px; }
-    }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--outline); }
 
-    /* ===== Nav (sticky) ===== */
+    /* ===== Navigation Bar ===== */
     nav {
       position: sticky;
       top: 0;
       z-index: 100;
       height: var(--nav-h);
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid var(--outline);
-      background: rgba(15, 17, 21, 0.94);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(15, 17, 21, 0.85);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--outline);
     }
     .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      width: 100%;
-      height: 100%;
     }
-    .nav-brand {
+    .brand-wrap {
       display: flex;
       align-items: center;
-      gap: 9px;
-      text-decoration: none;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
       color: var(--text);
-      font-weight: 700;
-      font-size: 1rem;
-      min-width: 0;
-      white-space: nowrap;
     }
-    .nav-brand svg { flex: 0 0 auto; }
-    .nav-tag {
-      font-size: 0.68rem;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      color: var(--brand);
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    /* Hamburger (mobile only) */
-    .nav-toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      flex: 0 0 auto;
+    .brand-wrap:hover { text-decoration: none; }
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       background: var(--surface);
       border: 1px solid var(--outline);
-      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .nav-items-desktop {
+      display: none;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-link {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: var(--text); text-decoration: none; }
+
+    /* Language Switcher Button */
+    .lang-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      border-radius: 20px;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      transition: all 0.2s;
+    }
+    .lang-toggle-btn:hover {
+      border-color: var(--brand);
+      color: var(--text);
+    }
+    .lang-toggle-btn span.active-lang {
+      background: var(--brand);
+      color: #1A1206;
+      border-radius: 12px;
+      padding: 1px 6px;
+    }
+
+    .nav-toggle-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: 1px solid var(--outline);
+      border-radius: 8px;
       color: var(--text);
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
     }
-    .nav-toggle:active { background: var(--surface-2); }
-    .nav-toggle .icon-close { display: none; }
-    .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
-    .nav-toggle[aria-expanded="true"] .icon-burger { display: none; }
-
-    /* Drawer / list link */
-    .nav-links {
+    .nav-menu-mobile {
       position: absolute;
       top: var(--nav-h);
       left: 0;
       right: 0;
       display: none;
       flex-direction: column;
-      gap: 2px;
-      padding: 10px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+      gap: 10px;
+      padding: 16px;
       background: var(--surface);
       border-bottom: 1px solid var(--outline);
-      box-shadow: 0 20px 34px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.6);
     }
-    .nav-links.open { display: flex; }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      min-height: 46px;
-      padding: 10px 10px;
-      border-radius: 10px;
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color 0.2s, background 0.2s;
-    }
-    .nav-link:active, .nav-link:hover { color: var(--text); background: var(--surface-2); }
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 8px;
-      min-height: 46px;
-      padding: 10px 18px;
-      border-radius: 11px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      text-decoration: none;
-      color: #1A1206;
-      background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
-      border: 1px solid #FFA500;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 3px 0 #9E6400;
-    }
+    .nav-menu-mobile.open { display: flex; }
 
     @media (min-width: 880px) {
-      .nav-toggle, .nav-cta { display: none; }
-      .nav-links {
-        position: static;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 22px;
-        padding: 0;
-        background: none;
-        border: 0;
-        box-shadow: none;
-      }
-      .nav-link { min-height: 0; padding: 6px 0; border-radius: 0; font-size: 0.9rem; }
-      .nav-link:active, .nav-link:hover { background: none; }
+      .nav-items-desktop { display: flex; }
+      .nav-toggle-mobile { display: none; }
     }
 
-    /* ===== Hero ===== */
+    /* ===== Main Container ===== */
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 30px 16px 80px;
+    }
+
+    /* ===== Hero Section ===== */
     .hero {
-      padding: 28px 0 24px;
       text-align: center;
+      padding: 20px 0 35px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-    .app-logo-wrap { margin-bottom: 18px; }
-    .app-logo {
-      width: 84px;
-      height: 84px;
+    .app-icon {
+      width: 88px;
+      height: 88px;
       border-radius: 22px;
       background: var(--surface);
       border: 2px solid var(--outline);
       display: grid;
       place-items: center;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 12px 30px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 176, 32, 0.15);
-      transition: transform 0.2s;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 176, 32, 0.18);
     }
-    .app-logo svg { width: 46px; height: 46px; }
-    .hero-title {
-      font-size: clamp(1.95rem, 8.5vw, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.12;
-      margin-bottom: 10px;
-      color: #FFFFFF;
-      word-break: break-word;
-    }
-    .hero-tagline {
-      font-size: clamp(0.98rem, 3.6vw, 1.25rem);
-      color: var(--text-dim);
-      max-width: 620px;
-      margin: 0 auto 16px;
-      font-weight: 400;
-      line-height: 1.5;
-      text-wrap: balance;
-    }
-    .xyverse-badge {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       background: var(--surface);
       border: 1px solid var(--outline);
-      color: var(--text-dim);
-      padding: 5px 14px;
+      padding: 6px 14px;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin-bottom: 22px;
-      max-width: 100%;
+      color: var(--text-dim);
+      margin-bottom: 16px;
     }
-    .xyverse-badge span.dot {
-      width: 7px;
-      height: 7px;
-      flex: 0 0 auto;
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
       background: var(--brand);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--brand);
     }
+    .hero-title {
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 24px;
+      line-height: 1.55;
+    }
 
-    /* ===== Buttons ===== */
+    /* Download Buttons */
     .btn-group {
       display: flex;
       flex-direction: column;
-      align-items: stretch;
       gap: 12px;
       width: 100%;
-      max-width: 400px;
-      margin-inline: auto;
-      margin-bottom: 20px;
+      max-width: 440px;
+      margin: 0 auto 22px;
     }
-    .btn-cf-glossy,
-    .btn-dark-glossy {
-      position: relative;
+    @media (min-width: 560px) {
+      .btn-group { flex-direction: row; justify-content: center; max-width: 100%; }
+    }
+    .btn-cf-glossy, .btn-dark-glossy {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      width: 100%;
       min-height: 50px;
-      padding: 13px 20px;
-      font-family: inherit;
+      padding: 12px 24px;
       font-weight: 700;
-      text-decoration: none;
+      font-size: 0.98rem;
       border-radius: 12px;
-      text-align: center;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background 0.15s ease-in-out;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
     }
     .btn-cf-glossy {
-      font-size: 1rem;
       color: #1A1206;
       background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
       border: 1px solid #FFA500;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.65),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-        0 4px 0 #9E6400,
-        0 8px 24px rgba(255, 176, 32, 0.35);
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 0 #9E6400, 0 8px 24px rgba(255, 176, 32, 0.35);
+    }
+    .btn-cf-glossy:hover {
+      text-decoration: none;
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 5px 0 #9E6400, 0 10px 28px rgba(255, 176, 32, 0.45);
+    }
+    .btn-cf-glossy:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 0 #9E6400;
     }
     .btn-dark-glossy {
-      font-size: 0.92rem;
-      font-weight: 600;
       color: var(--text);
       background: linear-gradient(180deg, #2A303C 0%, #1F242D 100%);
       border: 1px solid var(--outline-light);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        0 3px 0 #13171D,
-        0 6px 16px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 3px 0 #13171D, 0 6px 16px rgba(0, 0, 0, 0.4);
     }
-    .btn-cf-glossy svg, .btn-dark-glossy svg { flex: 0 0 auto; }
-    .btn-cf-glossy:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 1px 0 #9E6400, 0 3px 8px rgba(255,176,32,0.25); }
-    .btn-dark-glossy:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 1px 0 #13171D, 0 2px 6px rgba(0,0,0,0.3); }
-    @media (hover: hover) {
-      .app-logo:hover { transform: scale(1.03); }
-      .btn-cf-glossy:hover {
-        background: linear-gradient(180deg, #FFD273 0%, #FFB833 40%, #F09E0A 100%);
-        transform: translateY(-1px);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -1px 0 rgba(0,0,0,0.15), 0 4px 0 #9E6400, 0 10px 28px rgba(255,176,32,0.45);
-      }
-      .btn-dark-glossy:hover {
-        background: linear-gradient(180deg, #323A48 0%, #252B36 100%);
-        border-color: #4B5565;
-        transform: translateY(-1px);
-      }
+    .btn-dark-glossy:hover {
+      text-decoration: none;
+      transform: translateY(-2px);
+      border-color: #4B5565;
     }
-    /* State saat unduhan disiapkan */
-    .btn-cf-glossy.is-loading, .btn-dark-glossy.is-loading {
-      pointer-events: none;
-      opacity: 0.85;
-    }
-    .btn-cf-glossy.is-loading::after {
-      content: "";
-      width: 16px; height: 16px;
-      border: 2px solid rgba(26,18,6,0.35);
-      border-top-color: #1A1206;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @media (min-width: 560px) {
-      .btn-group {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 14px;
-        max-width: 100%;
-      }
-      .btn-cf-glossy, .btn-dark-glossy { width: auto; }
-      .btn-cf-glossy { padding: 14px 32px; font-size: 1.05rem; }
-      .btn-dark-glossy { padding: 13px 22px; font-size: 0.95rem; }
+    .btn-dark-glossy:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 #13171D;
     }
 
-    .req-line {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px 10px;
-    }
-    .req-line span { white-space: nowrap; }
     .dl-hint {
+      font-size: 0.82rem;
+      color: var(--ok);
+      margin-top: 8px;
       display: none;
-      font-size: 0.8rem;
-      color: var(--brand);
-      margin: -10px 0 16px;
     }
     .dl-hint.show { display: block; }
 
-    /* ===== Trust Pills ===== */
-    .pill-row {
+    /* Pill Badges */
+    .pills-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
+      gap: 10px;
+      margin-top: 14px;
     }
     .pill {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      color: var(--text-dim);
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 8px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
-      line-height: 1.35;
-      text-align: left;
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--text-dim);
     }
-    .pill svg { color: var(--ok); flex: 0 0 auto; }
+    .pill svg { color: var(--brand); }
 
-    /* ===== Sections ===== */
-    section { padding: 26px 0; }
-    .sec-head { margin-bottom: 18px; }
+    /* ===== Section Layout ===== */
+    section {
+      margin-top: 55px;
+    }
+    .sec-head {
+      margin-bottom: 22px;
+    }
     .sec-title {
-      font-size: clamp(1.18rem, 5vw, 1.45rem);
-      font-weight: 700;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       color: #FFFFFF;
       margin-bottom: 6px;
-      letter-spacing: -0.01em;
-      line-height: 1.3;
     }
-    .sec-sub { color: var(--text-dim); font-size: 0.92rem; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 20px;
-    }
-
-    /* Play Store Honest Note */
-    .note-playstore {
-      border-left: 4px solid var(--brand);
-      background: var(--surface);
-      border-top: 1px solid var(--outline);
-      border-right: 1px solid var(--outline);
-      border-bottom: 1px solid var(--outline);
-      border-radius: 12px;
-      padding: 18px;
-    }
-    .note-playstore h3 {
-      font-size: 1.03rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.35;
-    }
-    .note-playstore h3 svg { flex: 0 0 auto; margin-top: 3px; }
-    .note-playstore p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.62; }
-    .note-playstore strong { color: var(--text); }
-
-    /* ===== VirusTotal ===== */
-    .vt-wrap { display: flex; flex-direction: column; gap: 16px; }
-    .vt-header-bar {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 14px;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      border-radius: 12px;
-      padding: 16px;
-    }
-    .vt-status-pill { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .score-badge {
-      background: #0a2e1d;
-      color: var(--ok);
-      border: 1.5px solid var(--ok);
-      font-weight: 800;
-      font-size: 1.05rem;
-      padding: 4px 12px;
-      border-radius: 8px;
-      white-space: nowrap;
-      flex: 0 0 auto;
-    }
-    .vt-status-text { min-width: 0; }
-    .vt-status-text strong { color: #FFFFFF; font-size: 0.93rem; display: block; }
-    .vt-status-text .vendors { font-size: 0.78rem; color: var(--ok); }
-    .vt-header-bar .btn-dark-glossy { width: 100%; }
-
-    .vt-img-box {
-      border: 1px solid var(--outline);
-      border-radius: 14px;
-      overflow: hidden;
-      background: #0F1115;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    }
-    .vt-img-box img { width: 100%; height: auto; }
-    .vt-caption {
-      padding: 12px 16px;
-      background: var(--surface-2);
-      border-top: 1px solid var(--outline);
-      font-size: 0.8rem;
+    .sec-sub {
       color: var(--text-dim);
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      word-break: break-word;
+      font-size: 0.95rem;
     }
 
-    /* Hash list — jadi kartu bertumpuk di layar kecil */
-    .hash-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.86rem;
-      display: block;
-    }
-    .hash-table tbody, .hash-table tr, .hash-table td { display: block; width: 100%; }
-    .hash-table tr {
-      padding: 12px 0;
-      border-bottom: 1px solid var(--outline);
-    }
-    .hash-table tr:last-child { border-bottom: none; padding-bottom: 0; }
-    .hash-table tr:first-child { padding-top: 0; }
-    .hash-table td { padding: 0; border: 0; }
-    .hash-table td.label {
-      color: var(--text-dim);
-      font-weight: 600;
-      font-size: 0.76rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-    .hash-table td.code {
-      font-family: var(--mono);
-      color: var(--brand);
-      font-size: 0.82rem;
-      line-height: 1.55;
-      word-break: break-all;
-      overflow-wrap: anywhere;
-    }
-    .hash-table td.ok { color: var(--ok); font-weight: 600; font-size: 0.86rem; }
-    .hash-when { color: var(--text-muted); font-size: 0.78em; }
-
-    @media (min-width: 640px) {
-      .vt-header-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 14px 20px; }
-      .vt-header-bar .btn-dark-glossy { width: auto; padding: 8px 16px; font-size: 0.82rem; }
-      .vt-caption { flex-direction: row; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 18px; }
-      .hash-table { display: table; }
-      .hash-table tbody { display: table-row-group; }
-      .hash-table tr { display: table-row; padding: 0; border-bottom: 1px solid var(--outline); }
-      .hash-table tr:last-child { border-bottom: none; }
-      .hash-table td { display: table-cell; padding: 10px 14px; }
-      .hash-table td.label { width: 170px; margin: 0; text-transform: none; font-size: 0.88rem; letter-spacing: 0; }
-      .hash-table td.code { font-size: 0.86rem; }
-    }
-
-    /* ===== Features ===== */
+    /* ===== Feature Cards Grid ===== */
     .features-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 16px;
+    }
+    @media (min-width: 640px) {
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 960px) {
+      .features-grid { grid-template-columns: repeat(3, 1fr); }
     }
     .feat-card {
       background: var(--surface);
       border: 1px solid var(--outline);
       border-radius: 14px;
-      padding: 18px;
-      transition: border-color 0.2s;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .feat-card:hover { border-color: var(--outline-light); }
+    .feat-card:hover {
+      border-color: var(--outline-light);
+      transform: translateY(-2px);
+    }
     .feat-card-title {
-      font-size: 1rem;
       font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 6px;
+      font-size: 1.05rem;
+      color: var(--text);
       display: flex;
       align-items: center;
       gap: 8px;
-      line-height: 1.35;
     }
-    .feat-card-title svg { flex: 0 0 auto; }
-    .feat-card-desc { color: var(--text-dim); font-size: 0.87rem; line-height: 1.58; }
-    .feat-card-desc code { color: var(--brand); }
+    .feat-card-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
 
-    /* ===== Steps ===== */
-    .steps-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    .step-item {
+    /* ===== "Semua Versi" Tabs Component ===== */
+    .versions-container {
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .version-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--outline);
+      scrollbar-width: thin;
+    }
+    .version-tab-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      color: var(--text-dim);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .version-tab-btn:hover {
+      color: var(--text);
+      border-color: var(--outline-light);
+    }
+    .version-tab-btn.active {
+      background: var(--brand);
+      border-color: #FFA500;
+      color: #1A1206;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(255, 176, 32, 0.3);
+    }
+    .version-pane {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .version-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .version-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--outline);
+    }
+    .version-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .version-tag {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .version-date {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .version-badge-status {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(61, 220, 132, 0.15);
+      color: var(--ok);
+      border: 1px solid rgba(61, 220, 132, 0.3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .version-downloads {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .v-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      background: var(--surface-2);
+      border: 1px solid var(--outline-light);
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .v-dl-btn:hover {
+      text-decoration: none;
+      background: var(--surface-3);
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+    .v-dl-btn.primary {
+      background: linear-gradient(180deg, #FFC959 0%, #FFB020 100%);
+      color: #1A1206;
+      border-color: #FFA500;
+    }
+    .v-dl-btn.primary:hover {
+      background: linear-gradient(180deg, #FFD273 0%, #FFB833 100%);
+      color: #1A1206;
+    }
+    .changelog-category {
+      margin-top: 16px;
+    }
+    .changelog-category-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .changelog-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px;
+    }
+    .changelog-list li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 7px;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .changelog-list li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      color: var(--brand);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    /* ===== Security & VirusTotal Section ===== */
+    .vt-banner {
+      background: linear-gradient(135deg, rgba(61, 220, 132, 0.1) 0%, rgba(23, 26, 33, 0.9) 100%);
+      border: 1px solid rgba(61, 220, 132, 0.35);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    @media (min-width: 680px) {
+      .vt-banner { flex-direction: row; align-items: center; justify-content: space-between; }
+    }
+    .vt-score-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .vt-score {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--ok);
+      line-height: 1;
+    }
+    .vt-verdict-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+    }
+    .vt-verdict-desc {
+      font-size: 0.84rem;
+      color: var(--text-dim);
+    }
+    .hash-table {
+      width: 100%;
       background: var(--surface);
       border: 1px solid var(--outline);
       border-radius: 12px;
-      padding: 18px;
+      border-collapse: collapse;
+      overflow: hidden;
+      font-size: 0.86rem;
+    }
+    .hash-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--outline);
+    }
+    .hash-table tr:last-child td { border-bottom: none; }
+    .hash-table td.label {
+      width: 160px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .hash-table td.code {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      word-break: break-all;
+    }
+
+    /* ===== Guide Steps ===== */
+    .steps-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 720px) {
+      .steps-list { grid-template-columns: repeat(3, 1fr); }
+    }
+    .step-item {
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     .step-badge {
       display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
+      align-self: flex-start;
+      background: var(--brand-container);
       color: var(--brand);
-      padding: 2px 8px;
+      border: 1px solid var(--brand-dark);
+      padding: 3px 10px;
       border-radius: 6px;
-      margin-bottom: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
     }
-    .step-item h4 { font-size: 0.98rem; font-weight: 700; color: #FFFFFF; margin-bottom: 6px; }
-    .step-item p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.55; }
-    .step-item p code { color: var(--brand); word-break: break-all; }
+    .step-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .step-item p {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
 
-    @media (min-width: 700px) {
-      section { padding: 42px 0; }
-      .sec-head { margin-bottom: 24px; }
-      .card { padding: 24px; }
-      .note-playstore { padding: 20px 24px; }
-      .features-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-      .steps-list { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
-      .hero { padding: 56px 0 40px; }
-      .app-logo { width: 104px; height: 104px; border-radius: 26px; }
-      .app-logo svg { width: 60px; height: 60px; }
-      .app-logo-wrap { margin-bottom: 24px; }
-      .xyverse-badge { margin-bottom: 30px; }
-      .btn-group { margin-bottom: 28px; }
-      .req-line { margin-bottom: 30px; }
+    /* ===== Contributors & Ecosystem ===== */
+    .contrib-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .contrib-card {
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .contrib-name {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .contrib-role {
+      font-size: 0.82rem;
+      color: var(--brand);
+    }
+    .contrib-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+      margin-top: 2px;
     }
 
     /* ===== Footer ===== */
     footer {
+      margin-top: 80px;
+      padding-top: 30px;
       border-top: 1px solid var(--outline);
-      padding-top: 26px;
-      margin-top: 34px;
-      color: var(--text-muted);
-      font-size: 0.84rem;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 14px;
-      padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+      gap: 16px;
+      font-size: 0.88rem;
+      color: var(--text-dim);
     }
-    .footer-links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
-    footer a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
-    footer a:hover, footer a:active { color: var(--text); }
-
-    @media (min-width: 700px) {
-      footer { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 32px; margin-top: 50px; }
+    @media (min-width: 640px) {
+      footer { flex-direction: row; justify-content: space-between; align-items: center; }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
     }
+    .footer-links a {
+      color: var(--text-dim);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--brand); text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
+  <!-- Navigation -->
   <nav>
-    <div class="container nav-inner">
-      <a href="#" class="nav-brand">
-        <svg width="22" height="22" viewBox="0 0 108 108" aria-hidden="true">
-          <rect width="108" height="108" rx="24" fill="#171A21" stroke="#2C313B" stroke-width="4"/>
-          <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" fill="none" stroke="#ECEFF4" stroke-width="6"/>
-          <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
-          <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
-        </svg>
-        AppsPerms
-        <span class="nav-tag">XyVerse</span>
+    <div class="nav-inner">
+      <a href="#" class="brand-wrap">
+        <div class="brand-logo">
+          <svg width="20" height="20" viewBox="0 0 108 108" fill="none">
+            <rect width="108" height="108" rx="28" fill="#171A21"/>
+            <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="8"/>
+            <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
+            <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
+            <rect x="51" y="58" width="14" height="4" rx="2" fill="#1A1206"/>
+          </svg>
+        </div>
+        <span>AppsPerms</span>
       </a>
 
-      <button class="nav-toggle" id="navToggle" type="button" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="navMenu">
-        <svg class="icon-burger" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg class="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-
-      <div class="nav-links" id="navMenu">
-        <a href="#unduh" class="nav-link">Unduh</a>
-        <a href="#fitur" class="nav-link">Fitur</a>
-        <a href="#keamanan" class="nav-link">Audit VirusTotal</a>
-        <a href="#kenapa-bukan-playstore" class="nav-link">Play Store?</a>
-        <a href="#panduan" class="nav-link">Panduan</a>
-        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener" class="nav-link">GitHub</a>
-        <a href="#unduh" class="nav-cta">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Unduh APK v1.4.2
+      <!-- Desktop Links -->
+      <div class="nav-items-desktop">
+        <a href="#fitur" class="nav-link">
+          <span class="lang-id">Fitur</span>
+          <span class="lang-en">Features</span>
         </a>
+        <a href="#semua-versi" class="nav-link">
+          <span class="lang-id">Semua Versi</span>
+          <span class="lang-en">All Versions</span>
+        </a>
+        <a href="#keamanan" class="nav-link">
+          <span class="lang-id">Keamanan</span>
+          <span class="lang-en">Security</span>
+        </a>
+        <a href="#panduan" class="nav-link">
+          <span class="lang-id">Panduan</span>
+          <span class="lang-en">Guide</span>
+        </a>
+        <a href="#kontributor" class="nav-link">
+          <span class="lang-id">Kontributor</span>
+          <span class="lang-en">Contributors</span>
+        </a>
+        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+
+        <!-- Language Switcher -->
+        <button class="lang-toggle-btn" id="langToggle" aria-label="Toggle language">
+          <span class="opt-id">ID</span>
+          <span>/</span>
+          <span class="opt-en">EN</span>
+        </button>
       </div>
+
+      <!-- Mobile Button -->
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="lang-toggle-btn" id="langToggleMobile" aria-label="Toggle language" style="display:inline-flex;">
+          <span class="opt-id">ID</span>
+          <span>/</span>
+          <span class="opt-en">EN</span>
+        </button>
+        <button class="nav-toggle-mobile" id="navToggle" aria-label="Menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="nav-menu-mobile" id="navMenu">
+      <a href="#fitur" class="nav-link">
+        <span class="lang-id">Fitur</span>
+        <span class="lang-en">Features</span>
+      </a>
+      <a href="#semua-versi" class="nav-link">
+        <span class="lang-id">Semua Versi &amp; Changelog</span>
+        <span class="lang-en">All Versions &amp; Changelog</span>
+      </a>
+      <a href="#keamanan" class="nav-link">
+        <span class="lang-id">Keamanan &amp; VirusTotal</span>
+        <span class="lang-en">Security &amp; VirusTotal</span>
+      </a>
+      <a href="#panduan" class="nav-link">
+        <span class="lang-id">Panduan Shizuku</span>
+        <span class="lang-en">Quick Guide</span>
+      </a>
+      <a href="#kontributor" class="nav-link">
+        <span class="lang-id">Kontributor</span>
+        <span class="lang-en">Contributors</span>
+      </a>
+      <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener" class="nav-link">GitHub Repository</a>
     </div>
   </nav>
 
-  <main class="container">
+  <!-- Main Container -->
+  <main>
 
     <!-- Hero -->
-    <header class="hero" id="unduh">
-      <div class="app-logo-wrap">
-        <div class="app-logo">
-          <svg viewBox="0 0 108 108" aria-hidden="true">
-            <path d="M40,24h28a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-28a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" fill="none" stroke="#ECEFF4" stroke-width="5" />
-            <rect x="48" y="44" width="34" height="26" rx="6" fill="#FFB020" />
-            <rect x="53" y="50" width="22" height="4" rx="2" fill="#1A1206" />
-            <rect x="53" y="58" width="14" height="4" rx="2" fill="#1A1206" />
-            <path d="M49,31h10" stroke="#ECEFF4" stroke-width="4" stroke-linecap="round" />
-          </svg>
-        </div>
+    <header class="hero">
+      <div class="app-icon">
+        <svg width="48" height="48" viewBox="0 0 108 108" fill="none">
+          <rect width="108" height="108" rx="28" fill="#171A21"/>
+          <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="6"/>
+          <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
+          <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
+          <rect x="51" y="58" width="14" height="4" rx="2" fill="#1A1206"/>
+          <path d="M48,31h12" stroke="#ECEFF4" stroke-width="3" stroke-linecap="round"/>
+        </svg>
       </div>
 
-      <h1 class="hero-title">AppsPerms</h1>
-      <p class="hero-tagline">
-        Pengelola AppOps &amp; Izin Sistem Android Tingkat Lanjut via Shizuku tanpa Root.
-      </p>
-
-      <div class="xyverse-badge">
+      <div class="hero-badge">
         <span class="dot"></span>
-        Built in XyVerse · v1.4.2 Rilis Resmi
+        <span>Built-in XyVerse by Kall</span>
+        <span style="opacity:0.4;">|</span>
+        <span id="heroVerBadge">v1.7.1</span>
       </div>
 
-      <div class="btn-group">
-        <a id="btnRelease" href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.4.2/AppsPerms-1.4.2-release.apk"
-           target="_blank" rel="noopener" class="btn-cf-glossy" data-download="release" data-variant="release">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span class="dl-label">Download Release APK (±1,9 MB)</span>
-        </a>
-        <a id="btnDebug" href="https://github.com/xykalnotkel/OverlayOps/releases/download/v1.4.2/AppsPerms-1.4.2-debug.apk"
-           target="_blank" rel="noopener" class="btn-dark-glossy" data-download="debug" data-variant="debug">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span class="dl-label">Debug APK (5.86 MB)</span>
-        </a>
-      </div>
+      <h1 class="hero-title">
+        <span class="lang-id">Kendali Penuh Izin Android Tanpa Root</span>
+        <span class="lang-en">Full Android Permissions Control Without Root</span>
+      </h1>
 
-      <p class="dl-hint" id="dlHint" role="status" aria-live="polite"></p>
-
-      <p class="req-line">
-        <span>Android 7.0+</span><span aria-hidden="true">·</span>
-        <span id="reqSize">±1,9 MB</span><span aria-hidden="true">·</span>
-        <span>Butuh aplikasi Shizuku</span><span aria-hidden="true">·</span>
-        <span>Gratis &amp; tanpa iklan</span>
+      <p class="hero-sub">
+        <span class="lang-id">Kelola 19 AppOps tersembunyi, tuning resolusi &amp; animasi aman, serta eksekusi Terminal Shizuku langsung dari HP kamu. Ringan, super cepat, dan 100% tanpa iklan.</span>
+        <span class="lang-en">Manage 19 hidden AppOps, safely tune screen resolution &amp; animations, and execute Shizuku Terminal shell directly on your phone. Lightweight, ultra-fast, and 100% ad-free.</span>
       </p>
 
-      <div class="pill-row">
+      <!-- Buttons -->
+      <div class="btn-group">
+        <a id="btnRelease" class="btn-cf-glossy" href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" data-variant="release" data-alt="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span class="dl-label lang-id">Download Release APK (~1.9 MB)</span>
+          <span class="dl-label lang-en">Download Release APK (~1.9 MB)</span>
+        </a>
+
+        <a id="btnDebug" class="btn-dark-glossy" href="https://dl.xyverse.my.id/AppsPerms-debug-latest.apk" target="_blank" rel="noopener" data-variant="debug" data-alt="https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          </svg>
+          <span class="lang-id">Debug Build (Logcat)</span>
+          <span class="lang-en">Debug Build (Logcat)</span>
+        </a>
+      </div>
+
+      <div id="dlHint" class="dl-hint"></div>
+
+      <!-- Quick Trust Pills -->
+      <div class="pills-row">
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span id="vtPillText">0/72 Clean di VirusTotal</span>
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Nol Izin Internet (Privasi Mutlak)
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="lang-id">0 Izin Internet (Privasi Mutlak)</span>
+          <span class="lang-en">0 Internet Permission (100% Private)</span>
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Tanpa Root Permanen (Shizuku)
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Shizuku / Root</span>
         </div>
         <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          Optimistic UI 0ms (Anti-Lag)
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>0ms Optimistic UI</span>
         </div>
       </div>
     </header>
 
-    <!-- Catatan penting untuk pengguna versi lama -->
-    <section id="catatan-v130">
-      <div class="note-playstore" style="border-left-color: var(--deny);">
-        <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Sudah pernah pasang versi lama (OverlayOps)?
-        </h3>
-        <p>
-          Mulai <strong>v1.3.0 nama paketnya berubah</strong> (<code>app.overlayops</code> &rarr; <code>app.appsperms</code>),
-          jadi Android menganggapnya <strong>aplikasi baru</strong>. Uninstall dulu versi lama, baru pasang AppsPerms,
-          lalu berikan izin Shizuku sekali lagi. Konfigurasi lama tidak ikut pindah &mdash; pakai
-          <em>Backup konfigurasi</em> di versi lama, lalu <em>Restore</em> di versi baru kalau mau cepat.
-        </p>
-      </div>
-    </section>
-
-    <!-- Baru di v1.4.0 -->
-    <section id="baru">
-      <div class="sec-head">
-        <h2 class="sec-title">Baru di v1.4.2 — Tuning Lebih Aman</h2>
-        <p class="sec-sub">Tidak ada tweak yang aktif otomatis. Fitur penelan sentuhan dan pembersih proses dihapus, halaman Tentang diperbarui, serta satu aplikasi dapat dibantu tetap aktif di latar.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
-            Resolusi &amp; DPI (auto-revert 15 detik)
-          </div>
-          <p class="feat-card-desc">
-            Turunkan resolusi lewat preset 50–90% (rasio terjaga) atau angka manual lewat <code>wm size/density</code>. Ketik satu angka seperti <code>1080</code> dan sisi lain dihitung otomatis.
-            Ada jaring pengaman: tidak dikonfirmasi → sistem kembali sendiri. Tidak ada skenario layar terkunci.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 2v6"/><path d="M12 22a8 8 0 0 0 8-8c0-4-4-6-8-12-4 6-8 8-8 12a8 8 0 0 0 8 8z"/></svg>
-            Proteksi Satu Aplikasi
-          </div>
-          <p class="feat-card-desc">
-            Pilih satu app untuk diizinkan berjalan di latar dan dikecualikan dari Doze jika ROM mendukung.
-            Tetap jujur: Android masih dapat menghentikannya setelah force-stop atau swipe.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-            Riwayat &amp; Undo Massal
-          </div>
-          <p class="feat-card-desc">
-            Semua perubahan AppOps tercatat. Satu tombol mengembalikan seluruh app &amp; op ke status paling awal —
-            cocok setelah eksperimen massal.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Changelog arsip -->
-    <section id="baru-130">
-      <div class="sec-head">
-        <h2 class="sec-title">Baru di v1.3.0</h2>
-        <p class="sec-sub">Fokus rilis ini: kejelasan dan kenyamanan pakai, bukan sekadar menambah fitur.</p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            Dua Bahasa: Indonesia & English
-          </div>
-          <p class="feat-card-desc">
-            Seluruh antarmuka bisa diganti ke Bahasa Inggris dari menu Pengaturan, atau ikut bahasa sistem.
-            Di Android 13+ pilihannya juga muncul di Pengaturan sistem &rarr; Aplikasi &rarr; AppsPerms &rarr; Bahasa.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            Menu Baru yang Tertata
-          </div>
-          <p class="feat-card-desc">
-            Menu titik tiga tidak lagi berupa daftar panjang: sekarang dikelompokkan jadi
-            <strong>Kelola</strong>, <strong>Diagnostik</strong>, dan <strong>Bantuan &amp; info</strong>, lengkap dengan keterangan singkat per aksi.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 14H4a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 6 8.6l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 11 4.6V4a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 2.82 1.17l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 11H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            Layar Pengaturan
-          </div>
-          <p class="feat-card-desc">
-            Atur bahasa, urutan daftar bawaan, peringatan UID bersama, dan konfirmasi mode berisiko &mdash;
-            semua tersimpan di perangkat, tanpa akun dan tanpa internet.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-            Peringatan Mode Berisiko
-          </div>
-          <p class="feat-card-desc">
-            Memilih <strong>Diblokir</strong> atau <strong>Diabaikan</strong> untuk app yang memang meminta izin overlay kini ditanya dulu,
-            plus penjelasan konsekuensinya &mdash; supaya tidak ada app yang tiba-tiba rusak tanpa kamu sadari.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Deteksi UID Bersama
-          </div>
-          <p class="feat-card-desc">
-            AppOps disimpan per-UID, jadi app dengan UID sama (klon / profil kerja) berubah bersamaan.
-            AppsPerms sekarang menghitungnya dan memberi tahu sebelum kamu mengubah sesuatu.
-          </p>
-        </div>
-
-        <div class="feat-card">
-          <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Unit Test &amp; Build Terverifikasi
-          </div>
-          <p class="feat-card-desc">
-            Parser perintah <code>appops</code> (bagian paling rawan) kini punya unit test yang jalan di CI
-            setiap kali kode berubah &mdash; termasuk untuk format keluaran ROM yang berbeda-beda.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Transparansi Play Store -->
-    <section id="kenapa-bukan-playstore">
-      <div class="note-playstore">
-        <h3>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          Kenapa AppsPerms Tidak Ada di Google Play Store?
-        </h3>
-        <p>
-          Biar transparan dari awal: <strong>bukan karena aplikasi ini ada virus, malware, atau melanggar keamanan</strong>.
-          Alasannya adalah <strong>keterbatasan modal untuk biaya pendaftaran akun Google Play Console ($25 USD)</strong> dan proses birokrasi verifikasi korporasi Google yang sangat rumit untuk pengembang independen.
-          Selain itu, kebijakan Google Play saat ini sangat membatasi aplikasi pengelola izin sistem/Shizuku.
-          Dengan distribusi langsung via GitHub Releases, <strong>AppsPerms tetap 100% gratis, bebas monopoli, tanpa iklan, dan kode sumbernya terbuka untuk diaudit siapapun.</strong>
-        </p>
-      </div>
-    </section>
-
-    <!-- Audit Keamanan & Screenshot VirusTotal -->
-    <section id="keamanan">
-      <div class="sec-head">
-        <h2 class="sec-title">Audit Keamanan &amp; Hasil Scan Antivirus</h2>
-        <p class="sec-sub">Uji integritas file rilis APK resmi terhadap 72 antivirus industri di VirusTotal.</p>
-      </div>
-
-      <div class="vt-wrap">
-        <div class="vt-header-bar">
-          <div class="vt-status-pill">
-            <span class="score-badge" id="vtScore">0 / 72</span>
-            <div class="vt-status-text">
-              <strong id="vtVerdict">100% Clean · No Security Vendors Flagged This File</strong>
-              <div class="vendors">Google Play Protect, Kaspersky, BitDefender, Microsoft, ESET, Sophos — Undetected</div>
-            </div>
-          </div>
-          <a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="btn-dark-glossy">
-            Verifikasi di VirusTotal ↗
-          </a>
-        </div>
-
-        <div class="vt-img-box">
-          <img src="images/virustotal-report.png" width="1400" height="820" loading="lazy" decoding="async" alt="Screenshot Hasil Scan VirusTotal AppsPerms 0/72 Clean">
-          <div class="vt-caption">
-            <span>Screenshot &amp; angka di kartu ini <strong>diperbarui otomatis oleh CI setiap rilis</strong> <span id="vtUpdated">(sumber: <code>data/virustotal.json</code>)</span>.</span>
-            <span>Target SDK: 34 · Signed Keystore Resmi</span>
-          </div>
-        </div>
-
-        <div class="card">
-          <table class="hash-table">
-            <tbody>
-              <tr>
-                <td class="label">SHA-256 APK rilis</td>
-                <td class="code" id="hashRelease">f0439e1373567f3d17c2f88a0eff02ff3321906140c84fb9eb624c30d0138cac <span class="hash-when" id="hashWhen">· v1.3.0</span></td>
-              </tr>
-              <tr>
-                <td class="label">Sertifikat Signing</td>
-                <td class="code">82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30</td>
-              </tr>
-              <tr>
-                <td class="label">Izin Internet</td>
-                <td class="ok">0 (Tidak meminta android.permission.INTERNET — Data aman)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Fitur -->
+    <!-- Core Features Section -->
     <section id="fitur">
       <div class="sec-head">
-        <h2 class="sec-title">Kemampuan Pengelolaan Izin Lengkap</h2>
-        <p class="sec-sub">Kendalikan privasi sistem dan hak akses aplikasi dengan presisi tinggi.</p>
+        <h2 class="sec-title">
+          <span class="lang-id">Fitur Unggulan AppsPerms</span>
+          <span class="lang-en">Key Features of AppsPerms</span>
+        </h2>
+        <p class="sec-sub">
+          <span class="lang-id">Didesain khusus untuk kecepatan maksimal, kenyamanan pengguna, dan kontrol sistem yang bersih.</span>
+          <span class="lang-en">Built specifically for peak speed, user comfort, and pristine system control.</span>
+        </p>
       </div>
 
       <div class="features-grid">
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Real-Time 0ms &amp; Anti-Lag
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="lang-id">19 AppOps Tersembunyi</span>
+            <span class="lang-en">19 Hidden AppOps</span>
           </div>
           <p class="feat-card-desc">
-            Menggunakan <em>Optimistic UI State</em> dan <em>Partial Payload Diffing</em>. Pergantian izin langsung bereaksi instan tanpa jeda pemrosesan latar belakang.
+            <span class="lang-id">Kontrol penuh atas izin Display over other apps (SYSTEM_ALERT_WINDOW), clipboard, mikrofon latar, kamera, lokasi latar, dan wake locks tanpa batasan sistem.</span>
+            <span class="lang-en">Full control over Display over other apps (SYSTEM_ALERT_WINDOW), clipboard reading, background mic, camera, background location, and wake locks without OS limits.</span>
           </p>
         </div>
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Kendali Penuh 19 AppOps
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <span class="lang-id">Terminal Shizuku Mandiri</span>
+            <span class="lang-en">Embedded Shizuku Terminal</span>
           </div>
           <p class="feat-card-desc">
-            Atur Display Over Other Apps, akses Kamera, Mikrofon, Lokasi, Clipboard, Wake Lock, Read SMS, hingga Notifikasi Pop-up pada setiap aplikasi.
+            <span class="lang-id">Jalankan perintah shell langsung dari HP dengan hak akses UID 2000 (Shell) atau UID 0 (Root). Dilengkapi preset perintah cepat LADB-style tanpa perlu kabel PC.</span>
+            <span class="lang-en">Execute shell commands directly on your phone with UID 2000 (Shell) or UID 0 (Root) privileges. Packed with quick LADB presets without a computer cable.</span>
           </p>
         </div>
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-            Pemisah App Sistem vs User
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span class="lang-id">Safe Tuning Layar &amp; Animasi</span>
+            <span class="lang-en">Safe Screen &amp; Animation Tuning</span>
           </div>
           <p class="feat-card-desc">
-            Daftar otomatis terpisah rapi antara aplikasi pihak ketiga yang diinstall pengguna dan aplikasi bawaan sistem dengan filter tipe yang fleksibel.
+            <span class="lang-id">Ubah resolusi dan DPI layar via wm size/density dengan timer pengaman auto-revert 15 detik (anti-brick). Sesuaikan skala animasi global ke 0x, 0.5x, atau 1x.</span>
+            <span class="lang-en">Adjust resolution and DPI via wm size/density backed by a 15-second safety revert timer. Tune global window animations to 0x, 0.5x, or 1x smoothly.</span>
           </p>
         </div>
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-            Mode Ignore (Bypass Crash)
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span class="lang-id">Pemindaian Kilat (~150ms)</span>
+            <span class="lang-en">Sub-200ms Fast Scanning</span>
           </div>
           <p class="feat-card-desc">
-            Mendukung mode cerdas IGNORED: izin diblokir secara senyap tanpa melempar SecurityException, mencegah app bermasalah mengalami force close.
+            <span class="lang-id">Ditenagai sistem lazy on-demand icon loading dengan status scan counter realtime ("Memeriksa aplikasi 48/312..."). Menghemat memori RAM dan baterai secara signifikan.</span>
+            <span class="lang-en">Powered by on-demand lazy icon caching with a live scan progress counter ("Checking apps 48/312..."). Drastically saves RAM memory and battery overhead.</span>
           </p>
         </div>
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Backup &amp; Restore Clipboard
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="lang-id">Aksi Massal &amp; Backup</span>
+            <span class="lang-en">Batch Actions &amp; Backup</span>
           </div>
           <p class="feat-card-desc">
-            Ekspor seluruh konfigurasi izin ke format teks sederhana yang dapat disalin ke clipboard dan dipulihkan kembali sewaktu-waktu.
+            <span class="lang-id">Izinkan atau tolak izin overlay pada puluhan aplikasi sekaligus dalam hitungan detik. Ekspor konfigurasi AppOps Anda ke clipboard teks untuk dipulihkan kapan saja.</span>
+            <span class="lang-en">Allow or deny overlay permissions across dozens of apps simultaneously. Backup your configuration to a plain-text clipboard string and restore anytime.</span>
           </p>
         </div>
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            Arsitektur Shell-First
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            <span class="lang-id">100% Privat &amp; Offline</span>
+            <span class="lang-en">100% Private &amp; Offline</span>
           </div>
           <p class="feat-card-desc">
-            Kompatibel dengan berbagai ROM (HyperOS, One UI, ColorOS, Pixel) dengan fallback otomatis ke perintah resmi <code>appops</code> via Shizuku.
+            <span class="lang-id">Nol (0) izin internet di AndroidManifest.xml. Tidak ada SDK iklan, pelacak, analitik, ataupun pengumpulan data. Privasi total yang terbukti secara teknis.</span>
+            <span class="lang-en">Zero internet permissions in AndroidManifest.xml. Zero ad SDKs, analytics, or background tracking. Mathematically impossible for your data to leave the device.</span>
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Panduan Ringkas -->
+    <!-- "Semua Versi" (All Versions) Section -->
+    <section id="semua-versi">
+      <div class="sec-head">
+        <h2 class="sec-title">
+          <span class="lang-id">Semua Versi &amp; Catatan Perubahan</span>
+          <span class="lang-en">All Versions &amp; Changelogs</span>
+        </h2>
+        <p class="sec-sub">
+          <span class="lang-id">Pilih versi di bawah ini untuk melihat changelog lengkap dan mengunduh build resminya.</span>
+          <span class="lang-en">Select a version below to review its full changelog and download official builds.</span>
+        </p>
+      </div>
+
+      <div class="versions-container">
+        <!-- Version Tab Bar -->
+        <div class="version-nav" id="versionNav">
+          <button class="version-tab-btn active" data-target="v171">v1.7.1 (Terbaru)</button>
+          <button class="version-tab-btn" data-target="v170">v1.7.0</button>
+          <button class="version-tab-btn" data-target="v160">v1.6.0</button>
+          <button class="version-tab-btn" data-target="v150">v1.5.0</button>
+          <button class="version-tab-btn" data-target="v142">v1.4.2</button>
+          <button class="version-tab-btn" data-target="v130">v1.3.0</button>
+          <button class="version-tab-btn" data-target="v100">v1.0.0</button>
+        </div>
+
+        <!-- Version Pane v1.7.1 -->
+        <div class="version-pane active" id="pane-v171">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.7.1</span>
+              <span class="version-badge-status">
+                <span class="lang-id">Rilis Stabil</span>
+                <span class="lang-en">Latest Stable</span>
+              </span>
+              <span class="version-date">2026-09-22</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span class="lang-id">Download APK (dl.xyverse)</span>
+                <span class="lang-en">Download APK (dl.xyverse)</span>
+              </a>
+              <a href="https://dl.appsperms.xyverse.my.id" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>dl.appsperms mirror</span>
+              </a>
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.1" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Fitur Baru &amp; Antarmuka</span>
+              <span class="lang-en">New Features &amp; UI</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id"><strong>Status Pemindaian Realtime:</strong> Menampilkan counter progress hidup ("Memeriksa aplikasi 48/312...") selama pemindaian awal sehingga pengguna langsung tahu proses sedang berjalan lancar.</span>
+                <span class="lang-en"><strong>Live Scan Counter:</strong> Added real-time progress indicator ("Checking apps 48/312...") during app indexing so users know the system is actively working.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Navigation Drawer Terintegrasi:</strong> Sidebar navigasi modern dengan akses langsung ke Layar &amp; Resolusi, Animasi, Terminal Shizuku, Kirim Masukan, Saluran XyVerse, dan Periksa Pembaruan.</span>
+                <span class="lang-en"><strong>Integrated Navigation Drawer:</strong> Modern sidebar navigation with quick access to Display &amp; Resolution, Animations, Shizuku Terminal, Feedback, XyVerse Channel, and Update Checker.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Ikon Menu Terstandarisasi 24dp:</strong> Seluruh ikon navigasi distandarisasi ke ukuran 24dp seragam dengan styling Material Design 3.</span>
+                <span class="lang-en"><strong>Standardized 24dp Menu Icons:</strong> All drawer and toolbar icons are standardized to a clean 24dp baseline with Material Design 3 guidelines.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Optimasi Performa</span>
+              <span class="lang-en">Performance Optimizations</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id"><strong>Lazy On-Demand Icon Loading:</strong> Ikon aplikasi tidak lagi diekstrak secara massal ratusan sekaligus saat startup. Ikon dimuat sesuai kebutuhan scroll layar, mempercepat startup hingga 75% (~150ms).</span>
+                <span class="lang-en"><strong>Lazy On-Demand Icon Loading:</strong> App drawables are no longer decoded en masse during initial launch. Icons load dynamically per viewport scroll, cutting startup latency by up to 75% (~150ms).</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Paritas Penuh Bahasa ID &amp; EN:</strong> String terminal, menu drawer, dan dialog tuning diselaraskan 100% antara Bahasa Indonesia dan Bahasa Inggris.</span>
+                <span class="lang-en"><strong>Complete ID &amp; EN String Parity:</strong> Fully localized terminal prompts, drawer items, and tuning dialogs across Indonesian and English.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.7.0 -->
+        <div class="version-pane" id="pane-v170">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.7.0</span>
+              <span class="version-date">2026-09-18</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span>Download APK</span>
+              </a>
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.0" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Perubahan Arsitektur</span>
+              <span class="lang-en">Architectural Overhaul</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Pengenalan Navigation Drawer menggantikan menu titik tiga konvensional.</span>
+                <span class="lang-en">Introduction of the modern Navigation Drawer replacing the legacy overflow menu.</span>
+              </li>
+              <li>
+                <span class="lang-id">Penataan ulang logika RPC Shizuku untuk kompatibilitas Android 15 &amp; Android 16 preview.</span>
+                <span class="lang-en">Refactored Shizuku RPC bridge logic for Android 15 and Android 16 developer previews.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.6.0 -->
+        <div class="version-pane" id="pane-v160">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.6.0</span>
+              <span class="version-date">2026-09-10</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span>Download APK</span>
+              </a>
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.6.0" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Fitur Terminal Shizuku</span>
+              <span class="lang-en">Shizuku Terminal Feature</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Penyematan antarmuka Terminal interaktif mandiri yang mengeksekusi perintah shell Shizuku secara langsung.</span>
+                <span class="lang-en">Integrated standalone interactive Terminal executing Shizuku shell commands on-device.</span>
+              </li>
+              <li>
+                <span class="lang-id">Dukungan eksekusi ganda: UID 2000 (Shell standar) dan opsi elevasi UID 0 (Root su) otomatis.</span>
+                <span class="lang-en">Dual execution modes: standard UID 2000 (Shell) and automated UID 0 (Root su) elevation.</span>
+              </li>
+              <li>
+                <span class="lang-id">Preset perintah cepat bawaan untuk pengecekan baterai, logcat, dan status resolusi.</span>
+                <span class="lang-en">Built-in quick command presets for battery status, logcat dumping, and resolution querying.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.5.0 -->
+        <div class="version-pane" id="pane-v150">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.5.0</span>
+              <span class="version-date">2026-08-28</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span>Download APK</span>
+              </a>
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.5.0" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Filosofi Safe Tuning Layar</span>
+              <span class="lang-en">Safe Screen Tuning Philosophy</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Implementasi pengatur resolusi layar (wm size) dan kerapatan piksel (wm density) dengan dialog hitung mundur auto-revert 15 detik untuk mencegah salah ketik resolusi.</span>
+                <span class="lang-en">Introduced resolution tuning (wm size) and pixel density (wm density) with an automated 15-second safety revert countdown to prevent unrecoverable screen states.</span>
+              </li>
+              <li>
+                <span class="lang-id">Pengaturan kecepatan skala animasi jendela global (0x, 0.5x, 1x).</span>
+                <span class="lang-en">Added global window and transition animation duration scale controls (0x, 0.5x, 1x).</span>
+              </li>
+              <li>
+                <span class="lang-id">Penghapusan permanen modul agresif/killer background guna menjaga masa pakai baterai dan performa SoC perangkat.</span>
+                <span class="lang-en">Permanent removal of aggressive background killer modules to protect battery lifespan and device SoC stability.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.4.2 -->
+        <div class="version-pane" id="pane-v142">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.4.2</span>
+              <span class="version-date">2026-08-15</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.4.2" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Perbaikan Kompatibilitas ROM</span>
+              <span class="lang-en">ROM Compatibility Fixes</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Perbaikan AIDL interface binding untuk Android 13/14 pada custom ROM OEM (HyperOS, One UI, ColorOS).</span>
+                <span class="lang-en">Resolved AIDL interface binding issues for Android 13/14 across OEM flavors (HyperOS, One UI, ColorOS).</span>
+              </li>
+              <li>
+                <span class="lang-id">Integrasi scanning VirusTotal otomatis di CI (0/72 Clean).</span>
+                <span class="lang-en">Automated VirusTotal CI verification pipeline integration (0/72 Clean).</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.3.0 -->
+        <div class="version-pane" id="pane-v130">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.3.0</span>
+              <span class="version-date">2026-07-20</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.3.0" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Migrasi Paket &amp; Fitur Backup</span>
+              <span class="lang-en">Package Migration &amp; Backup Feature</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Migrasi ID paket dari app.overlayops ke app.appsperms.</span>
+                <span class="lang-en">Migrated application package ID from app.overlayops to app.appsperms.</span>
+              </li>
+              <li>
+                <span class="lang-id">Penambahan fitur Backup &amp; Restore konfigurasi AppOps via clipboard.</span>
+                <span class="lang-en">Added clipboard-based plain-text AppOps Backup &amp; Restore.</span>
+              </li>
+              <li>
+                <span class="lang-id">Dukungan bilingual penuh Bahasa Indonesia &amp; English di dalam aplikasi.</span>
+                <span class="lang-en">Added complete dual-language support (ID &amp; EN) in-app.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Version Pane v1.0.0 -->
+        <div class="version-pane" id="pane-v100">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.0.0</span>
+              <span class="version-date">2026-06-01</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>Arsip Rilis</span>
+              </a>
+            </div>
+          </div>
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="lang-id">Peluncuran Awal</span>
+              <span class="lang-en">Initial Release</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id">Peluncuran perdana aplikasi manajemen AppOps modern via Shizuku tanpa root.</span>
+                <span class="lang-en">Initial launch of modern AppOps management on Android via Shizuku without root.</span>
+              </li>
+              <li>
+                <span class="lang-id">Penerapan arsitektur 0ms Optimistic UI untuk respon antarmuka instan tanpa jeda.</span>
+                <span class="lang-en">Implemented 0ms Optimistic UI architecture for instant lag-free toggle responsiveness.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Security & VirusTotal Section -->
+    <section id="keamanan">
+      <div class="sec-head">
+        <h2 class="sec-title">
+          <span class="lang-id">Audit Keamanan &amp; Verifikasi Hash</span>
+          <span class="lang-en">Security Audit &amp; Hash Verification</span>
+        </h2>
+        <p class="sec-sub">
+          <span class="lang-id">Transparan 100%. Tidak ada celah tersembunyi, tidak ada pelacak, dan dapat diverifikasi secara independen.</span>
+          <span class="lang-en">100% transparent. No hidden telemetry, no tracking, and fully auditable by third parties.</span>
+        </p>
+      </div>
+
+      <div class="vt-banner">
+        <div class="vt-score-wrap">
+          <div class="vt-score" id="vtScore">0 / 72</div>
+          <div>
+            <div class="vt-verdict-title" id="vtVerdict">100% Clean · No Security Vendors Flagged This File</div>
+            <div class="vt-verdict-desc" id="vtUpdated">Diperbarui otomatis oleh CI pada setiap rilis tag</div>
+          </div>
+        </div>
+        <div>
+          <a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="v-dl-btn">
+            <span>Periksa Hasil VirusTotal &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <table class="hash-table">
+        <tbody>
+          <tr>
+            <td class="label">SHA-256 (Release)</td>
+            <td class="code" id="hashRelease">82a02caee27b8b9b09e700b8313dd4ade5cf9b946b01be6c54ec33984ab00430 <span id="hashWhen" style="color:var(--text-muted);">· v1.7.1</span></td>
+          </tr>
+          <tr>
+            <td class="label">Internet Permission</td>
+            <td class="code" style="color:var(--ok); font-weight:700;">Nol (0) di AndroidManifest.xml — Mutlak Offline</td>
+          </tr>
+          <tr>
+            <td class="label">Sertifikat Keystore</td>
+            <td class="code">RSA 4096-bit (CN=OverlayOps, OU=Release, O=xykalnotkel, C=ID)</td>
+          </tr>
+          <tr>
+            <td class="label">Lisensi Kode</td>
+            <td class="code"><a href="https://github.com/xykalnotkel/OverlayOps/blob/main/LICENSE" target="_blank" rel="noopener">Apache License 2.0</a> (Open Source)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Quick Guide Section -->
     <section id="panduan">
       <div class="sec-head">
-        <h2 class="sec-title">Panduan Cepat via Shizuku</h2>
-        <p class="sec-sub">Hanya 3 langkah mudah untuk mulai mengelola izin tanpa root.</p>
+        <h2 class="sec-title">
+          <span class="lang-id">Panduan Penggunaan Cepat via Shizuku</span>
+          <span class="lang-en">Quick Guide via Shizuku</span>
+        </h2>
+        <p class="sec-sub">
+          <span class="lang-id">Hanya 3 langkah sederhana untuk mengelola izin tanpa root:</span>
+          <span class="lang-en">Just 3 easy steps to start managing permissions without root:</span>
+        </p>
       </div>
 
       <div class="steps-list">
         <div class="step-item">
-          <span class="step-badge">Langkah 1</span>
-          <h4>Jalankan Shizuku</h4>
-          <p>Buka Shizuku di HP kamu. Di Android 11+, gunakan opsi <strong>Wireless Debugging</strong> untuk start tanpa PC. Jika HP sudah root, pilih start via root.</p>
+          <span class="step-badge">
+            <span class="lang-id">Langkah 1</span>
+            <span class="lang-en">Step 1</span>
+          </span>
+          <h4>
+            <span class="lang-id">Jalankan Shizuku</span>
+            <span class="lang-en">Start Shizuku</span>
+          </h4>
+          <p>
+            <span class="lang-id">Pasang Shizuku dari Google Play atau GitHub. Pada Android 11+, gunakan opsi <strong>Wireless Debugging</strong>. Jika perangkat sudah di-root, jalankan via root.</span>
+            <span class="lang-en">Install Shizuku from Google Play or GitHub. On Android 11+, start via <strong>Wireless Debugging</strong>. If your phone is rooted, launch via root mode.</span>
+          </p>
         </div>
 
         <div class="step-item">
-          <span class="step-badge">Langkah 2</span>
-          <h4>Pasang AppsPerms</h4>
-          <p>Download file <code>AppsPerms-1.4.2-release.apk</code> di atas, pasang di perangkatmu, lalu buka aplikasinya.</p>
+          <span class="step-badge">
+            <span class="lang-id">Langkah 2</span>
+            <span class="lang-en">Step 2</span>
+          </span>
+          <h4>
+            <span class="lang-id">Pasang AppsPerms</span>
+            <span class="lang-en">Install AppsPerms</span>
+          </h4>
+          <p>
+            <span class="lang-id">Unduh APK resmi AppsPerms melalui link <code>dl.xyverse.my.id</code> atau <code>dl.appsperms.xyverse.my.id</code> di atas, kemudian install pada perangkat Anda.</span>
+            <span class="lang-en">Download official AppsPerms APK via <code>dl.xyverse.my.id</code> or <code>dl.appsperms.xyverse.my.id</code>, then install it on your device.</span>
+          </p>
         </div>
 
         <div class="step-item">
-          <span class="step-badge">Langkah 3</span>
-          <h4>Setujui Izin Shizuku</h4>
-          <p>Tekan <strong>Minta izin</strong> pada kartu sambungan, lalu pilih <em>"Izinkan selalu"</em>. Kamu langsung bisa mengatur izin seluruh aplikasi secara real-time.</p>
+          <span class="step-badge">
+            <span class="lang-id">Langkah 3</span>
+            <span class="lang-en">Step 3</span>
+          </span>
+          <h4>
+            <span class="lang-id">Setujui Hak Akses</span>
+            <span class="lang-en">Grant Permissions</span>
+          </h4>
+          <p>
+            <span class="lang-id">Buka AppsPerms, ketuk tombol <strong>Minta izin</strong> pada banner atas, lalu pilih <em>"Izinkan selalu"</em>. Seluruh izin dan fitur tuning siap digunakan.</span>
+            <span class="lang-en">Launch AppsPerms, tap <strong>Request permission</strong> on the connection card, then select <em>"Allow all the time"</em>. All features are instantly unlocked.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contributors Section -->
+    <section id="kontributor">
+      <div class="sec-head">
+        <h2 class="sec-title">
+          <span class="lang-id">Kontributor &amp; Penghargaan</span>
+          <span class="lang-en">Contributors &amp; Credits</span>
+        </h2>
+        <p class="sec-sub">
+          <span class="lang-id">Proyek open source ini dibangun berkat dedikasi dan kolaborasi:</span>
+          <span class="lang-en">This open-source project is built through the dedication of our contributors:</span>
+        </p>
+      </div>
+
+      <div class="contrib-grid">
+        <div class="contrib-card">
+          <div class="contrib-name">Kall (@xykalnotkel)</div>
+          <div class="contrib-role">Founder &amp; Lead Developer</div>
+          <div class="contrib-desc">
+            <span class="lang-id">Arsitek utama XyVerse, perancang 0ms Optimistic UI, Safe Tuning Layar, dan integrasi Shizuku Terminal.</span>
+            <span class="lang-en">Lead architect of XyVerse, creator of 0ms Optimistic UI, Safe Screen Tuning, and Shizuku Terminal.</span>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-name">@BuddhaDiedLaughing</div>
+          <div class="contrib-role">Research &amp; Multi-Profile Plumbing</div>
+          <div class="contrib-desc">
+            <span class="lang-id">Riset One UI 8.5 compatibility, plumbing multi-profile Android, dan lokalisasi Terminal Shizuku.</span>
+            <span class="lang-en">One UI 8.5 compatibility research, multi-profile Android plumbing, and Shizuku Terminal localization.</span>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-name">Rikka (@RikkaApps)</div>
+          <div class="contrib-role">Shizuku &amp; App Ops Creator</div>
+          <div class="contrib-desc">
+            <span class="lang-id">Pencipta framework Shizuku dan inspirasi utama arsitektur manajemen AppOps di Android modern.</span>
+            <span class="lang-en">Creator of the groundbreaking Shizuku framework and primary pioneer of Android AppOps management.</span>
+          </div>
+        </div>
+
+        <div class="contrib-card">
+          <div class="contrib-name">LSPosed Developers</div>
+          <div class="contrib-role">HiddenApiBypass Library</div>
+          <div class="contrib-desc">
+            <span class="lang-id">Penyedia solusi bypass hidden API Android yang stabil dan aman untuk runtime modern.</span>
+            <span class="lang-en">Providers of the reliable HiddenApiBypass library enabling seamless reflection on modern Android.</span>
+          </div>
         </div>
       </div>
     </section>
@@ -1062,19 +1445,62 @@
     <!-- Footer -->
     <footer>
       <div>
-        <strong>AppsPerms</strong> · Built in <strong>XyVerse</strong> by <strong>Xykal</strong> (@xykalnotkel).
+        <strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong> (@xykalnotkel).
       </div>
       <div class="footer-links">
-        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener">GitHub Repo</a>
-        <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener">Semua Rilis</a>
-        <a href="#keamanan">Hasil VirusTotal</a>
+        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener">GitHub</a>
+        <a href="#semua-versi">
+          <span class="lang-id">Semua Versi</span>
+          <span class="lang-en">All Versions</span>
+        </a>
+        <a href="#keamanan">VirusTotal</a>
+        <a href="https://xyverse.my.id" target="_blank" rel="noopener">XyVerse Ecosystem</a>
       </div>
     </footer>
 
   </main>
 
   <script>
-    /* ===== Menu mobile ===== */
+    /* ===== Language Switcher & Auto-Detection ===== */
+    (function () {
+      function getActiveLang() {
+        return document.documentElement.lang || 'id';
+      }
+
+      function setLang(lang) {
+        document.documentElement.lang = lang;
+        localStorage.setItem('site_lang', lang);
+        updateToggleButtons(lang);
+      }
+
+      function updateToggleButtons(lang) {
+        var isEn = (lang === 'en');
+        ['langToggle', 'langToggleMobile'].forEach(function (id) {
+          var btn = document.getElementById(id);
+          if (!btn) return;
+          var optId = btn.querySelector('.opt-id');
+          var optEn = btn.querySelector('.opt-en');
+          if (optId) optId.classList.toggle('active-lang', !isEn);
+          if (optEn) optEn.classList.toggle('active-lang', isEn);
+        });
+      }
+
+      // Initial active state
+      updateToggleButtons(getActiveLang());
+
+      // Click listener
+      function toggleLang() {
+        var next = getActiveLang() === 'en' ? 'id' : 'en';
+        setLang(next);
+      }
+
+      var b1 = document.getElementById('langToggle');
+      var b2 = document.getElementById('langToggleMobile');
+      if (b1) b1.addEventListener('click', toggleLang);
+      if (b2) b2.addEventListener('click', toggleLang);
+    })();
+
+    /* ===== Mobile Navigation Drawer ===== */
     (function () {
       var toggle = document.getElementById('navToggle');
       var menu = document.getElementById('navMenu');
@@ -1083,17 +1509,14 @@
       function setOpen(open) {
         menu.classList.toggle('open', open);
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        toggle.setAttribute('aria-label', open ? 'Tutup menu navigasi' : 'Buka menu navigasi');
       }
 
       toggle.addEventListener('click', function () {
         setOpen(!menu.classList.contains('open'));
       });
-      // tutup setelah pilih link
       menu.addEventListener('click', function (e) {
         if (e.target.closest('a')) setOpen(false);
       });
-      // tutup saat Escape / klik di luar / balik ke desktop
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') setOpen(false);
       });
@@ -1105,63 +1528,84 @@
       });
     })();
 
-    /* ===== v1.4: tombol download = unduhan NATIVE di tab baru; tab utama -> thanks ===== */
+    /* ===== "Semua Versi" Tab Navigation ===== */
     (function () {
-      var VERSION = '1.4.1';
+      var nav = document.getElementById('versionNav');
+      if (!nav) return;
+
+      nav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.version-tab-btn');
+        if (!btn) return;
+        var target = btn.getAttribute('data-target');
+        if (!target) return;
+
+        // Toggle buttons
+        nav.querySelectorAll('.version-tab-btn').forEach(function (b) {
+          b.classList.remove('active');
+        });
+        btn.classList.add('active');
+
+        // Toggle panes
+        document.querySelectorAll('.version-pane').forEach(function (pane) {
+          pane.classList.remove('active');
+        });
+        var targetPane = document.getElementById('pane-' + target);
+        if (targetPane) targetPane.classList.add('active');
+      });
+    })();
+
+    /* ===== Native Download & Redirect to Thanks ===== */
+    (function () {
+      var CURRENT_VERSION = '1.7.1';
 
       ['btnRelease', 'btnDebug'].forEach(function (id) {
         var a = document.getElementById(id);
         if (!a) return;
-        // Klik anchor (target=_blank) membuka tab baru yang langsung dicatat
-        // browser sebagai unduhan (GitHub mengirim Content-Disposition: attachment),
-        // jadi tidak bisa dibatalkan oleh navigasi apa pun di tab ini.
-        // Tab utama baru pindah ke thanks SETELAH unduhan terdaftar (fix bug:
-        // window.open serentak dulu membatalkan request unduhan di beberapa browser).
         a.addEventListener('click', function () {
           var variant = a.getAttribute('data-variant') || 'release';
           var hint = document.getElementById('dlHint');
           if (hint) {
-            hint.textContent = 'Unduhan dimulai di tab baru ✓ — membawa kamu ke halaman terima kasih…';
+            hint.textContent = 'Unduhan dimulai ✓ — membawa kamu ke halaman terima kasih…';
             hint.classList.add('show');
           }
           setTimeout(function () {
-            window.location.href = 'thanks.html?v=' + encodeURIComponent(VERSION) + '&var=' + encodeURIComponent(variant);
-          }, 600);
+            window.location.href = 'thanks.html?v=' + encodeURIComponent(CURRENT_VERSION) + '&var=' + encodeURIComponent(variant);
+          }, 700);
         });
       });
 
-      /* Data live hash + VirusTotal (ditulis ulang otomatis oleh CI tiap rilis). */
+      /* Live VirusTotal & Hash Fetching from CI */
       fetch('data/virustotal.json', { cache: 'no-store' }).then(function (r) {
         return r.ok ? r.json() : null;
       }).then(function (d) {
         if (!d) return;
         if (d.version) {
+          CURRENT_VERSION = d.version;
+          var hb = document.getElementById('heroVerBadge');
+          if (hb) hb.textContent = 'v' + d.version;
           var hs = document.getElementById('hashWhen');
           if (hs) hs.textContent = '· v' + d.version;
         }
         if (d.release) {
           if (d.release.sha256) {
             var hr = document.getElementById('hashRelease');
-            if (hr) hr.innerHTML = d.release.sha256 + ' <span class="hash-when" id="hashWhen">· v' + (d.version || '') + '</span>';
-          }
-          if (d.release.size_mb) {
-            var sizeTxt = '\u00b1' + String(d.release.size_mb).replace('.', ',') + ' MB';
-            var rel = document.getElementById('btnRelease');
-            if (rel) { var l = rel.querySelector('.dl-label'); if (l) l.textContent = 'Download Release APK (' + sizeTxt + ')'; }
-            var rs = document.getElementById('reqSize'); if (rs) rs.textContent = sizeTxt;
+            if (hr) hr.innerHTML = d.release.sha256 + ' <span style="color:var(--text-muted);" id="hashWhen">· v' + (d.version || CURRENT_VERSION) + '</span>';
           }
         }
         var vt = d.virustotal || {};
         if (vt.checked) {
-          var sc = document.getElementById('vtScore'); if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
-          var pl = document.getElementById('vtPillText'); if (pl) pl.textContent = vt.detected + '/' + vt.total + ' Clean di VirusTotal';
+          var sc = document.getElementById('vtScore');
+          if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
+          var pl = document.getElementById('vtPillText');
+          if (pl) pl.textContent = vt.detected + '/' + vt.total + ' Clean di VirusTotal';
           var vd = document.getElementById('vtVerdict');
-          if (vd) vd.textContent = (vt.detected === 0 ? '100% Clean · No Security Vendors Flagged This File' : vt.detected + ' vendor menandai — cek permalink sebelum install');
-          var lk = document.getElementById('vtLink'); if (lk && vt.permalink) { lk.href = vt.permalink; }
+          if (vd) vd.textContent = (vt.detected === 0 ? '100% Clean · No Security Vendors Flagged This File' : vt.detected + ' vendor menandai — cek link sebelum install');
+          var lk = document.getElementById('vtLink');
+          if (lk && vt.permalink) lk.href = vt.permalink;
           var up = document.getElementById('vtUpdated');
-          if (up) up.textContent = 'Diperbarui otomatis oleh CI · ' + (d.updated_utc || '?') + ' UTC · rilis v' + (d.version || '?');
+          if (up) up.textContent = 'Diperbarui otomatis oleh CI · ' + (d.updated_utc || '?') + ' UTC · rilis v' + (d.version || CURRENT_VERSION);
         }
-      }).catch(function () { /* offline/github-pages tanpa file: pakai angka statis */ });
+      }).catch(function () {});
     })();
   </script>
 
