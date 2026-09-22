@@ -396,7 +396,7 @@ Semua fitur berbahaya sudah dibersihkan.</string>
 
     <!-- Terminal (v1.6) i18n -->
     <string name="term_status_not_running">⚠️ Shizuku belum jalan — buka Shizuku dulu via Wireless Debugging / Root</string>
-    <string name="term_status_no_permission">⚠️ Shizuku jalan tapi izin belum diberikan — tekan 'Minta izin' di halaman utama</string>
+    <string name="term_status_no_permission">⚠️ Shizuku jalan tapi izin belum diberikan — tekan \'Minta izin\' di halaman utama</string>
     <string name="term_status_root_ready">✅ Shizuku root (uid 0) — semua perintah shell siap</string>
     <string name="term_status_shell_ready">✅ Shizuku shell (uid 2000) — semua perintah shell siap</string>
     <string name="term_hint_connect">Sambungkan Shizuku dulu...</string>

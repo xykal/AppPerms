@@ -395,7 +395,7 @@ All dangerous features have been cleaned.</string>
 
     <!-- Terminal (v1.6) i18n -->
     <string name="term_status_not_running">⚠️ Shizuku is not running — open Shizuku first via Wireless Debugging / Root</string>
-    <string name="term_status_no_permission">⚠️ Shizuku is running but permission is not granted — tap 'Request permission' on the main screen</string>
+    <string name="term_status_no_permission">⚠️ Shizuku is running but permission is not granted — tap \'Request permission\' on the main screen</string>
     <string name="term_status_root_ready">✅ Shizuku root (uid 0) — all shell commands ready</string>
     <string name="term_status_shell_ready">✅ Shizuku shell (uid 2000) — all shell commands ready</string>
     <string name="term_hint_connect">Connect Shizuku first...</string>
@@ -415,7 +415,7 @@ Examples:
 • dumpsys deviceidle whitelist</string>
     <string name="term_meta_idle">exit: — · duration: —</string>
     <string name="term_snack_copied">Output copied</string>
-    <string name="term_snack_history_cleared">This session's history cleared</string>
+    <string name="term_snack_history_cleared">This session\'s history cleared</string>
     <string name="term_history_title">Command history</string>
     <string name="term_history_close">Close</string>
     <string name="term_preset_check_screen">check screen</string>
