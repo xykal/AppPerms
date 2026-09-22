@@ -1,0 +1,358 @@
+{
+  "palette": {
+    "amber": "#FFB020",
+    "charcoal": "#171A21",
+    "ivory": "#ECEFF4"
+  },
+  "source_size": 1024,
+  "items": [
+    {
+      "name": "download",
+      "source": {
+        "path": "design/illustrations/download.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 793062,
+        "sha256": "52274ec7d8a90c2e2a6f957fa5e4bab30286427e982df95ec16cf499343c12ab"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/download-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 17302,
+          "sha256": "5f76439748b1b4fafa81b7d9d073e75e093190de2140a939351b697f73ba62f8"
+        },
+        {
+          "path": "docs/images/illustrations/download-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 37562,
+          "sha256": "254bca43ef197dab5593e9aab374bfd0616e14723a532383c6de719f6a3d9205"
+        },
+        {
+          "path": "docs/images/illustrations/download-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 66362,
+          "sha256": "11724fd283d9478756f2e08eb4b5d5314f9136a28c800ee095ad9583753bb7fd"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/download.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 312179,
+        "sha256": "9e3620124fbad22ad056c0b28c8c2ae96eb12cd3e8130d2af5fa006237dde9bc"
+      }
+    },
+    {
+      "name": "security-report",
+      "source": {
+        "path": "design/illustrations/security-report.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 791420,
+        "sha256": "4f4ca5a8980eeae571a03a407ead448ac304404ad4c6a289cbecfaf8a18cf37a"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/security-report-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 19834,
+          "sha256": "45c3d891b42b71f27bddb4d94aded4b1bd235e55b02b93e3cf66f41ab2a84d18"
+        },
+        {
+          "path": "docs/images/illustrations/security-report-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 43788,
+          "sha256": "c8ad1d9e912086ccc46d85b0ce58eaa25d66bd160f7df586c9f85eb2b9950426"
+        },
+        {
+          "path": "docs/images/illustrations/security-report-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 74796,
+          "sha256": "74a71e774ba16750e554b4f20c131d140019a3b03ad5bcc4dd748dcfe481d92f"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/security-report.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 327967,
+        "sha256": "807401c19587e1924507ae5710aadccad51d0a1dc033b5c922e95ea1036dacdb"
+      }
+    },
+    {
+      "name": "faq",
+      "source": {
+        "path": "design/illustrations/faq.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 761330,
+        "sha256": "69ced08d38e2509dc8f2003bbd883b03e60eaec23bb1b9fd3227a7602ab54d5a"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/faq-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 21132,
+          "sha256": "7d77435351f9edb9e919c4b32954978a9f77708e3db3b2f1634164dfc233db5d"
+        },
+        {
+          "path": "docs/images/illustrations/faq-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 48534,
+          "sha256": "276d186505eabe7a7f9695595eeb049276db5f830295f1b5a4fc1e20991a710a"
+        },
+        {
+          "path": "docs/images/illustrations/faq-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 84980,
+          "sha256": "ff3b110c70a3ee6c77d195b6a42d513216a3127f1fbe0f130c7a4e1edd8dad0f"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/faq.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 319248,
+        "sha256": "9996508f0142ffe5d81e14ba77571be47dfbe3df9ea1f516d0725382a17ca474"
+      },
+      "android": {
+        "path": "app/src/main/res/drawable-nodpi/illus_faq.webp",
+        "width": 384,
+        "height": 384,
+        "bytes": 26264,
+        "sha256": "f4b11e377f1544a425bf778941180db106d5804cc1971003842aeea531933a74"
+      }
+    },
+    {
+      "name": "versions",
+      "source": {
+        "path": "design/illustrations/versions.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 760922,
+        "sha256": "fdc6fda4560c606c000bff48a462b1e96ad32e2f22d94ced2df7f219b713246e"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/versions-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 21058,
+          "sha256": "5de825ce66cd248afb862f1e50ed98382939741ad2db584a36e9315c9bec8e79"
+        },
+        {
+          "path": "docs/images/illustrations/versions-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 48288,
+          "sha256": "578fe40dd24eac05b5a2cd6f60de4ee34eefca86dbb9e32cde0add820df425a2"
+        },
+        {
+          "path": "docs/images/illustrations/versions-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 83160,
+          "sha256": "e3a1d96fb01d90f30d799e8c3b1ee33bcd2a3f2e058307fa470e18bbd97d9803"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/versions.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 319724,
+        "sha256": "c7e746895a63f3df116a4d7357b6180784d2a54247a8de207ed47bf7d4fd039a"
+      },
+      "android": {
+        "path": "app/src/main/res/drawable-nodpi/illus_versions.webp",
+        "width": 384,
+        "height": 384,
+        "bytes": 26022,
+        "sha256": "9f29159399042416631e6abec42b05415043fe91d53a4ee7bae570d70f300f98"
+      }
+    },
+    {
+      "name": "permissions",
+      "source": {
+        "path": "design/illustrations/permissions.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 767979,
+        "sha256": "26734303267d3266db1a59534a9a29b0ae8829f64956e38c82789a9f6ea24d22"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/permissions-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 18012,
+          "sha256": "fa916108bf5c65f82ed5b63cb9dc1e02a87f6e0352df42eafbbcdda7aa677b0f"
+        },
+        {
+          "path": "docs/images/illustrations/permissions-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 40598,
+          "sha256": "cc51504b09f1d000e8e3f8bfff0d1f7e34c3a11b1ac27ea0f145b3e71fa7a2e2"
+        },
+        {
+          "path": "docs/images/illustrations/permissions-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 70688,
+          "sha256": "f296c462dd173c9c28e39fd60209c73202851a888b31c95cc86542ef6cfe2d1b"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/permissions.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 315432,
+        "sha256": "8e907d2f26c85a3b4ede2783de7c8960a7ebd8bf2762ba910e9df199d31cfe0c"
+      },
+      "android": {
+        "path": "app/src/main/res/drawable-nodpi/illus_permissions.webp",
+        "width": 384,
+        "height": 384,
+        "bytes": 22320,
+        "sha256": "279272d4762b708fccb1fa872fb954f0db369c6c3654e5c1b9f31798766c4534"
+      }
+    },
+    {
+      "name": "update",
+      "source": {
+        "path": "design/illustrations/update.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 862833,
+        "sha256": "f38fdf9cddb100077a9467adb03b1e9e4549863047ff6a99ad3b6964acc7233a"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/update-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 26978,
+          "sha256": "240957f3f199dc4861989778ceac243e1d6bdacd7a559e0dadbfc5831dcc0900"
+        },
+        {
+          "path": "docs/images/illustrations/update-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 59836,
+          "sha256": "f54c6e7b17422193517553c43e28d89d610957c8e5030799df2d7cb1d9cd21d7"
+        },
+        {
+          "path": "docs/images/illustrations/update-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 104852,
+          "sha256": "96f14c7a89a688ad3a12714ccdeea3dfc9506b3e381fa222891b2dc0365c1528"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/update.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 365622,
+        "sha256": "242b599dd209d9fc4c8ea27b746da4dab19d333e8f5999390861c91d2172abd1"
+      }
+    },
+    {
+      "name": "search",
+      "source": {
+        "path": "design/illustrations/search.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 831361,
+        "sha256": "adab3dc23ff554d6702db0a4f1a8da99b9d8f648e7ed0e1e4f7eb4350737ef52"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/search-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 22670,
+          "sha256": "3e7a6891b11e67c0e0c9e7d02be86d492ab9f399af7d4d0fb4ce992fc90ceca1"
+        },
+        {
+          "path": "docs/images/illustrations/search-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 52666,
+          "sha256": "53f8f86c56d27b429a186e6711028f93e988f727bb777be9841198115ea326a7"
+        },
+        {
+          "path": "docs/images/illustrations/search-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 90786,
+          "sha256": "cadb5055c05753cc1a76de80837d83d678316fa5f2c6420481237ff9911723ed"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/search.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 356076,
+        "sha256": "257d5330c91d1a5891d36ff692a4dd19cbb0932c7d0b9654481abffa51584609"
+      },
+      "android": {
+        "path": "app/src/main/res/drawable-nodpi/illus_search.webp",
+        "width": 384,
+        "height": 384,
+        "bytes": 28306,
+        "sha256": "231aaa4c5fa5f03441dee82374ae4c3b5d3d99fad88161397c27487de62910ae"
+      }
+    },
+    {
+      "name": "empty-404",
+      "source": {
+        "path": "design/illustrations/empty-404.png",
+        "width": 1024,
+        "height": 1024,
+        "bytes": 709078,
+        "sha256": "8c32882ecb9e06e51e1550a47a012aef230ed99c8a0e94806d34af028ecc5ab9"
+      },
+      "web": [
+        {
+          "path": "docs/images/illustrations/empty-404-320.webp",
+          "width": 320,
+          "height": 320,
+          "bytes": 18692,
+          "sha256": "686fb673bcb1b3f9c9ddd5fd0463efee541c14d2de27262b8d33fb7a2db5bf82"
+        },
+        {
+          "path": "docs/images/illustrations/empty-404-640.webp",
+          "width": 640,
+          "height": 640,
+          "bytes": 41820,
+          "sha256": "c57d2520b4401afb79ec4d9c88731e806b6db70f751473b1a913817f68aa4555"
+        },
+        {
+          "path": "docs/images/illustrations/empty-404-960.webp",
+          "width": 960,
+          "height": 960,
+          "bytes": 72130,
+          "sha256": "554161e935dbf4f8b79f3f17fc5a7fc970aa403766c2a21c7ea5ce0e26502e19"
+        }
+      ],
+      "fallback": {
+        "path": "docs/images/illustrations/empty-404.png",
+        "width": 640,
+        "height": 640,
+        "bytes": 289485,
+        "sha256": "8d64d3b837e2f23fd9cdd195f964de7371bd13e61b2dfe3e052269869cc9e15c"
+      }
+    }
+  ]
+}

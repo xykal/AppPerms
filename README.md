@@ -101,6 +101,12 @@ Proyek ini dibangun dan dikembangkan berkat kontribusi dari:
 
 ---
 
+## Ilustrasi UI / UI Illustrations
+
+Aset papercut website dan Android, budget ukuran, regenerasi WebP/PNG serta tes UI didokumentasikan di [Panduan ilustrasi](docs/ILLUSTRATIONS.md). / Website and Android paper-cut assets, byte budgets, regeneration, and UI checks are documented in the [illustration guide](docs/ILLUSTRATIONS.md).
+
+---
+
 ## Lisensi / License
 
 Proyek ini dirilis di bawah lisensi terbuka [Apache License 2.0](LICENSE).  

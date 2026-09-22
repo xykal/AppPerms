@@ -37,15 +37,33 @@
         android:textColor="@color/on_surface_dim"
         android:textSize="11sp" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/historyEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="@string/history_empty"
-        android:textColor="@color/on_surface_dim"
-        android:textSize="12sp"
-        android:visibility="gone" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/illustration_empty_size"
+            android:layout_height="@dimen/illustration_empty_size"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="@null"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/illus_versions" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/history_empty"
+            android:textColor="@color/on_surface_dim"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/historyScroll"

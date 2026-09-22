@@ -308,21 +308,25 @@ class MainActivity : AppCompatActivity() {
         if (empty) {
             when {
                 !s.snapshot.canOperate -> {
+                    binding.emptyIllustration.setImageResource(R.drawable.illus_permissions)
                     binding.emptyTitle.setText(R.string.empty_no_access)
                     binding.emptyDesc.text = getString(R.string.empty_no_access_desc)
                 }
 
                 s.apps.isEmpty() -> {
+                    binding.emptyIllustration.setImageResource(R.drawable.illus_versions)
                     binding.emptyTitle.setText(R.string.empty_no_data)
                     binding.emptyDesc.text = getString(R.string.empty_no_data_desc)
                 }
 
                 s.tab == 0 && s.query.isBlank() -> {
+                    binding.emptyIllustration.setImageResource(R.drawable.illus_permissions)
                     binding.emptyTitle.setText(R.string.empty_no_explicit)
                     binding.emptyDesc.text = getString(R.string.empty_no_explicit_desc)
                 }
 
                 else -> {
+                    binding.emptyIllustration.setImageResource(R.drawable.illus_search)
                     binding.emptyTitle.setText(R.string.empty_no_result)
                     binding.emptyDesc.text = getString(R.string.empty_no_result_desc)
                 }

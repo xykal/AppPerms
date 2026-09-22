@@ -719,6 +719,8 @@
     }
     .footer-links a:hover { color: var(--brand); text-decoration: none; }
   </style>
+  <link rel="stylesheet" href="assets/illustrations.css">
+  <script src="assets/illustrations.js" defer></script>
 </head>
 <body>
 
@@ -756,6 +758,7 @@
           <span class="lang-id">Panduan</span>
           <span class="lang-en">Guide</span>
         </a>
+        <a href="#faq" class="nav-link">FAQ</a>
         <a href="#kontributor" class="nav-link">
           <span class="lang-id">Kontributor</span>
           <span class="lang-en">Contributors</span>
@@ -805,6 +808,7 @@
         <span class="lang-id">Panduan Shizuku</span>
         <span class="lang-en">Quick Guide</span>
       </a>
+      <a href="#faq" class="nav-link">FAQ</a>
       <a href="#kontributor" class="nav-link">
         <span class="lang-id">Kontributor</span>
         <span class="lang-en">Contributors</span>
@@ -818,6 +822,7 @@
 
     <!-- Hero -->
     <header class="hero">
+      <div class="hero-copy">
       <div class="app-icon">
         <svg width="48" height="48" viewBox="0 0 108 108" fill="none">
           <rect width="108" height="108" rx="28" fill="#171A21"/>
@@ -890,11 +895,17 @@
           <span>0ms Optimistic UI</span>
         </div>
       </div>
+      </div>
+      <picture class="paper-illustration hero-art" data-illustration="download" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="(min-width: 880px) 350px, 240px">
+          <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
     </header>
 
     <!-- Core Features Section -->
     <section id="fitur">
-      <div class="sec-head">
+      <div class="sec-head section-with-art">
+        <div class="section-heading">
         <h2 class="sec-title">
           <span class="lang-id">Fitur Unggulan AppsPerms</span>
           <span class="lang-en">Key Features of AppsPerms</span>
@@ -903,6 +914,11 @@
           <span class="lang-id">Didesain khusus untuk kecepatan maksimal, kenyamanan pengguna, dan kontrol sistem yang bersih.</span>
           <span class="lang-en">Built specifically for peak speed, user comfort, and pristine system control.</span>
         </p>
+        </div>
+        <picture class="paper-illustration section-art" data-illustration="permissions" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/permissions-320.webp 320w, images/illustrations/permissions-640.webp 640w, images/illustrations/permissions-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
+          <img src="images/illustrations/permissions.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
       </div>
 
       <div class="features-grid">
@@ -982,7 +998,8 @@
 
     <!-- "Semua Versi" (All Versions) Section -->
     <section id="semua-versi">
-      <div class="sec-head">
+      <div class="sec-head section-with-art">
+        <div class="section-heading">
         <h2 class="sec-title">
           <span class="lang-id">Semua Versi &amp; Catatan Perubahan</span>
           <span class="lang-en">All Versions &amp; Changelogs</span>
@@ -991,7 +1008,24 @@
           <span class="lang-id">Pilih versi di bawah ini untuk melihat changelog lengkap dan mengunduh build resminya.</span>
           <span class="lang-en">Select a version below to review its full changelog and download official builds.</span>
         </p>
+        </div>
+        <picture class="paper-illustration section-art" data-illustration="versions" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/versions-320.webp 320w, images/illustrations/versions-640.webp 640w, images/illustrations/versions-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
+          <img src="images/illustrations/versions.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
       </div>
+
+      <aside class="update-note">
+        <picture class="paper-illustration update-art" data-illustration="update" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/update-320.webp 320w, images/illustrations/update-640.webp 640w, images/illustrations/update-960.webp 960w" sizes="(min-width: 640px) 80px, 64px">
+          <img src="images/illustrations/update.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
+        <div>
+          <h3><span class="lang-id">Pembaruan tetap dalam kendalimu.</span><span class="lang-en">Updates stay in your control.</span></h3>
+          <p><span class="lang-id">Baca catatan perubahan, lalu pasang APK resmi secara manual. AppsPerms tidak mengunduh pembaruan diam-diam.</span><span class="lang-en">Read the release notes, then install the official APK manually. AppsPerms never silently downloads updates.</span></p>
+        </div>
+        <a href="https://github.com/xykalnotkel/OverlayOps/releases/latest" target="_blank" rel="noopener"><span class="lang-id">Buka rilis resmi &rarr;</span><span class="lang-en">Official release &rarr;</span></a>
+      </aside>
 
       <div class="versions-container">
         <!-- Version Tab Bar -->
@@ -1281,7 +1315,8 @@
 
     <!-- Security & VirusTotal Section -->
     <section id="keamanan">
-      <div class="sec-head">
+      <div class="sec-head section-with-art">
+        <div class="section-heading">
         <h2 class="sec-title">
           <span class="lang-id">Audit Keamanan &amp; Verifikasi Hash</span>
           <span class="lang-en">Security Audit &amp; Hash Verification</span>
@@ -1290,6 +1325,11 @@
           <span class="lang-id">Transparan 100%. Tidak ada celah tersembunyi, tidak ada pelacak, dan dapat diverifikasi secara independen.</span>
           <span class="lang-en">100% transparent. No hidden telemetry, no tracking, and fully auditable by third parties.</span>
         </p>
+        </div>
+        <picture class="paper-illustration section-art" data-illustration="security-report" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/security-report-320.webp 320w, images/illustrations/security-report-640.webp 640w, images/illustrations/security-report-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
+          <img src="images/illustrations/security-report.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
       </div>
 
       <div class="vt-banner">
@@ -1390,6 +1430,66 @@
       </div>
     </section>
 
+    <!-- Native details remain usable without scripts; search is progressive enhancement. -->
+    <section id="faq" aria-labelledby="faq-title">
+      <div class="sec-head section-with-art">
+        <div class="section-heading">
+          <h2 class="sec-title" id="faq-title"><span class="lang-id">Pertanyaan yang sering ditanya</span><span class="lang-en">Frequently asked questions</span></h2>
+          <p class="sec-sub"><span class="lang-id">Kenali izin, unduhan, dan penggunaan AppsPerms sebelum mulai.</span><span class="lang-en">Get familiar with permissions, downloads, and using AppsPerms.</span></p>
+        </div>
+        <picture class="paper-illustration section-art" data-illustration="faq" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/faq-320.webp 320w, images/illustrations/faq-640.webp 640w, images/illustrations/faq-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
+          <img src="images/illustrations/faq.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
+      </div>
+      <div class="faq-tools" id="faq-tools" hidden>
+        <picture class="paper-illustration search-art" data-illustration="search" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="(min-width: 640px) 76px, 52px">
+          <img src="images/illustrations/search.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
+        <div class="faq-search-wrap">
+          <label for="faq-search"><span class="lang-id">Cari jawaban (misalnya Shizuku atau pembaruan)</span><span class="lang-en">Find an answer (try Shizuku or updates)</span></label>
+          <input id="faq-search" type="search" autocomplete="off" enterkeyhint="search" aria-controls="faq-list" aria-describedby="faq-status">
+        </div>
+      </div>
+      <p class="faq-status" id="faq-status" role="status" aria-live="polite" aria-atomic="true"><span class="lang-id" id="faq-count-id">6 jawaban</span><span class="lang-en" id="faq-count-en">6 answers</span></p>
+      <div id="faq-list">
+        <details class="faq-item">
+          <summary><span class="lang-id">Apa AppsPerms harus memakai root?</span><span class="lang-en">Does AppsPerms require root?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Tidak selalu. AppsPerms memakai Shizuku yang dapat dijalankan lewat ADB / Wireless Debugging pada perangkat yang mendukungnya, atau lewat root. Sambungkan Shizuku dan berikan akses sebelum mengubah AppOps.</span><span class="lang-en">Not necessarily. AppsPerms uses Shizuku, which can run through ADB / Wireless Debugging on supported devices, or through root. Start Shizuku and grant access before changing AppOps.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary><span class="lang-id">Mengapa aplikasi meminta akses Shizuku?</span><span class="lang-en">Why does the app request Shizuku access?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Membaca dan mengubah AppOps membutuhkan hak akses sistem yang tidak dimiliki aplikasi biasa. Izinkan hanya aplikasi yang kamu percayai, dan baca penjelasan sebelum memakai mode berisiko.</span><span class="lang-en">Reading and changing AppOps requires privileges that ordinary apps do not have. Only authorize apps you trust, and read the explanation before using risky modes.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary><span class="lang-id">Apakah aplikasi memakai internet?</span><span class="lang-en">Does the app use the internet?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Manifest AppsPerms tidak meminta izin INTERNET. Ilustrasi di aplikasi juga dibundel secara lokal. Tautan website, bantuan, dan rilis dibuka di browser eksternal, yang dapat memakai koneksi internetnya sendiri.</span><span class="lang-en">AppsPerms does not request the INTERNET permission. In-app illustrations are bundled locally too. Website, help, and release links open in an external browser, which may use its own internet connection.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary><span class="lang-id">Bagaimana memeriksa keamanan APK?</span><span class="lang-en">How do I check APK security?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Unduh dari sumber resmi, bandingkan SHA-256, dan buka laporan VirusTotal untuk berkas tersebut pada bagian <a href="#keamanan">Audit Keamanan</a>. Hasil scan adalah laporan pada waktu tertentu, bukan jaminan keamanan mutlak. Ilustrasi perisai bukan laporan scan.</span><span class="lang-en">Download from an official source, compare the SHA-256, and open the report for that file in the <a href="#keamanan">Security Audit</a> section. A scan is a point-in-time report, not a guarantee of safety. The shield illustration is not a scan report.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary><span class="lang-id">Bagaimana memperbarui atau mencari versi lama?</span><span class="lang-en">How do I update or find an older version?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Gunakan bagian <a href="#semua-versi">Semua Versi</a> atau GitHub Releases. Baca catatan perubahan dan cadangkan konfigurasi sebelum mengganti versi. Saat pindah dari paket lama OverlayOps ke AppsPerms, ikuti petunjuk migrasi pada rilis.</span><span class="lang-en">Use <a href="#semua-versi">All Versions</a> or GitHub Releases. Read the release notes and back up your configuration before changing versions. When moving from the old OverlayOps package to AppsPerms, follow the migration notes in the release.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary><span class="lang-id">Kenapa pencarian atau daftar aplikasi kosong?</span><span class="lang-en">Why are search results or the app list empty?</span></summary>
+          <p class="faq-answer"><span class="lang-id">Periksa status Shizuku dan izinnya, hapus kata kunci pencarian, lalu longgarkan filter tipe atau status. Coba tab Semua app dan muat ulang. Jika masih bermasalah, sertakan laporan perangkat saat membuat issue tanpa membagikan data pribadi.</span><span class="lang-en">Check the Shizuku connection and authorization, clear your search query, and loosen the type or status filters. Try the All apps tab and refresh. If it persists, attach a device report to an issue without sharing private data.</span></p>
+        </details>
+      </div>
+      <div class="faq-empty" id="faq-empty" hidden>
+        <picture class="paper-illustration empty-art" data-illustration="empty-404" aria-hidden="true">
+          <source type="image/webp" srcset="images/illustrations/empty-404-320.webp 320w, images/illustrations/empty-404-640.webp 640w, images/illustrations/empty-404-960.webp 960w" sizes="160px">
+          <img src="images/illustrations/empty-404.png" width="640" height="640" alt="" loading="lazy" decoding="async">
+        </picture>
+        <h3><span class="lang-id">Belum ketemu jawabannya</span><span class="lang-en">No matching answers yet</span></h3>
+        <p><span class="lang-id">Coba kata kunci yang lebih singkat, atau tampilkan semua pertanyaan.</span><span class="lang-en">Try a shorter keyword, or show all questions.</span></p>
+        <button class="illustration-link" id="faq-reset" type="button"><span class="lang-id">Tampilkan semua FAQ</span><span class="lang-en">Show all questions</span></button>
+      </div>
+    </section>
+
     <!-- Contributors Section -->
     <section id="kontributor">
       <div class="sec-head">
@@ -1454,6 +1554,7 @@
           <span class="lang-en">All Versions</span>
         </a>
         <a href="#keamanan">VirusTotal</a>
+        <a href="#faq">FAQ</a>
         <a href="https://xyverse.my.id" target="_blank" rel="noopener">XyVerse Ecosystem</a>
       </div>
     </footer>

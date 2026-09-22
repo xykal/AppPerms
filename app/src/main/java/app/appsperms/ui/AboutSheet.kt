@@ -19,6 +19,7 @@ object AboutSheet {
             BuildConfig.VERSION_NAME,
             BuildConfig.VERSION_CODE,
         )
+        b.aboutFaq.setOnClickListener { open(context, "https://appsperms.xyverse.my.id/#faq") }
         b.aboutWebsite.setOnClickListener { open(context, "https://appsperms.xyverse.my.id/") }
         b.aboutSource.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps") }
         b.aboutUpdate.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps/releases/latest") }

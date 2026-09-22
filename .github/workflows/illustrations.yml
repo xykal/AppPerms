@@ -1,0 +1,57 @@
+name: Illustration & web checks
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'design/illustrations/**'
+      - 'app/src/main/**'
+      - 'tests/**'
+      - 'tools/**'
+      - '.github/workflows/illustrations.yml'
+  push:
+    branches: [main, master]
+    paths:
+      - 'docs/**'
+      - 'design/illustrations/**'
+      - 'app/src/main/**'
+      - 'tests/**'
+      - 'tools/**'
+      - '.github/workflows/illustrations.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: illustrations-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  illustrations:
+    name: Transparent assets, Android resources & web smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/requirements-illustrations.txt
+      - name: Install test tools
+        run: |
+          python -m pip install -r tools/requirements-illustrations.txt
+          python -m playwright install --with-deps chromium
+      - name: Validate assets, XML and browser behavior
+        env:
+          ILLUSTRATION_SCREENSHOTS: out/illustration-smoke
+        run: python -m unittest discover -s tests -p 'test_illustrations*.py' -v
+      - name: Retain UI review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: illustration-smoke
+          path: out/illustration-smoke/*.png
+          if-no-files-found: ignore
+          retention-days: 7

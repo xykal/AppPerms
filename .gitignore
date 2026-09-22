@@ -25,3 +25,8 @@ Thumbs.db
 *.keystore
 keystore.b64
 app-signing/
+
+# Illustration tooling / Python caches
+__pycache__/
+*.py[cod]
+.venv/

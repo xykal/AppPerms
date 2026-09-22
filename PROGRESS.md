@@ -146,3 +146,37 @@
 **Next Step:**
 - Monitor workflow CI dan verifikasi deployment Cloudflare Pages.
 
+
+### 2026-09-22 - Ilustrasi papercut AppsPerms untuk Web dan Android
+**Status:** Implementasi dan verifikasi lokal selesai; PR/build Android menunggu publikasi branch dan CI.
+
+**Yang dikerjain:**
+- Integrasi delapan ilustrasi amber/charcoal transparan: download, hasil scan simbolis, FAQ, semua versi, izin, update, pencarian dan 404.
+- Website memakai WebP responsif 320/640/960 px + fallback PNG, dimensi eksplisit, decoding async, hero prioritas tinggi dan gambar lain lazy.
+- Tambah FAQ ID/EN dengan details native, pencarian lokal, status hasil, reset/fokus dan empty-state; tetap bisa dibaca tanpa JavaScript.
+- Tambah halaman HTTP 404 bilingual. Pertahankan domain, CDN/redirect, data hash/VirusTotal dan alur unduhan terbaru dari upstream.
+- Android: ilustrasi kontekstual pada status kosong/pencarian, riwayat kosong, kartu privasi dan shortcut FAQ di Tentang. Empat WebP offline 384 px di drawable-nodpi, total berkas 100.5 KiB; tidak ada izin internet/library gambar baru.
+- Ilustrasi dekoratif tidak menduplikasi pembacaan screen reader. Ukuran empty-state diperkecil di landscape.
+- Master PNG dan provenance di design/illustrations; exporter, manifest hash/byte budget, server preview dan dokumentasi pemeliharaan.
+- Workflow tambahan Illustration & web checks memakai contents: read tanpa secrets. Build/signing/release yang sudah ada tidak diubah.
+
+**File utama:**
+- docs/index.html, docs/assets/illustrations.{css,js}, docs/404.html, docs/images/illustrations/*
+- app/src/main/res/layout/{activity_main,sheet_history,sheet_about}.xml
+- app/src/main/java/app/appsperms/ui/{MainActivity,AboutSheet}.kt
+- app/src/main/res/{drawable-nodpi,values,values-en,values-land}/*
+- tools/, tests/, .github/workflows/illustrations.yml, docs/ILLUSTRATIONS.md
+
+**Verifikasi:**
+- 23 tes asset/resource dan Chromium lulus lokal: alpha/hash/dimensi/budget, referensi XML/drawable, label FAQ ID/EN, viewport 320–1440, pergantian bahasa, FAQ/keyboard/reset/tanpa JS, fallback PNG, tab versi, URL unduhan, fixture scan dan HTTP 404.
+- JavaScript syntax, YAML workflow dan git diff whitespace diperiksa.
+- Android belum dikompilasi atau diuji di perangkat pada sesi ini. Validasi XML bukan pengganti build.
+
+**Build & PR:**
+- Build Android tetap melalui workflow Build APK setelah branch/PR dipush. Belum ada URL build fitur/PR yang dapat dicatat pada tahap lokal ini.
+- Tidak membuat atau mengunduh APK, tidak menyentuh signing/secrets, tidak mendorong perubahan langsung ke main.
+
+**Next:**
+- Publikasikan branch dan tunggu Build APK + Illustration & web checks.
+- Uji perangkat nyata (portrait/landscape, font besar, TalkBack, koneksi Shizuku dan seluruh empty-state).
+- Follow-up terpisah: konsistensi versi README/web vs Gradle/data scan; audit klaim keamanan absolut dan fallback status scan.
