@@ -28,19 +28,24 @@ import java.util.Locale
 class AppsRepository(private val context: Context) {
 
     private val pm: PackageManager = context.packageManager
-    // OPTIMIZED v1.5: cache icon dikecilin 300 -> 80 agar hemat RAM, cegah OOM & panas.
-    // LruCache 80 entry ~ hemat ~8-12MB di HP RAM kecil, tetap mulus karena icon di-load ulang kalau perlu.
-    private val iconCache = LruCache<String, Drawable>(80)
+    // Cache ikon 200 entri agar memori efisien dan scrolling tetap halus tanpa IPC berulang.
+    private val iconCache = LruCache<String, Drawable>(200)
 
     // ------------------------------------------------------------ daftar app
 
-    fun loadApps(preferShell: Boolean): List<AppEntry> {
+    fun loadApps(
+        preferShell: Boolean,
+        onProgress: (done: Int, total: Int) -> Unit = { _, _ -> },
+    ): List<AppEntry> {
         val infos: List<ApplicationInfo> = try {
             pm.getInstalledApplications(PackageManager.MATCH_DISABLED_COMPONENTS)
         } catch (t: Throwable) {
             Log.w(TAG, "getInstalledApplications gagal", t)
             emptyList()
         }
+
+        val total = infos.size
+        onProgress(0, total)
 
         // Ambil himpunan paket yang meminta izin overlay dalam 1 batch call (bukan N IPC calls)
         val declaredOverlaySet: Set<String> = runCatching {
@@ -60,12 +65,20 @@ class AppsRepository(private val context: Context) {
         // sama (klon / profil kerja) ikut berubah saat salah satunya diubah.
         val uidCounts: Map<Int, Int> = infos.groupingBy { it.uid }.eachCount()
 
-        return infos.asSequence()
-            .mapNotNull { info ->
-                toEntry(info, bulk, declaredOverlaySet, preferShell, uidCounts[info.uid] ?: 1)
+        val list = ArrayList<AppEntry>(total)
+        var count = 0
+        for (info in infos) {
+            count++
+            val entry = toEntry(info, bulk, declaredOverlaySet, preferShell, uidCounts[info.uid] ?: 1)
+            if (entry != null) {
+                list.add(entry)
             }
-            .sortedBy { it.labelLower }
-            .toList()
+            if (count % 10 == 0 || count == total) {
+                onProgress(count, total)
+            }
+        }
+
+        return list.sortedBy { it.labelLower }
     }
 
     private fun toEntry(
@@ -84,7 +97,9 @@ class AppsRepository(private val context: Context) {
         } else {
             declaresOverlayPermission(pkg)
         }
-        val icon = iconFor(pkg, info)
+
+        // Ambil dari cache jika sudah pernah di-load (0ms), jangan loadIcon sinkron di scan loop!
+        val icon = iconCache.get(pkg)
 
         val status = when {
             bulk != null -> bulk[pkg] ?: OpStatus.DEFAULT
@@ -106,10 +121,10 @@ class AppsRepository(private val context: Context) {
         )
     }
 
-    /** Ikon di-cache: loadIcon itu mahal kalau dipanggil tiap refresh untuk ratusan app. */
-    private fun iconFor(pkg: String, info: ApplicationInfo): Drawable? {
+    /** Ikon on-demand: jika belum di-cache, load lalu simpan di LruCache. */
+    fun getOrLoadIcon(pkg: String): Drawable? {
         iconCache.get(pkg)?.let { return it }
-        val drawable = runCatching { info.loadIcon(pm) }.getOrNull() ?: return null
+        val drawable = runCatching { pm.getApplicationIcon(pkg) }.getOrNull() ?: return null
         iconCache.put(pkg, drawable)
         return drawable
     }
@@ -175,7 +190,7 @@ class AppsRepository(private val context: Context) {
     fun exportBackup(apps: List<AppEntry>): String {
         val stamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
         return buildString {
-            append("# OverlayOps backup\n")
+            append("# AppsPerms backup\n")
             append("# dibuat: ").append(stamp).append('\n')
             append("# format: <nama paket>=<allow|ignore|deny|foreground>\n")
             apps.filter { it.overlayStatus.isExplicit || it.overlayStatus == OpStatus.FOREGROUND }

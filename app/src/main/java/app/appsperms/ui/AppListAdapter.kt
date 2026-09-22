@@ -1,11 +1,13 @@
 package app.appsperms.ui
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import app.appsperms.R
 import app.appsperms.databinding.ItemAppBinding
 import app.appsperms.databinding.ItemHeaderBinding
 import app.appsperms.model.AppEntry
@@ -13,6 +15,7 @@ import app.appsperms.model.AppEntry
 class AppListAdapter(
     private val onOpen: (AppEntry) -> Unit,
     private val onChangeOverlay: (AppEntry) -> Unit,
+    private val onLoadIcon: ((String) -> Drawable?)? = null,
 ) : ListAdapter<ListItem, RecyclerView.ViewHolder>(DIFF) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
@@ -25,7 +28,7 @@ class AppListAdapter(
         return if (viewType == TYPE_HEADER) {
             HeaderVH(ItemHeaderBinding.inflate(inflater, parent, false))
         } else {
-            AppVH(ItemAppBinding.inflate(inflater, parent, false), onOpen, onChangeOverlay)
+            AppVH(ItemAppBinding.inflate(inflater, parent, false), onOpen, onChangeOverlay, onLoadIcon)
         }
     }
 
@@ -62,12 +65,18 @@ class AppListAdapter(
         private val b: ItemAppBinding,
         private val onOpen: (AppEntry) -> Unit,
         private val onChangeOverlay: (AppEntry) -> Unit,
+        private val onLoadIcon: ((String) -> Drawable?)?,
     ) : RecyclerView.ViewHolder(b.root) {
 
         fun bind(item: AppEntry) = with(b) {
             label.text = item.label
             pkg.text = item.packageName
-            icon.setImageDrawable(item.icon)
+            val currentIcon = item.icon ?: onLoadIcon?.invoke(item.packageName)
+            if (currentIcon != null) {
+                icon.setImageDrawable(currentIcon)
+            } else {
+                icon.setImageResource(R.drawable.bg_avatar)
+            }
             badgeUid.text = "uid ${item.uid}"
             badgeSystem.isVisible = item.isSystem && false
             badgeDeclares.isVisible = item.declaresOverlay

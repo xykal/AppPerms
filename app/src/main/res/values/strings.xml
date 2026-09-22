@@ -420,4 +420,34 @@ Contoh:
     <string name="term_history_title">History perintah</string>
     <string name="term_history_close">Tutup</string>
     <string name="term_preset_check_screen">cek layar</string>
+
+    <!-- Navigation Drawer & Progress & Polish (v1.7.1) -->
+    <string name="loading_checking_apps">Memeriksa aplikasi (%1$d/%2$d)…</string>
+    <string name="nav_refresh">Muat ulang daftar</string>
+    <string name="nav_sort">Urutkan daftar</string>
+    <string name="nav_batch">Aksi massal</string>
+    <string name="nav_terminal">Terminal Shizuku</string>
+    <string name="nav_tweaks">Tuning Layar &amp; Animasi</string>
+    <string name="nav_backup">Backup konfigurasi</string>
+    <string name="nav_restore">Restore dari backup</string>
+    <string name="nav_history">Riwayat &amp; undo</string>
+    <string name="nav_report">Laporan perangkat</string>
+    <string name="nav_copy_report">Salin laporan</string>
+    <string name="nav_channel">Saluran Resmi XyVerse</string>
+    <string name="nav_feedback">Kirim Masukan &amp; Lapor Isu</string>
+    <string name="nav_update">Periksa Pembaruan</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="nav_shizuku">Buka app Shizuku</string>
+    <string name="nav_overlay">Settings overlay sistem</string>
+    <string name="nav_about">Tentang AppsPerms</string>
+    <string name="nav_header_tagline">Kelola AppOps tanpa root · tanpa iklan · tanpa internet</string>
+    <string name="about_check_update">Cek Pembaruan</string>
+    <string name="about_channel">Saluran XyVerse</string>
+    <string name="about_feedback">Kirim Masukan / Isu</string>
+    <string name="about_contributors_title">KONTRIBUTOR &amp; APRESIASI KHUSUS</string>
+    <string name="about_contributors_body">• Kall (@xykalnotkel) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Riset Samsung One UI 8.5, Terminal i18n &amp; multi-profile\n• Rikka — Pencipta Shizuku &amp; App Ops\n• Pengembang LSPosed — HiddenApiBypass</string>
+    <string name="about_ecosystem_title">JUGA DARI XYVERSE</string>
+    <string name="about_xydesk">• XyDesk — Remote Desktop &amp; PC Controller</string>
+    <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Otomasi Kerja</string>
+    <string name="about_xycloud">• XyCloudStore — Marketplace &amp; Toko Digital</string>
 </resources>

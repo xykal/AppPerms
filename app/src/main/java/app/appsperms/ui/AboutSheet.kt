@@ -9,7 +9,7 @@ import app.appsperms.BuildConfig
 import app.appsperms.R
 import app.appsperms.databinding.SheetAboutBinding
 
-/** Halaman Tentang yang ringkas, informatif, dan tidak lagi berupa dialog teks panjang. */
+/** Halaman Tentang AppsPerms: versi, audit privasi, kontributor, ekosistem XyVerse, dan feedback. */
 object AboutSheet {
     fun show(context: Context) {
         val dialog = BottomSheetDialog(context)
@@ -21,11 +21,23 @@ object AboutSheet {
         )
         b.aboutWebsite.setOnClickListener { open(context, "https://appsperms.haekal.web.id/") }
         b.aboutSource.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps") }
+        b.aboutUpdate.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps/releases/latest") }
+        b.aboutChannel.setOnClickListener { open(context, "https://t.me/xyverse") }
+        b.aboutFeedback.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps/issues") }
+        b.aboutXyDesk.setOnClickListener { open(context, "https://github.com/xykalnotkel/xydesk") }
+        b.aboutXyStudio.setOnClickListener { open(context, "https://github.com/xykalnotkel") }
+        b.aboutXyCloud.setOnClickListener { open(context, "https://github.com/xykalnotkel") }
+
         dialog.setContentView(b.root)
         dialog.show()
     }
 
     private fun open(context: Context, url: String) {
-        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+        runCatching {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        }
     }
 }

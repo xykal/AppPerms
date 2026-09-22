@@ -419,4 +419,34 @@ Examples:
     <string name="term_history_title">Command history</string>
     <string name="term_history_close">Close</string>
     <string name="term_preset_check_screen">check screen</string>
+
+    <!-- Navigation Drawer & Progress & Polish (v1.7.1) -->
+    <string name="loading_checking_apps">Checking apps (%1$d/%2$d)…</string>
+    <string name="nav_refresh">Reload app list</string>
+    <string name="nav_sort">Sort list</string>
+    <string name="nav_batch">Batch actions</string>
+    <string name="nav_terminal">Shizuku Terminal</string>
+    <string name="nav_tweaks">Screen &amp; Animation Tuning</string>
+    <string name="nav_backup">Backup configuration</string>
+    <string name="nav_restore">Restore from backup</string>
+    <string name="nav_history">History &amp; undo</string>
+    <string name="nav_report">Device report</string>
+    <string name="nav_copy_report">Copy report</string>
+    <string name="nav_channel">Official XyVerse Channel</string>
+    <string name="nav_feedback">Send Feedback &amp; Report Issue</string>
+    <string name="nav_update">Check for Updates</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_shizuku">Open Shizuku app</string>
+    <string name="nav_overlay">System overlay settings</string>
+    <string name="nav_about">About AppsPerms</string>
+    <string name="nav_header_tagline">Manage AppOps without root · no ads · no internet</string>
+    <string name="about_check_update">Check Update</string>
+    <string name="about_channel">XyVerse Channel</string>
+    <string name="about_feedback">Feedback &amp; Issues</string>
+    <string name="about_contributors_title">CONTRIBUTORS &amp; SPECIAL THANKS</string>
+    <string name="about_contributors_body">• Kall (@xykalnotkel) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Samsung One UI 8.5 Research, Terminal i18n &amp; multi-profile\n• Rikka — Creator of Shizuku &amp; App Ops\n• LSPosed Developers — HiddenApiBypass</string>
+    <string name="about_ecosystem_title">ALSO FROM XYVERSE</string>
+    <string name="about_xydesk">• XyDesk — Remote Desktop &amp; PC Controller</string>
+    <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Work Automation</string>
+    <string name="about_xycloud">• XyCloudStore — Marketplace &amp; Digital Store</string>
 </resources>

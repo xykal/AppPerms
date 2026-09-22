@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 data class UiState(
     val snapshot: AccessSnapshot = AccessSnapshot.unknown(),
     val loading: Boolean = false,
+    val loadingProgress: String? = null,
     val busy: String? = null,
     val apps: List<AppEntry> = emptyList(),
     val items: List<ListItem> = emptyList(),
@@ -69,15 +70,36 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun refresh(showSpinner: Boolean = true) {
-        if (showSpinner) _state.update { it.copy(loading = true) }
+        if (showSpinner) {
+            _state.update {
+                it.copy(
+                    loading = true,
+                    loadingProgress = getApplication<Application>().getString(R.string.loading_checking_apps, 0, 0),
+                )
+            }
+        }
         val preferShell = _state.value.snapshot.preferShell
         viewModelScope.launch {
             val list = withContext(Dispatchers.IO) {
-                runCatching { repo.loadApps(preferShell) }.getOrDefault(emptyList())
+                runCatching {
+                    repo.loadApps(preferShell) { current, total ->
+                        _state.update { s ->
+                            s.copy(
+                                loadingProgress = getApplication<Application>().getString(
+                                    R.string.loading_checking_apps,
+                                    current,
+                                    total,
+                                ),
+                            )
+                        }
+                    }
+                }.getOrDefault(emptyList())
             }
-            _state.update { s -> s.copy(apps = list, loading = false).recompute() }
+            _state.update { s -> s.copy(apps = list, loading = false, loadingProgress = null).recompute() }
         }
     }
+
+    fun loadIcon(pkg: String): android.graphics.drawable.Drawable? = repo.getOrLoadIcon(pkg)
 
     fun setQuery(query: String) = _state.update { it.copy(query = query).recompute() }
     fun setTab(index: Int) = _state.update { it.copy(tab = index).recompute() }

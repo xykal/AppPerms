@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         adapter = AppListAdapter(
             onOpen = { entry -> showAppDetail(entry) },
             onChangeOverlay = { entry -> pickOverlayStatus(entry) },
+            onLoadIcon = { pkg -> viewModel.loadIcon(pkg) },
         )
         binding.list.layoutManager = LinearLayoutManager(this)
         binding.list.adapter = adapter
@@ -172,11 +173,15 @@ class MainActivity : AppCompatActivity() {
                     R.id.nav_sort -> handleMenu(MenuAction.SORT)
                     R.id.nav_batch -> handleMenu(MenuAction.BATCH)
                     R.id.nav_terminal -> handleMenu(MenuAction.TERMINAL)
+                    R.id.nav_tweaks -> handleMenu(MenuAction.TWEAKS)
                     R.id.nav_backup -> handleMenu(MenuAction.BACKUP)
                     R.id.nav_restore -> handleMenu(MenuAction.RESTORE)
                     R.id.nav_history -> handleMenu(MenuAction.HISTORY)
                     R.id.nav_report -> handleMenu(MenuAction.REPORT)
                     R.id.nav_copy_report -> handleMenu(MenuAction.COPY_REPORT)
+                    R.id.nav_channel -> handleMenu(MenuAction.CHANNEL)
+                    R.id.nav_feedback -> handleMenu(MenuAction.FEEDBACK)
+                    R.id.nav_update -> handleMenu(MenuAction.UPDATE)
                     R.id.nav_settings -> handleMenu(MenuAction.SETTINGS)
                     R.id.nav_shizuku -> handleMenu(MenuAction.SHIZUKU)
                     R.id.nav_overlay -> handleMenu(MenuAction.OVERLAY_SETTINGS)
@@ -185,10 +190,8 @@ class MainActivity : AppCompatActivity() {
             }, 200)
             true
         }
-        // Highlight terminal & shizuku dengan brand color + isi versi header
+        // Isi versi header drawer
         try {
-            binding.navView.menu.findItem(R.id.nav_terminal)?.icon?.setTint(getColor(R.color.brand))
-            binding.navView.menu.findItem(R.id.nav_shizuku)?.icon?.setTint(getColor(R.color.brand))
             val header = binding.navView.getHeaderView(0)
             header.findViewById<TextView>(R.id.navAppVersion)?.text =
                 "v${app.appsperms.BuildConfig.VERSION_NAME} · XyVerse"
@@ -291,8 +294,9 @@ class MainActivity : AppCompatActivity() {
             else R.string.request_permission
         )
 
-        binding.swipe.isRefreshing = false
-        binding.progress.isVisible = s.loading && s.apps.isEmpty()
+        binding.swipe.isRefreshing = s.loading && s.apps.isNotEmpty()
+        binding.loadingLayout.isVisible = s.loading && s.apps.isEmpty()
+        binding.loadingStatusText.text = s.loadingProgress ?: getString(R.string.loading)
 
         binding.tabs.getTabAt(0)?.text = getString(R.string.tab_overlay_count, s.overlayCount)
         binding.tabs.getTabAt(1)?.text = getString(R.string.tab_apps_count, s.apps.size)
@@ -327,6 +331,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.hintBar.text = when {
             s.busy != null -> s.busy
+            s.loading && s.loadingProgress != null -> s.loadingProgress
             s.query.isNotBlank() || s.typeFilter != AppTypeFilter.ALL || s.statusFilter != StatusFilter.ALL ->
                 getString(R.string.hint_filtered, s.apps.size, s.overlayCount, s.allowedCount, s.blockedCount)
 
@@ -405,11 +410,6 @@ class MainActivity : AppCompatActivity() {
 
     // ------------------------------------------------------------------ menu
 
-    private fun showMenuSheet() {
-        val sortLabel = getString(viewModel.state.value.sort.labelRes)
-        MenuSheet.show(this, sortLabel) { action -> handleMenu(action) }
-    }
-
     /** Pengaturan ringan: bahasa, konfirmasi mode berisiko, peringatan UID, urutan daftar. */
     private fun showSettings() {
         SettingsSheet.show(this) { message ->
@@ -470,6 +470,8 @@ class MainActivity : AppCompatActivity() {
 
             MenuAction.TERMINAL -> showTerminal()
 
+            MenuAction.TWEAKS -> showTweaks()
+
             MenuAction.BACKUP -> copyToClipboard(
                 viewModel.exportBackup(),
                 getString(R.string.clip_label_backup),
@@ -490,6 +492,18 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.clip_label_report),
             )
 
+            MenuAction.CHANNEL -> startActivitySafely(
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/xyverse"))
+            )
+
+            MenuAction.FEEDBACK -> startActivitySafely(
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykalnotkel/OverlayOps/issues"))
+            )
+
+            MenuAction.UPDATE -> startActivitySafely(
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykalnotkel/OverlayOps/releases/latest"))
+            )
+
             MenuAction.SHIZUKU -> openShizukuApp()
 
             MenuAction.OVERLAY_SETTINGS ->
@@ -501,7 +515,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBatchDialog() {
+    private fun showTweaks() {
+        val canOperate = viewModel.state.value.snapshot.canOperate
+        TweaksSheet.show(this, canOperate) { message -> snack(message) }
+    }
         val apps = viewModel.appsNow()
         if (apps.isEmpty()) {
             snack(getString(R.string.snack_no_apps))
