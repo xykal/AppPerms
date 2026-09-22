@@ -1,0 +1,78 @@
+/* AppsPerms paper-cut assets: local, transparent, static, no image runtime. */
+.paper-illustration { display: block; flex: none; }
+.paper-illustration img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 28px; text-align: left; padding: 42px 0; }
+.hero-copy { min-width: 0; }
+.hero .app-icon { width: 56px; height: 56px; border-radius: 16px; margin-bottom: 16px; }
+.hero .app-icon svg { width: 34px; height: 34px; }
+.hero .hero-title { font-size: clamp(2rem, 4.5vw, 3rem); }
+.hero .hero-sub { margin-left: 0; max-width: 56ch; }
+.hero .btn-group { justify-content: flex-start; flex-wrap: wrap; margin-left: 0; }
+.hero .pills-row { justify-content: flex-start; }
+.hero-art { width: 350px; background: radial-gradient(ellipse, rgba(255,176,32,.09), transparent 70%); }
+.section-with-art { display: grid; grid-template-columns: minmax(0, 1fr) 144px; gap: 24px; align-items: center; }
+.section-heading { min-width: 0; }
+.section-art { width: 144px; }
+.update-note { display: grid; grid-template-columns: 80px minmax(0,1fr) auto; align-items: center; gap: 18px; padding: 14px 20px; margin: 0 0 20px; border: 1px solid var(--outline); border-radius: 14px; background: var(--surface); }
+.update-art { width: 80px; }
+.update-note h3 { font-size: 1rem; margin-bottom: 4px; }
+.update-note p { color: var(--text-dim); font-size: .88rem; }
+.update-note a { font-size: .86rem; font-weight: 700; }
+.faq-tools { display: flex; align-items: center; gap: 16px; max-width: 740px; }
+.search-art { width: 76px; }
+.faq-search-wrap { flex: 1; min-width: 0; }
+.faq-search-wrap label { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 8px; }
+.faq-search-wrap input { width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--outline-light); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; }
+.faq-search-wrap input:focus { border-color: var(--brand); }
+.faq-status { margin: 14px 0; color: var(--text-dim); font-size: .86rem; }
+.faq-item { margin-bottom: 10px; border: 1px solid var(--outline); border-radius: 12px; background: var(--surface); }
+.faq-item summary { padding: 18px 20px; font-weight: 650; cursor: pointer; border-radius: 12px; }
+.faq-item summary::marker { color: var(--brand); }
+.faq-item[open] summary { color: var(--brand); }
+.faq-answer { padding: 0 20px 20px; color: var(--text-dim); font-size: .94rem; line-height: 1.7; }
+.faq-empty { text-align: center; padding: 20px; background: var(--surface); border: 1px dashed var(--outline-light); border-radius: 16px; }
+.empty-art { width: 160px; margin: 0 auto 10px; }
+.faq-empty h3 { font-size: 1.12rem; margin-bottom: 8px; }
+.faq-empty p { color: var(--text-dim); margin-bottom: 16px; }
+.illustration-link { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; padding: 10px 18px; border: 1px solid #FFB020; border-radius: 10px; background: #FFB020; color: #1A1206; font: inherit; font-weight: 700; cursor: pointer; text-decoration: none; }
+.illustration-link:hover { background: #FFC959; text-decoration: none; }
+.faq-tools[hidden], .faq-item[hidden], .faq-empty[hidden] { display: none; }
+.faq-tools, .faq-item, .faq-empty { scroll-margin-top: 80px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid #FFB020; outline-offset: 4px; }
+
+/* The real static 404 page is independent of the homepage's inline styles. */
+.illustration-error-page { margin: 0; min-height: 100vh; background: #0F1115; color: #ECEFF4; font: 16px/1.65 system-ui, sans-serif; }
+.illustration-error-page * { box-sizing: border-box; }
+.illustration-error-page main { width: min(100%, 650px); padding: 32px 24px 48px; margin: auto; text-align: center; }
+.illustration-error-page .error-art { width: min(72vw, 290px); margin: 18px auto; }
+.illustration-error-page .error-brand { color: #FFB020; text-decoration: none; font-weight: 800; }
+.illustration-error-page h1 { margin: 12px 0; font-size: clamp(1.75rem,5vw,2.5rem); line-height: 1.2; }
+.illustration-error-page p, .illustration-error-page footer { color: #9BA3AF; }
+.illustration-error-page footer { margin-top: 36px; font-size: .85rem; }
+.illustration-error-page .error-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+.illustration-error-page .error-secondary { color: #FFB020; padding: 10px; }
+.illustration-error-page .error-lang { color: #ECEFF4; background: none; border: 1px solid #3A4250; border-radius: 8px; min-height: 44px; padding: 8px 14px; cursor: pointer; }
+html[lang="id"] .lang-en, html[lang="en"] .lang-id { display: none !important; }
+
+@media (max-width: 879px) {
+  .hero { grid-template-columns: 1fr; gap: 8px; text-align: center; padding-top: 18px; }
+  .hero .app-icon, .hero .hero-sub, .hero .btn-group { margin-left: auto; margin-right: auto; }
+  .hero .btn-group, .hero .pills-row { justify-content: center; }
+  .hero-art { width: 240px; margin: 0 auto; }
+}
+@media (min-width: 880px) { #langToggleMobile { display: none !important; } }
+@media (max-width: 639px) {
+  .section-with-art { grid-template-columns: minmax(0,1fr) 96px; gap: 12px; }
+  .section-art { width: 96px; }
+  .update-note { grid-template-columns: 64px minmax(0,1fr); gap: 12px; padding: 12px; }
+  .update-art { width: 64px; }
+  .update-note > a { grid-column: 2; }
+  .faq-tools { gap: 10px; }
+  .search-art { width: 52px; }
+  .faq-item summary { padding: 16px; }
+  .faq-answer { padding: 0 16px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .feat-card, .btn-cf-glossy, .btn-dark-glossy { transition: none; }
+}

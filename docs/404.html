@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0F1115">
+  <title>404 — AppsPerms | Built-in XyVerse by Kall</title>
+  <link rel="stylesheet" href="/assets/illustrations.css">
+  <script>
+    (function () {
+      var lang = (navigator.language || '').toLowerCase().startsWith('id') ? 'id' : 'en';
+      try { var saved = localStorage.getItem('site_lang'); if (saved === 'id' || saved === 'en') lang = saved; } catch (_) {}
+      document.documentElement.lang = lang;
+    })();
+  </script>
+</head>
+<body class="illustration-error-page">
+  <main>
+    <a class="error-brand" href="/">AppsPerms</a>
+    <picture class="paper-illustration error-art" data-illustration="empty-404" aria-hidden="true">
+          <source type="image/webp" srcset="/images/illustrations/empty-404-320.webp 320w, /images/illustrations/empty-404-640.webp 640w, /images/illustrations/empty-404-960.webp 960w" sizes="(min-width: 403px) 290px, 72vw">
+          <img src="/images/illustrations/empty-404.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
+    <h1><span class="lang-id">Halaman ini belum ketemu.</span><span class="lang-en">This page could not be found.</span></h1>
+    <p><span class="lang-id">Tautannya mungkin berubah atau sudah tidak tersedia. Kembali ke halaman utama untuk mengunduh AppsPerms dan membaca panduan.</span><span class="lang-en">The link may have moved or is no longer available. Head back home for official downloads and the guide.</span></p>
+    <div class="error-links">
+      <a class="illustration-link" href="/"><span class="lang-id">Kembali ke beranda</span><span class="lang-en">Back to home</span></a>
+      <a class="error-secondary" href="/#faq">FAQ</a>
+      <button class="error-lang" type="button" id="error-lang" hidden aria-label="Bahasa / Language">ID / EN</button>
+    </div>
+    <footer>AppsPerms · Built-in XyVerse by Kall</footer>
+  </main>
+  <script>
+    (function () {
+      var button = document.getElementById('error-lang');
+      button.hidden = false;
+      button.addEventListener('click', function () {
+        var lang = document.documentElement.lang === 'id' ? 'en' : 'id';
+        document.documentElement.lang = lang;
+        try { localStorage.setItem('site_lang', lang); } catch (_) {}
+      });
+    })();
+  </script>
+</body>
+</html>
