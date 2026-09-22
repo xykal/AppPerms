@@ -17,8 +17,8 @@ android {
         applicationId = "app.appsperms"
         minSdk = 24
         targetSdk = 34
-        versionCode = 10
-        versionName = "1.7.0-sidebar"
+        versionCode = 11
+        versionName = "1.7.1"
         vectorDrawables.useSupportLibrary = true
     }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Kartu hasil scan VirusTotal (PNG) untuk landing page — dipakai oleh CI build.yml.
 
-Dulu screenshot di-recapture manual dan selalu ketinggalan satu versi 😅.
+Dulu screenshot di-recapture manual dan selalu ketinggalan satu versi.
 Sekarang CI yang gambar ulang tiap rilis: hasil scan, SHA-256, tanggal.
 
 Pakai:

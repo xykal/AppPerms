@@ -126,8 +126,8 @@ class IllustrationBrowser(unittest.TestCase):
         self.page.locator('.version-tab-btn[data-target="v130"]').click()
         expect(self.page.locator('#pane-v130')).to_be_visible()
         expect(self.page.locator('#pane-v171')).to_be_hidden()
-        expect(self.page.locator('#btnRelease')).to_have_attribute('href', 'https://dl.xyverse.my.id/AppsPerms-latest.apk')
-        expect(self.page.locator('#btnDebug')).to_have_attribute('href', 'https://dl.xyverse.my.id/AppsPerms-debug-latest.apk')
+        expect(self.page.locator('#btnRelease')).to_have_attribute('href', 'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk')
+        expect(self.page.locator('#btnDebug')).to_have_attribute('href', 'https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk')
         self.assertTrue((DOCS / 'thanks.html').is_file())
 
     def test_scan_art_does_not_replace_live_scan_data(self):

@@ -33,9 +33,8 @@ Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other ap
 
 | Varian | Link Unduh Langsung | Mirror Cadangan | Catatan |
 |---|---|---|---|
-| Release APK (Rekomendasi) | [dl.xyverse.my.id/AppsPerms-latest.apk](https://dl.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~1.98 MB) |
-| Alternate Direct DL | [dl.appsperms.xyverse.my.id](https://dl.appsperms.xyverse.my.id) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Jalur CDN sekunder |
-| Debug APK (Troubleshooting) | [dl.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Logging logcat aktif, unstripped (~6.0 MB) |
+| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~1.98 MB) |
+| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Logging logcat aktif, unstripped (~6.0 MB) |
 
 ### Website Resmi & Keamanan
 
@@ -72,11 +71,10 @@ It focuses on controlling `SYSTEM_ALERT_WINDOW` (*Display over other apps*) alon
 
 ### Official Downloads
 
-| Variant | Primary Direct Link | Mirror | Notes |
+| Variant | Direct Download Link | Mirror | Notes |
 |---|---|---|---|
-| Release APK (Recommended) | [dl.xyverse.my.id/AppsPerms-latest.apk](https://dl.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed by official XyVerse RSA-4096 keystore, R8 minified |
-| Alternate Direct DL | [dl.appsperms.xyverse.my.id](https://dl.appsperms.xyverse.my.id) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Secondary distribution route |
-| Debug APK (Troubleshooting) | [dl.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Full logcat logging, unstripped |
+| Release APK (Recommended) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed by official XyVerse RSA-4096 keystore, R8 minified |
+| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Full logcat logging, unstripped |
 
 Official Portal: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.id/)
 

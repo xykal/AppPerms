@@ -9,7 +9,7 @@
 .hero .hero-sub { margin-left: 0; max-width: 56ch; }
 .hero .btn-group { justify-content: flex-start; flex-wrap: wrap; margin-left: 0; }
 .hero .pills-row { justify-content: flex-start; }
-.hero-art { width: 350px; background: radial-gradient(ellipse, rgba(255,176,32,.09), transparent 70%); }
+.hero-art { width: 350px; background: none; }
 .section-with-art { display: grid; grid-template-columns: minmax(0, 1fr) 144px; gap: 24px; align-items: center; }
 .section-heading { min-width: 0; }
 .section-art { width: 144px; }

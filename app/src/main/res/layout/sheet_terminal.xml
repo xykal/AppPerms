@@ -222,7 +222,7 @@
             android:layout_marginTop="14dp"
             android:background="@drawable/bg_card"
             android:padding="10dp"
-            android:text="💡 Tips Brevent/LADB: Semua perintah jalan sebagai shell (uid 2000). Untuk reset AppOps: appops set --uid &lt;paket&gt; &lt;OP&gt; default  •  Untuk whitelist: cmd deviceidle whitelist +&lt;paket&gt;  •  Hati-hati dengan wm size/density — selalu ada reset: wm size reset"
+            android:text="Tips Brevent/LADB: Semua perintah jalan sebagai shell (uid 2000). Untuk reset AppOps: appops set --uid &lt;paket&gt; &lt;OP&gt; default  •  Untuk whitelist: cmd deviceidle whitelist +&lt;paket&gt;  •  Hati-hati dengan wm size/density — selalu ada reset: wm size reset"
             android:textColor="@color/on_surface_dim"
             android:textSize="10sp" />
 

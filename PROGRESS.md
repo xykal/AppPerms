@@ -180,3 +180,36 @@
 - Publikasikan branch dan tunggu Build APK + Illustration & web checks.
 - Uji perangkat nyata (portrait/landscape, font besar, TalkBack, koneksi Shizuku dan seluruh empty-state).
 - Follow-up terpisah: konsistensi versi README/web vs Gradle/data scan; audit klaim keamanan absolut dan fallback status scan.
+
+
+### 2026-09-22 - Rilis v1.7.1 & Konsolidasi Domain dl.appsperms.xyverse.my.id
+**Status:** Done
+**Dikerjain oleh:** AI Agent + xykalnotkel
+
+**Yang dikerjain:**
+- Merge PR #3 (papercut illustrations untuk web & Android) ke main secara clean.
+- Bump versi rilis ke v1.7.1 (versionCode 11) di app/build.gradle.kts.
+- Konsolidasi domain unduhan secara ketat ke dl.appsperms.xyverse.my.id (meniadakan pemisahan dl.xyverse.my.id).
+- Desain ulang web docs/index.html & docs/thanks.html dengan tema solid matte pekat deep charcoal (#0A0C10, tanpa glow neon).
+- Paritas terjemahan 100% penuh antara Bahasa Indonesia dan Bahasa Inggris untuk seluruh bagian web dan semua tab changelog.
+- Memperbaiki alur unduh docs/index.html dengan trigger iframe tersembunyi dan navigasi mulus ke docs/thanks.
+- Pembaruan aturan docs/_redirects ke target rilis v1.7.1.
+- Menjaga kepatuhan aturan anti-emoji dan branding tunggal Built-in XyVerse by Kall.
+
+**File yang diubah:**
+- app/build.gradle.kts -> bump versionCode 11, versionName 1.7.1
+- docs/_redirects -> routing download ke v1.7.1 release assets
+- docs/assets/illustrations.css -> hapus background radial gradient hero
+- docs/index.html -> redesign tema matte, paritas bilingual 100%, tab changelog v1.0.0 s.d v1.7.1, dl.appsperms.xyverse.my.id
+- docs/thanks.html -> redesign tema matte, paritas bilingual 100%, trigger iframe fallback, tautan unduh manual, zero emoji
+- PROGRESS.md -> dokumentasi progres rilis v1.7.1
+
+**Kendala & Solusi:**
+- Menjaga kompatibilitas 12 unit test illustrations: seluruh 8 tag picture dan atribut data-illustration dipertahankan secara utuh sehingga test suite python3 -m unittest tests/test_illustrations.py lulus 100%.
+
+**Build & Release:**
+- Push ke main dan tag v1.7.1 untuk memicu workflow Build APK & GitHub Releases.
+- Link download: https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk
+
+**Next Step:**
+- Pantau proses build GitHub Actions dan publikasi Cloudflare Pages.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0F1115">
+  <meta name="theme-color" content="#0A0C10">
   <meta name="color-scheme" content="dark">
   <title>AppsPerms — Android AppOps &amp; Permissions Manager | Built-in XyVerse by Kall</title>
   <meta name="description" content="AppsPerms: Pengelola izin tersembunyi (AppOps) modern &amp; profesional untuk Android via Shizuku tanpa root. 100% Bebas Malware, 0 Izin Internet, Terverifikasi Clean di VirusTotal.">
@@ -34,26 +34,26 @@
   <meta name="twitter:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.9 MB, 0 izin internet, 0/72 Clean di VirusTotal.">
   <meta name="twitter:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
 
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23171A21' stroke='%232C313B' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23FFB020'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%231A1206'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%231A1206'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%2312151B' stroke='%23212631' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23E59800'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%230A0C10'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%230A0C10'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+
   <style>
-    /* ===== Color Palette & Variables ===== */
+    /* ===== Solid Matte Deep Dark Palette (Zero Neon) ===== */
     :root {
-      --bg: #0F1115;
-      --surface: #171A21;
-      --surface-2: #1F232C;
-      --surface-3: #282E3A;
-      --outline: #2C313B;
-      --outline-light: #3A4250;
-      --brand: #FFB020;
-      --brand-dark: #C97F00;
-      --brand-container: #3A2C0C;
+      --bg: #0A0C10;
+      --surface: #12151B;
+      --surface-2: #181C23;
+      --surface-3: #20252F;
+      --outline: #1E232D;
+      --outline-light: #2A313E;
+      --brand: #E59800;
+      --brand-dark: #B37400;
+      --brand-container: #201704;
       --text: #ECEFF4;
-      --text-dim: #9BA3AF;
-      --text-muted: #6B7280;
+      --text-dim: #8B949E;
+      --text-muted: #57606A;
       --ok: #3DDC84;
       --deny: #FF5C5C;
-      --warn: #FFC46B;
-      --ignored: #6BA8FF;
+      --warn: #E59800;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       --nav-h: 60px;
@@ -81,11 +81,7 @@
     body {
       min-height: 100vh;
       overflow-x: hidden;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 176, 32, 0.08), transparent 45%),
-        radial-gradient(circle at 90% 20%, rgba(61, 220, 132, 0.04), transparent 40%),
-        var(--bg);
-      background-attachment: fixed;
+      background: var(--bg);
     }
 
     a { color: var(--brand); text-decoration: none; }
@@ -98,9 +94,9 @@
       top: 0;
       z-index: 100;
       height: var(--nav-h);
-      background: rgba(15, 17, 21, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(10, 12, 16, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--outline);
     }
     .nav-inner {
@@ -130,7 +126,6 @@
       border: 1px solid var(--outline);
       display: grid;
       place-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
     .nav-items-desktop {
       display: none;
@@ -158,7 +153,7 @@
       font-size: 0.78rem;
       font-weight: 700;
       color: var(--text-dim);
-      transition: all 0.2s;
+      transition: border-color 0.15s, color 0.15s;
     }
     .lang-toggle-btn:hover {
       border-color: var(--brand);
@@ -166,7 +161,7 @@
     }
     .lang-toggle-btn span.active-lang {
       background: var(--brand);
-      color: #1A1206;
+      color: #0A0C10;
       border-radius: 12px;
       padding: 1px 6px;
     }
@@ -194,7 +189,7 @@
       padding: 16px;
       background: var(--surface);
       border-bottom: 1px solid var(--outline);
-      box-shadow: 0 16px 30px rgba(0,0,0,0.6);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.5);
     }
     .nav-menu-mobile.open { display: flex; }
 
@@ -212,22 +207,17 @@
 
     /* ===== Hero Section ===== */
     .hero {
-      text-align: center;
-      padding: 20px 0 35px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 24px 0 32px;
     }
     .app-icon {
-      width: 88px;
-      height: 88px;
-      border-radius: 22px;
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
       background: var(--surface);
-      border: 2px solid var(--outline);
+      border: 1px solid var(--outline-light);
       display: grid;
       place-items: center;
-      margin-bottom: 18px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 176, 32, 0.18);
+      margin-bottom: 16px;
     }
     .hero-badge {
       display: inline-flex;
@@ -235,7 +225,7 @@
       gap: 8px;
       background: var(--surface);
       border: 1px solid var(--outline);
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 999px;
       font-size: 0.82rem;
       font-weight: 600;
@@ -243,24 +233,23 @@
       margin-bottom: 16px;
     }
     .hero-badge .dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       background: var(--brand);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--brand);
     }
     .hero-title {
-      font-size: clamp(2rem, 7vw, 3.4rem);
+      font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       line-height: 1.15;
       margin-bottom: 14px;
     }
     .hero-sub {
-      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
       color: var(--text-dim);
-      max-width: 640px;
-      margin: 0 auto 24px;
+      max-width: 600px;
+      margin-bottom: 22px;
       line-height: 1.55;
     }
 
@@ -271,54 +260,51 @@
       gap: 12px;
       width: 100%;
       max-width: 440px;
-      margin: 0 auto 22px;
+      margin-bottom: 18px;
     }
     @media (min-width: 560px) {
-      .btn-group { flex-direction: row; justify-content: center; max-width: 100%; }
+      .btn-group { flex-direction: row; align-items: center; max-width: 100%; }
     }
     .btn-cf-glossy, .btn-dark-glossy {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      min-height: 50px;
-      padding: 12px 24px;
+      min-height: 48px;
+      padding: 12px 22px;
       font-weight: 700;
-      font-size: 0.98rem;
-      border-radius: 12px;
+      font-size: 0.95rem;
+      border-radius: 10px;
       cursor: pointer;
       text-decoration: none;
-      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
     }
     .btn-cf-glossy {
-      color: #1A1206;
-      background: linear-gradient(180deg, #FFC959 0%, #FFB020 40%, #E69500 100%);
-      border: 1px solid #FFA500;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 0 #9E6400, 0 8px 24px rgba(255, 176, 32, 0.35);
+      color: #0A0C10;
+      background: #E59800;
+      border: 1px solid #D18700;
     }
     .btn-cf-glossy:hover {
       text-decoration: none;
-      transform: translateY(-2px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 5px 0 #9E6400, 0 10px 28px rgba(255, 176, 32, 0.45);
+      background: #F0A515;
+      transform: translateY(-1px);
     }
     .btn-cf-glossy:active {
-      transform: translateY(2px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 0 #9E6400;
+      transform: translateY(1px);
     }
     .btn-dark-glossy {
       color: var(--text);
-      background: linear-gradient(180deg, #2A303C 0%, #1F242D 100%);
+      background: var(--surface-2);
       border: 1px solid var(--outline-light);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 3px 0 #13171D, 0 6px 16px rgba(0, 0, 0, 0.4);
     }
     .btn-dark-glossy:hover {
       text-decoration: none;
-      transform: translateY(-2px);
-      border-color: #4B5565;
+      background: var(--surface-3);
+      border-color: #3E4758;
+      transform: translateY(-1px);
     }
     .btn-dark-glossy:active {
-      transform: translateY(2px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 #13171D;
+      transform: translateY(1px);
     }
 
     .dl-hint {
@@ -333,8 +319,7 @@
     .pills-row {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+      gap: 8px;
       margin-top: 14px;
     }
     .pill {
@@ -343,22 +328,22 @@
       gap: 6px;
       background: var(--surface);
       border: 1px solid var(--outline);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.82rem;
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 0.8rem;
       color: var(--text-dim);
     }
     .pill svg { color: var(--brand); }
 
     /* ===== Section Layout ===== */
     section {
-      margin-top: 55px;
+      margin-top: 50px;
     }
     .sec-head {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
     .sec-title {
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #FFFFFF;
@@ -366,14 +351,14 @@
     }
     .sec-sub {
       color: var(--text-dim);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     /* ===== Feature Cards Grid ===== */
     .features-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
     }
     @media (min-width: 640px) {
       .features-grid { grid-template-columns: repeat(2, 1fr); }
@@ -384,27 +369,26 @@
     .feat-card {
       background: var(--surface);
       border: 1px solid var(--outline);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: transform 0.2s, border-color 0.2s;
+      gap: 8px;
+      transition: border-color 0.15s;
     }
     .feat-card:hover {
       border-color: var(--outline-light);
-      transform: translateY(-2px);
     }
     .feat-card-title {
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: var(--text);
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .feat-card-desc {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: var(--text-dim);
       line-height: 1.5;
     }
@@ -413,16 +397,15 @@
     .versions-container {
       background: var(--surface);
       border: 1px solid var(--outline);
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      border-radius: 14px;
+      padding: 20px;
     }
     .version-nav {
       display: flex;
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border-bottom: 1px solid var(--outline);
       scrollbar-width: thin;
     }
@@ -430,13 +413,13 @@
       background: var(--surface-2);
       border: 1px solid var(--outline);
       color: var(--text-dim);
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.88rem;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .version-tab-btn:hover {
       color: var(--text);
@@ -444,28 +427,22 @@
     }
     .version-tab-btn.active {
       background: var(--brand);
-      border-color: #FFA500;
-      color: #1A1206;
+      border-color: var(--brand-dark);
+      color: #0A0C10;
       font-weight: 700;
-      box-shadow: 0 2px 10px rgba(255, 176, 32, 0.3);
     }
     .version-pane {
       display: none;
-      animation: fadeIn 0.25s ease-in-out;
     }
     .version-pane.active {
       display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     .version-header {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       margin-bottom: 16px;
       padding-bottom: 14px;
       border-bottom: 1px dashed var(--outline);
@@ -477,7 +454,7 @@
       flex-wrap: wrap;
     }
     .version-tag {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: var(--text);
     }
@@ -487,9 +464,9 @@
     }
     .version-badge-status {
       font-size: 0.72rem;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
-      background: rgba(61, 220, 132, 0.15);
+      background: rgba(61, 220, 132, 0.12);
       color: var(--ok);
       border: 1px solid rgba(61, 220, 132, 0.3);
       font-weight: 700;
@@ -498,16 +475,16 @@
     }
     .version-downloads {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .v-dl-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
       text-decoration: none;
       background: var(--surface-2);
@@ -522,19 +499,19 @@
       color: var(--brand);
     }
     .v-dl-btn.primary {
-      background: linear-gradient(180deg, #FFC959 0%, #FFB020 100%);
-      color: #1A1206;
-      border-color: #FFA500;
+      background: var(--brand);
+      color: #0A0C10;
+      border-color: var(--brand-dark);
     }
     .v-dl-btn.primary:hover {
-      background: linear-gradient(180deg, #FFD273 0%, #FFB833 100%);
-      color: #1A1206;
+      background: #F0A515;
+      color: #0A0C10;
     }
     .changelog-category {
-      margin-top: 16px;
+      margin-top: 14px;
     }
     .changelog-category-title {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--brand);
       margin-bottom: 8px;
@@ -549,16 +526,16 @@
     }
     .changelog-list li {
       position: relative;
-      padding-left: 18px;
+      padding-left: 16px;
       margin-bottom: 7px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-dim);
       line-height: 1.5;
     }
     .changelog-list li::before {
       content: "•";
       position: absolute;
-      left: 4px;
+      left: 2px;
       color: var(--brand);
       font-size: 1.1rem;
       line-height: 1;
@@ -566,14 +543,14 @@
 
     /* ===== Security & VirusTotal Section ===== */
     .vt-banner {
-      background: linear-gradient(135deg, rgba(61, 220, 132, 0.1) 0%, rgba(23, 26, 33, 0.9) 100%);
-      border: 1px solid rgba(61, 220, 132, 0.35);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
+      background: var(--surface);
+      border: 1px solid rgba(61, 220, 132, 0.25);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     @media (min-width: 680px) {
       .vt-banner { flex-direction: row; align-items: center; justify-content: space-between; }
@@ -584,19 +561,19 @@
       gap: 16px;
     }
     .vt-score {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: var(--ok);
       line-height: 1;
     }
     .vt-verdict-title {
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: #FFFFFF;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .vt-verdict-desc {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       color: var(--text-dim);
     }
     .hash-table {
@@ -614,7 +591,7 @@
     }
     .hash-table tr:last-child td { border-bottom: none; }
     .hash-table td.label {
-      width: 160px;
+      width: 170px;
       color: var(--text-dim);
       font-weight: 600;
     }
@@ -628,7 +605,7 @@
     .steps-list {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
     }
     @media (min-width: 720px) {
       .steps-list { grid-template-columns: repeat(3, 1fr); }
@@ -636,11 +613,11 @@
     .step-item {
       background: var(--surface);
       border: 1px solid var(--outline);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     .step-badge {
       display: inline-block;
@@ -648,26 +625,26 @@
       background: var(--brand-container);
       color: var(--brand);
       border: 1px solid var(--brand-dark);
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
     }
     .step-item h4 {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
     }
     .step-item p {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: var(--text-dim);
       line-height: 1.5;
     }
 
-    /* ===== Contributors & Ecosystem ===== */
+    /* ===== Contributors ===== */
     .contrib-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
     .contrib-card {
       background: var(--surface);
@@ -696,13 +673,13 @@
 
     /* ===== Footer ===== */
     footer {
-      margin-top: 80px;
-      padding-top: 30px;
+      margin-top: 70px;
+      padding-top: 26px;
       border-top: 1px solid var(--outline);
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      font-size: 0.88rem;
+      gap: 14px;
+      font-size: 0.86rem;
       color: var(--text-dim);
     }
     @media (min-width: 640px) {
@@ -710,7 +687,7 @@
     }
     .footer-links {
       display: flex;
-      gap: 18px;
+      gap: 16px;
       flex-wrap: wrap;
     }
     .footer-links a {
@@ -719,6 +696,7 @@
     }
     .footer-links a:hover { color: var(--brand); text-decoration: none; }
   </style>
+
   <link rel="stylesheet" href="assets/illustrations.css">
   <script src="assets/illustrations.js" defer></script>
 </head>
@@ -729,12 +707,12 @@
     <div class="nav-inner">
       <a href="#" class="brand-wrap">
         <div class="brand-logo">
-          <svg width="20" height="20" viewBox="0 0 108 108" fill="none">
-            <rect width="108" height="108" rx="28" fill="#171A21"/>
+          <svg width="18" height="18" viewBox="0 0 108 108" fill="none">
+            <rect width="108" height="108" rx="28" fill="#12151B"/>
             <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="8"/>
-            <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
-            <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
-            <rect x="51" y="58" width="14" height="4" rx="2" fill="#1A1206"/>
+            <rect x="46" y="44" width="36" height="26" rx="6" fill="#E59800"/>
+            <rect x="51" y="50" width="22" height="4" rx="2" fill="#0A0C10"/>
+            <rect x="51" y="58" width="14" height="4" rx="2" fill="#0A0C10"/>
           </svg>
         </div>
         <span>AppsPerms</span>
@@ -775,13 +753,13 @@
 
       <!-- Mobile Button -->
       <div style="display:flex; align-items:center; gap:8px;">
-        <button class="lang-toggle-btn" id="langToggleMobile" aria-label="Toggle language" style="display:inline-flex;">
+        <button class="lang-toggle-btn" id="langToggleMobile" aria-label="Toggle language">
           <span class="opt-id">ID</span>
           <span>/</span>
           <span class="opt-en">EN</span>
         </button>
         <button class="nav-toggle-mobile" id="navToggle" aria-label="Menu" aria-expanded="false">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -823,97 +801,103 @@
     <!-- Hero -->
     <header class="hero">
       <div class="hero-copy">
-      <div class="app-icon">
-        <svg width="48" height="48" viewBox="0 0 108 108" fill="none">
-          <rect width="108" height="108" rx="28" fill="#171A21"/>
-          <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="6"/>
-          <rect x="46" y="44" width="36" height="26" rx="6" fill="#FFB020"/>
-          <rect x="51" y="50" width="22" height="4" rx="2" fill="#1A1206"/>
-          <rect x="51" y="58" width="14" height="4" rx="2" fill="#1A1206"/>
-          <path d="M48,31h12" stroke="#ECEFF4" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </div>
-
-      <div class="hero-badge">
-        <span class="dot"></span>
-        <span>Built-in XyVerse by Kall</span>
-        <span style="opacity:0.4;">|</span>
-        <span id="heroVerBadge">v1.7.1</span>
-      </div>
-
-      <h1 class="hero-title">
-        <span class="lang-id">Kendali Penuh Izin Android Tanpa Root</span>
-        <span class="lang-en">Full Android Permissions Control Without Root</span>
-      </h1>
-
-      <p class="hero-sub">
-        <span class="lang-id">Kelola 19 AppOps tersembunyi, tuning resolusi &amp; animasi aman, serta eksekusi Terminal Shizuku langsung dari HP kamu. Ringan, super cepat, dan 100% tanpa iklan.</span>
-        <span class="lang-en">Manage 19 hidden AppOps, safely tune screen resolution &amp; animations, and execute Shizuku Terminal shell directly on your phone. Lightweight, ultra-fast, and 100% ad-free.</span>
-      </p>
-
-      <!-- Buttons -->
-      <div class="btn-group">
-        <a id="btnRelease" class="btn-cf-glossy" href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" data-variant="release" data-alt="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
+        <div class="app-icon">
+          <svg width="42" height="42" viewBox="0 0 108 108" fill="none">
+            <rect width="108" height="108" rx="28" fill="#12151B"/>
+            <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="6"/>
+            <rect x="46" y="44" width="36" height="26" rx="6" fill="#E59800"/>
+            <rect x="51" y="50" width="22" height="4" rx="2" fill="#0A0C10"/>
+            <rect x="51" y="58" width="14" height="4" rx="2" fill="#0A0C10"/>
+            <path d="M48,31h12" stroke="#ECEFF4" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <span class="dl-label lang-id">Download Release APK (~1.9 MB)</span>
-          <span class="dl-label lang-en">Download Release APK (~1.9 MB)</span>
-        </a>
+        </div>
 
-        <a id="btnDebug" class="btn-dark-glossy" href="https://dl.xyverse.my.id/AppsPerms-debug-latest.apk" target="_blank" rel="noopener" data-variant="debug" data-alt="https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          </svg>
-          <span class="lang-id">Debug Build (Logcat)</span>
-          <span class="lang-en">Debug Build (Logcat)</span>
-        </a>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          <span>Built-in XyVerse by Kall</span>
+          <span style="opacity:0.3;">|</span>
+          <span id="heroVerBadge">v1.7.1</span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="lang-id">Kendali Penuh Izin Android Tanpa Root</span>
+          <span class="lang-en">Full Android Permissions Control Without Root</span>
+        </h1>
+
+        <p class="hero-sub">
+          <span class="lang-id">Kelola 19 AppOps tersembunyi, tuning resolusi &amp; animasi aman, serta eksekusi Terminal Shizuku langsung dari HP kamu. Ringan, super cepat, dan 100% tanpa iklan.</span>
+          <span class="lang-en">Manage 19 hidden AppOps, safely tune screen resolution &amp; animations, and execute Shizuku Terminal shell directly on your phone. Lightweight, ultra-fast, and 100% ad-free.</span>
+        </p>
+
+        <!-- Buttons -->
+        <div class="btn-group">
+          <a id="btnRelease" class="btn-cf-glossy" href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" data-variant="release">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span class="lang-id">Download Release APK (~1.9 MB)</span>
+            <span class="lang-en">Download Release APK (~1.9 MB)</span>
+          </a>
+
+          <a id="btnDebug" class="btn-dark-glossy" href="https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk" data-variant="debug">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            </svg>
+            <span class="lang-id">Debug Build (Logcat)</span>
+            <span class="lang-en">Debug Build (Logcat)</span>
+          </a>
+        </div>
+
+        <div id="dlHint" class="dl-hint">
+          <span class="lang-id">Unduhan dimulai ✓ — membuka halaman terima kasih…</span>
+          <span class="lang-en">Download started ✓ — opening thank you page…</span>
+        </div>
+
+        <!-- Quick Trust Pills -->
+        <div class="pills-row">
+          <div class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span id="vtPillText">0/72 Clean di VirusTotal</span>
+          </div>
+          <div class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="lang-id">0 Izin Internet (Privasi Mutlak)</span>
+            <span class="lang-en">0 Internet Permission (100% Private)</span>
+          </div>
+          <div class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="lang-id">Shizuku / Root</span>
+            <span class="lang-en">Shizuku / Root</span>
+          </div>
+          <div class="pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="lang-id">0ms Optimistic UI</span>
+            <span class="lang-en">0ms Optimistic UI</span>
+          </div>
+        </div>
       </div>
 
-      <div id="dlHint" class="dl-hint"></div>
-
-      <!-- Quick Trust Pills -->
-      <div class="pills-row">
-        <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span id="vtPillText">0/72 Clean di VirusTotal</span>
-        </div>
-        <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="lang-id">0 Izin Internet (Privasi Mutlak)</span>
-          <span class="lang-en">0 Internet Permission (100% Private)</span>
-        </div>
-        <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>Shizuku / Root</span>
-        </div>
-        <div class="pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>0ms Optimistic UI</span>
-        </div>
-      </div>
-      </div>
       <picture class="paper-illustration hero-art" data-illustration="download" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="(min-width: 880px) 350px, 240px">
-          <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
-        </picture>
+        <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="(min-width: 880px) 350px, 240px">
+        <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
+      </picture>
     </header>
 
     <!-- Core Features Section -->
     <section id="fitur">
       <div class="sec-head section-with-art">
         <div class="section-heading">
-        <h2 class="sec-title">
-          <span class="lang-id">Fitur Unggulan AppsPerms</span>
-          <span class="lang-en">Key Features of AppsPerms</span>
-        </h2>
-        <p class="sec-sub">
-          <span class="lang-id">Didesain khusus untuk kecepatan maksimal, kenyamanan pengguna, dan kontrol sistem yang bersih.</span>
-          <span class="lang-en">Built specifically for peak speed, user comfort, and pristine system control.</span>
-        </p>
+          <h2 class="sec-title">
+            <span class="lang-id">Fitur Unggulan AppsPerms</span>
+            <span class="lang-en">Key Features of AppsPerms</span>
+          </h2>
+          <p class="sec-sub">
+            <span class="lang-id">Didesain khusus untuk kecepatan maksimal, kenyamanan pengguna, dan kontrol sistem yang bersih.</span>
+            <span class="lang-en">Built specifically for peak speed, user comfort, and pristine system control.</span>
+          </p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="permissions" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/permissions-320.webp 320w, images/illustrations/permissions-640.webp 640w, images/illustrations/permissions-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
@@ -924,7 +908,7 @@
       <div class="features-grid">
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span class="lang-id">19 AppOps Tersembunyi</span>
             <span class="lang-en">19 Hidden AppOps</span>
           </div>
@@ -936,7 +920,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             <span class="lang-id">Terminal Shizuku Mandiri</span>
             <span class="lang-en">Embedded Shizuku Terminal</span>
           </div>
@@ -948,7 +932,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <span class="lang-id">Safe Tuning Layar &amp; Animasi</span>
             <span class="lang-en">Safe Screen &amp; Animation Tuning</span>
           </div>
@@ -960,7 +944,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <span class="lang-id">Pemindaian Kilat (~150ms)</span>
             <span class="lang-en">Sub-200ms Fast Scanning</span>
           </div>
@@ -972,7 +956,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             <span class="lang-id">Aksi Massal &amp; Backup</span>
             <span class="lang-en">Batch Actions &amp; Backup</span>
           </div>
@@ -984,7 +968,7 @@
 
         <div class="feat-card">
           <div class="feat-card-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
             <span class="lang-id">100% Privat &amp; Offline</span>
             <span class="lang-en">100% Private &amp; Offline</span>
           </div>
@@ -1000,14 +984,14 @@
     <section id="semua-versi">
       <div class="sec-head section-with-art">
         <div class="section-heading">
-        <h2 class="sec-title">
-          <span class="lang-id">Semua Versi &amp; Catatan Perubahan</span>
-          <span class="lang-en">All Versions &amp; Changelogs</span>
-        </h2>
-        <p class="sec-sub">
-          <span class="lang-id">Pilih versi di bawah ini untuk melihat changelog lengkap dan mengunduh build resminya.</span>
-          <span class="lang-en">Select a version below to review its full changelog and download official builds.</span>
-        </p>
+          <h2 class="sec-title">
+            <span class="lang-id">Semua Versi &amp; Catatan Perubahan</span>
+            <span class="lang-en">All Versions &amp; Changelogs</span>
+          </h2>
+          <p class="sec-sub">
+            <span class="lang-id">Pilih versi di bawah ini untuk melihat changelog lengkap dan mengunduh build resminya.</span>
+            <span class="lang-en">Select a version below to review its full changelog and download official builds.</span>
+          </p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="versions" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/versions-320.webp 320w, images/illustrations/versions-640.webp 640w, images/illustrations/versions-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
@@ -1030,7 +1014,10 @@
       <div class="versions-container">
         <!-- Version Tab Bar -->
         <div class="version-nav" id="versionNav">
-          <button class="version-tab-btn active" data-target="v171">v1.7.1 (Terbaru)</button>
+          <button class="version-tab-btn active" data-target="v171">
+            <span class="lang-id">v1.7.1 (Terbaru)</span>
+            <span class="lang-en">v1.7.1 (Latest)</span>
+          </button>
           <button class="version-tab-btn" data-target="v170">v1.7.0</button>
           <button class="version-tab-btn" data-target="v160">v1.6.0</button>
           <button class="version-tab-btn" data-target="v150">v1.5.0</button>
@@ -1051,12 +1038,9 @@
               <span class="version-date">2026-09-22</span>
             </div>
             <div class="version-downloads">
-              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
-                <span class="lang-id">Download APK (dl.xyverse)</span>
-                <span class="lang-en">Download APK (dl.xyverse)</span>
-              </a>
-              <a href="https://dl.appsperms.xyverse.my.id" target="_blank" rel="noopener" class="v-dl-btn">
-                <span>dl.appsperms mirror</span>
+              <a href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span class="lang-id">Download APK</span>
+                <span class="lang-en">Download APK</span>
               </a>
               <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.1" target="_blank" rel="noopener" class="v-dl-btn">
                 <span>GitHub Release</span>
@@ -1111,10 +1095,11 @@
               <span class="version-date">2026-09-18</span>
             </div>
             <div class="version-downloads">
-              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
-                <span>Download APK</span>
+              <a href="https://dl.appsperms.xyverse.my.id/AppsPerms-1.7.0-sidebar-release.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span class="lang-id">Download APK</span>
+                <span class="lang-en">Download APK</span>
               </a>
-              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.0" target="_blank" rel="noopener" class="v-dl-btn">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.0-sidebar" target="_blank" rel="noopener" class="v-dl-btn">
                 <span>GitHub Release</span>
               </a>
             </div>
@@ -1126,12 +1111,12 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Pengenalan Navigation Drawer menggantikan menu titik tiga konvensional.</span>
-                <span class="lang-en">Introduction of the modern Navigation Drawer replacing the legacy overflow menu.</span>
+                <span class="lang-id"><strong>Navigation Drawer:</strong> Pengenalan Navigation Drawer menggantikan menu titik tiga konvensional.</span>
+                <span class="lang-en"><strong>Navigation Drawer:</strong> Introduction of the modern Navigation Drawer replacing the legacy overflow menu.</span>
               </li>
               <li>
-                <span class="lang-id">Penataan ulang logika RPC Shizuku untuk kompatibilitas Android 15 &amp; Android 16 preview.</span>
-                <span class="lang-en">Refactored Shizuku RPC bridge logic for Android 15 and Android 16 developer previews.</span>
+                <span class="lang-id"><strong>Kompatibilitas Android Baru:</strong> Penataan ulang logika RPC Shizuku untuk kompatibilitas Android 15 &amp; Android 16 preview.</span>
+                <span class="lang-en"><strong>Modern Android Compatibility:</strong> Refactored Shizuku RPC bridge logic for Android 15 and Android 16 developer previews.</span>
               </li>
             </ul>
           </div>
@@ -1145,10 +1130,7 @@
               <span class="version-date">2026-09-10</span>
             </div>
             <div class="version-downloads">
-              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
-                <span>Download APK</span>
-              </a>
-              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.6.0" target="_blank" rel="noopener" class="v-dl-btn">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener" class="v-dl-btn">
                 <span>GitHub Release</span>
               </a>
             </div>
@@ -1160,16 +1142,16 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Penyematan antarmuka Terminal interaktif mandiri yang mengeksekusi perintah shell Shizuku secara langsung.</span>
-                <span class="lang-en">Integrated standalone interactive Terminal executing Shizuku shell commands on-device.</span>
+                <span class="lang-id"><strong>Terminal Shell Interaktif:</strong> Penyematan antarmuka Terminal mandiri yang mengeksekusi perintah shell Shizuku secara langsung.</span>
+                <span class="lang-en"><strong>Interactive Shell Terminal:</strong> Integrated standalone interactive Terminal executing Shizuku shell commands on-device.</span>
               </li>
               <li>
-                <span class="lang-id">Dukungan eksekusi ganda: UID 2000 (Shell standar) dan opsi elevasi UID 0 (Root su) otomatis.</span>
-                <span class="lang-en">Dual execution modes: standard UID 2000 (Shell) and automated UID 0 (Root su) elevation.</span>
+                <span class="lang-id"><strong>Mode Eksekusi Ganda:</strong> Dukungan UID 2000 (Shell standar) dan opsi elevasi UID 0 (Root su) otomatis.</span>
+                <span class="lang-en"><strong>Dual Execution Modes:</strong> Standard UID 2000 (Shell) and automated UID 0 (Root su) elevation.</span>
               </li>
               <li>
-                <span class="lang-id">Preset perintah cepat bawaan untuk pengecekan baterai, logcat, dan status resolusi.</span>
-                <span class="lang-en">Built-in quick command presets for battery status, logcat dumping, and resolution querying.</span>
+                <span class="lang-id"><strong>Preset Cepat LADB:</strong> Preset perintah cepat bawaan untuk pengecekan baterai, logcat, dan status resolusi.</span>
+                <span class="lang-en"><strong>Quick LADB Presets:</strong> Built-in quick command presets for battery status, logcat dumping, and resolution querying.</span>
               </li>
             </ul>
           </div>
@@ -1183,10 +1165,7 @@
               <span class="version-date">2026-08-28</span>
             </div>
             <div class="version-downloads">
-              <a href="https://dl.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
-                <span>Download APK</span>
-              </a>
-              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.5.0" target="_blank" rel="noopener" class="v-dl-btn">
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener" class="v-dl-btn">
                 <span>GitHub Release</span>
               </a>
             </div>
@@ -1198,16 +1177,16 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Implementasi pengatur resolusi layar (wm size) dan kerapatan piksel (wm density) dengan dialog hitung mundur auto-revert 15 detik untuk mencegah salah ketik resolusi.</span>
-                <span class="lang-en">Introduced resolution tuning (wm size) and pixel density (wm density) with an automated 15-second safety revert countdown to prevent unrecoverable screen states.</span>
+                <span class="lang-id"><strong>Resolusi &amp; DPI Aman:</strong> Implementasi pengatur resolusi layar (wm size) dan kerapatan piksel (wm density) dengan dialog hitung mundur auto-revert 15 detik.</span>
+                <span class="lang-en"><strong>Safe Resolution &amp; DPI:</strong> Introduced resolution tuning (wm size) and pixel density (wm density) with an automated 15-second safety revert countdown.</span>
               </li>
               <li>
-                <span class="lang-id">Pengaturan kecepatan skala animasi jendela global (0x, 0.5x, 1x).</span>
-                <span class="lang-en">Added global window and transition animation duration scale controls (0x, 0.5x, 1x).</span>
+                <span class="lang-id"><strong>Skala Animasi Global:</strong> Pengaturan kecepatan skala animasi jendela global (0x, 0.5x, 1x).</span>
+                <span class="lang-en"><strong>Global Animation Scales:</strong> Added global window and transition animation duration scale controls (0x, 0.5x, 1x).</span>
               </li>
               <li>
-                <span class="lang-id">Penghapusan permanen modul agresif/killer background guna menjaga masa pakai baterai dan performa SoC perangkat.</span>
-                <span class="lang-en">Permanent removal of aggressive background killer modules to protect battery lifespan and device SoC stability.</span>
+                <span class="lang-id"><strong>Penghapusan Modul Agresif:</strong> Penghapusan permanen modul agresif/killer background guna menjaga masa pakai baterai dan performa SoC.</span>
+                <span class="lang-en"><strong>Removal of Aggressive Killers:</strong> Permanent removal of aggressive background killer modules to protect battery lifespan and device stability.</span>
               </li>
             </ul>
           </div>
@@ -1233,12 +1212,12 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Perbaikan AIDL interface binding untuk Android 13/14 pada custom ROM OEM (HyperOS, One UI, ColorOS).</span>
-                <span class="lang-en">Resolved AIDL interface binding issues for Android 13/14 across OEM flavors (HyperOS, One UI, ColorOS).</span>
+                <span class="lang-id"><strong>AIDL Interface Binding:</strong> Perbaikan AIDL interface binding untuk Android 13/14 pada custom ROM OEM (HyperOS, One UI, ColorOS).</span>
+                <span class="lang-en"><strong>AIDL Interface Binding:</strong> Resolved AIDL interface binding issues for Android 13/14 across OEM flavors (HyperOS, One UI, ColorOS).</span>
               </li>
               <li>
-                <span class="lang-id">Integrasi scanning VirusTotal otomatis di CI (0/72 Clean).</span>
-                <span class="lang-en">Automated VirusTotal CI verification pipeline integration (0/72 Clean).</span>
+                <span class="lang-id"><strong>Otomasi CI VirusTotal:</strong> Integrasi scanning VirusTotal otomatis di CI (0/72 Clean).</span>
+                <span class="lang-en"><strong>Automated VirusTotal CI:</strong> Automated VirusTotal CI verification pipeline integration (0/72 Clean).</span>
               </li>
             </ul>
           </div>
@@ -1264,16 +1243,16 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Migrasi ID paket dari app.overlayops ke app.appsperms.</span>
-                <span class="lang-en">Migrated application package ID from app.overlayops to app.appsperms.</span>
+                <span class="lang-id"><strong>Namespace Baru:</strong> Migrasi ID paket dari app.overlayops ke app.appsperms.</span>
+                <span class="lang-en"><strong>New Namespace:</strong> Migrated application package ID from app.overlayops to app.appsperms.</span>
               </li>
               <li>
-                <span class="lang-id">Penambahan fitur Backup &amp; Restore konfigurasi AppOps via clipboard.</span>
-                <span class="lang-en">Added clipboard-based plain-text AppOps Backup &amp; Restore.</span>
+                <span class="lang-id"><strong>Backup Clipboard:</strong> Penambahan fitur Backup &amp; Restore konfigurasi AppOps via clipboard.</span>
+                <span class="lang-en"><strong>Clipboard Backup:</strong> Added clipboard-based plain-text AppOps Backup &amp; Restore.</span>
               </li>
               <li>
-                <span class="lang-id">Dukungan bilingual penuh Bahasa Indonesia &amp; English di dalam aplikasi.</span>
-                <span class="lang-en">Added complete dual-language support (ID &amp; EN) in-app.</span>
+                <span class="lang-id"><strong>Bilingual In-App:</strong> Dukungan bilingual penuh Bahasa Indonesia &amp; English di dalam aplikasi.</span>
+                <span class="lang-en"><strong>In-App Bilingual:</strong> Added complete dual-language support (ID &amp; EN) in-app.</span>
               </li>
             </ul>
           </div>
@@ -1288,7 +1267,8 @@
             </div>
             <div class="version-downloads">
               <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener" class="v-dl-btn">
-                <span>Arsip Rilis</span>
+                <span class="lang-id">Arsip Rilis</span>
+                <span class="lang-en">Release Archive</span>
               </a>
             </div>
           </div>
@@ -1299,12 +1279,12 @@
             </div>
             <ul class="changelog-list">
               <li>
-                <span class="lang-id">Peluncuran perdana aplikasi manajemen AppOps modern via Shizuku tanpa root.</span>
-                <span class="lang-en">Initial launch of modern AppOps management on Android via Shizuku without root.</span>
+                <span class="lang-id"><strong>Peluncuran Perdana:</strong> Aplikasi manajemen AppOps modern via Shizuku tanpa root.</span>
+                <span class="lang-en"><strong>Initial Launch:</strong> Modern AppOps management on Android via Shizuku without root.</span>
               </li>
               <li>
-                <span class="lang-id">Penerapan arsitektur 0ms Optimistic UI untuk respon antarmuka instan tanpa jeda.</span>
-                <span class="lang-en">Implemented 0ms Optimistic UI architecture for instant lag-free toggle responsiveness.</span>
+                <span class="lang-id"><strong>0ms Optimistic UI:</strong> Penerapan arsitektur responsif instan tanpa jeda saat mengubah izin.</span>
+                <span class="lang-en"><strong>0ms Optimistic UI:</strong> Implemented zero-latency toggle responsiveness with automated rollback.</span>
               </li>
             </ul>
           </div>
@@ -1317,14 +1297,14 @@
     <section id="keamanan">
       <div class="sec-head section-with-art">
         <div class="section-heading">
-        <h2 class="sec-title">
-          <span class="lang-id">Audit Keamanan &amp; Verifikasi Hash</span>
-          <span class="lang-en">Security Audit &amp; Hash Verification</span>
-        </h2>
-        <p class="sec-sub">
-          <span class="lang-id">Transparan 100%. Tidak ada celah tersembunyi, tidak ada pelacak, dan dapat diverifikasi secara independen.</span>
-          <span class="lang-en">100% transparent. No hidden telemetry, no tracking, and fully auditable by third parties.</span>
-        </p>
+          <h2 class="sec-title">
+            <span class="lang-id">Audit Keamanan &amp; Verifikasi Hash</span>
+            <span class="lang-en">Security Audit &amp; Hash Verification</span>
+          </h2>
+          <p class="sec-sub">
+            <span class="lang-id">Transparan 100%. Tidak ada celah tersembunyi, tidak ada pelacak, dan dapat diverifikasi secara independen.</span>
+            <span class="lang-en">100% transparent. No hidden telemetry, no tracking, and fully auditable by third parties.</span>
+          </p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="security-report" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/security-report-320.webp 320w, images/illustrations/security-report-640.webp 640w, images/illustrations/security-report-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
@@ -1336,13 +1316,20 @@
         <div class="vt-score-wrap">
           <div class="vt-score" id="vtScore">0 / 72</div>
           <div>
-            <div class="vt-verdict-title" id="vtVerdict">100% Clean · No Security Vendors Flagged This File</div>
-            <div class="vt-verdict-desc" id="vtUpdated">Diperbarui otomatis oleh CI pada setiap rilis tag</div>
+            <div class="vt-verdict-title" id="vtVerdict">
+              <span class="lang-id">100% Bersih · Tidak Ada Vendor Keamanan yang Menandai Berkas Ini</span>
+              <span class="lang-en">100% Clean · No Security Vendors Flagged This File</span>
+            </div>
+            <div class="vt-verdict-desc" id="vtUpdated">
+              <span class="lang-id">Diperbarui otomatis oleh CI pada setiap rilis rilis tag</span>
+              <span class="lang-en">Automatically updated by CI on every tagged release</span>
+            </div>
           </div>
         </div>
         <div>
           <a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="v-dl-btn">
-            <span>Periksa Hasil VirusTotal &rarr;</span>
+            <span class="lang-id">Periksa Hasil VirusTotal &rarr;</span>
+            <span class="lang-en">Check VirusTotal Result &rarr;</span>
           </a>
         </div>
       </div>
@@ -1354,15 +1341,27 @@
             <td class="code" id="hashRelease">82a02caee27b8b9b09e700b8313dd4ade5cf9b946b01be6c54ec33984ab00430 <span id="hashWhen" style="color:var(--text-muted);">· v1.7.1</span></td>
           </tr>
           <tr>
-            <td class="label">Internet Permission</td>
-            <td class="code" style="color:var(--ok); font-weight:700;">Nol (0) di AndroidManifest.xml — Mutlak Offline</td>
+            <td class="label">
+              <span class="lang-id">Izin Internet</span>
+              <span class="lang-en">Internet Permission</span>
+            </td>
+            <td class="code" style="color:var(--ok); font-weight:700;">
+              <span class="lang-id">Nol (0) di AndroidManifest.xml — Mutlak Offline</span>
+              <span class="lang-en">Zero (0) in AndroidManifest.xml — 100% Offline</span>
+            </td>
           </tr>
           <tr>
-            <td class="label">Sertifikat Keystore</td>
+            <td class="label">
+              <span class="lang-id">Sertifikat Keystore</span>
+              <span class="lang-en">Keystore Certificate</span>
+            </td>
             <td class="code">RSA 4096-bit (CN=OverlayOps, OU=Release, O=xykalnotkel, C=ID)</td>
           </tr>
           <tr>
-            <td class="label">Lisensi Kode</td>
+            <td class="label">
+              <span class="lang-id">Lisensi Kode</span>
+              <span class="lang-en">Code License</span>
+            </td>
             <td class="code"><a href="https://github.com/xykalnotkel/OverlayOps/blob/main/LICENSE" target="_blank" rel="noopener">Apache License 2.0</a> (Open Source)</td>
           </tr>
         </tbody>
@@ -1408,8 +1407,8 @@
             <span class="lang-en">Install AppsPerms</span>
           </h4>
           <p>
-            <span class="lang-id">Unduh APK resmi AppsPerms melalui link <code>dl.xyverse.my.id</code> atau <code>dl.appsperms.xyverse.my.id</code> di atas, kemudian install pada perangkat Anda.</span>
-            <span class="lang-en">Download official AppsPerms APK via <code>dl.xyverse.my.id</code> or <code>dl.appsperms.xyverse.my.id</code>, then install it on your device.</span>
+            <span class="lang-id">Unduh APK resmi AppsPerms melalui link <code>dl.appsperms.xyverse.my.id</code> di atas, kemudian pasang pada perangkat Anda.</span>
+            <span class="lang-en">Download official AppsPerms APK via <code>dl.appsperms.xyverse.my.id</code> above, then install it on your device.</span>
           </p>
         </div>
 
@@ -1423,70 +1422,136 @@
             <span class="lang-en">Grant Permissions</span>
           </h4>
           <p>
-            <span class="lang-id">Buka AppsPerms, ketuk tombol <strong>Minta izin</strong> pada banner atas, lalu pilih <em>"Izinkan selalu"</em>. Seluruh izin dan fitur tuning siap digunakan.</span>
+            <span class="lang-id">Buka AppsPerms, ketuk tombol <strong>Minta izin</strong> pada banner atas, lalu pilih <em>"Izinkan selalu"</em>. Seluruh fitur siap digunakan.</span>
             <span class="lang-en">Launch AppsPerms, tap <strong>Request permission</strong> on the connection card, then select <em>"Allow all the time"</em>. All features are instantly unlocked.</span>
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Native details remain usable without scripts; search is progressive enhancement. -->
+    <!-- FAQ Section -->
     <section id="faq" aria-labelledby="faq-title">
       <div class="sec-head section-with-art">
         <div class="section-heading">
-          <h2 class="sec-title" id="faq-title"><span class="lang-id">Pertanyaan yang sering ditanya</span><span class="lang-en">Frequently asked questions</span></h2>
-          <p class="sec-sub"><span class="lang-id">Kenali izin, unduhan, dan penggunaan AppsPerms sebelum mulai.</span><span class="lang-en">Get familiar with permissions, downloads, and using AppsPerms.</span></p>
+          <h2 class="sec-title" id="faq-title">
+            <span class="lang-id">Pertanyaan yang Sering Diajukan</span>
+            <span class="lang-en">Frequently Asked Questions</span>
+          </h2>
+          <p class="sec-sub">
+            <span class="lang-id">Kenali izin, unduhan, dan penggunaan AppsPerms sebelum mulai.</span>
+            <span class="lang-en">Get familiar with permissions, downloads, and using AppsPerms.</span>
+          </p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="faq" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/faq-320.webp 320w, images/illustrations/faq-640.webp 640w, images/illustrations/faq-960.webp 960w" sizes="(min-width: 640px) 144px, 96px">
           <img src="images/illustrations/faq.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
+
       <div class="faq-tools" id="faq-tools" hidden>
         <picture class="paper-illustration search-art" data-illustration="search" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="(min-width: 640px) 76px, 52px">
           <img src="images/illustrations/search.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <div class="faq-search-wrap">
-          <label for="faq-search"><span class="lang-id">Cari jawaban (misalnya Shizuku atau pembaruan)</span><span class="lang-en">Find an answer (try Shizuku or updates)</span></label>
+          <label for="faq-search">
+            <span class="lang-id">Cari jawaban (misalnya Shizuku atau pembaruan)</span>
+            <span class="lang-en">Find an answer (try Shizuku or updates)</span>
+          </label>
           <input id="faq-search" type="search" autocomplete="off" enterkeyhint="search" aria-controls="faq-list" aria-describedby="faq-status">
         </div>
       </div>
-      <p class="faq-status" id="faq-status" role="status" aria-live="polite" aria-atomic="true"><span class="lang-id" id="faq-count-id">6 jawaban</span><span class="lang-en" id="faq-count-en">6 answers</span></p>
+
+      <p class="faq-status" id="faq-status" role="status" aria-live="polite" aria-atomic="true">
+        <span class="lang-id" id="faq-count-id">6 jawaban</span>
+        <span class="lang-en" id="faq-count-en">6 answers</span>
+      </p>
+
       <div id="faq-list">
         <details class="faq-item">
-          <summary><span class="lang-id">Apa AppsPerms harus memakai root?</span><span class="lang-en">Does AppsPerms require root?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Tidak selalu. AppsPerms memakai Shizuku yang dapat dijalankan lewat ADB / Wireless Debugging pada perangkat yang mendukungnya, atau lewat root. Sambungkan Shizuku dan berikan akses sebelum mengubah AppOps.</span><span class="lang-en">Not necessarily. AppsPerms uses Shizuku, which can run through ADB / Wireless Debugging on supported devices, or through root. Start Shizuku and grant access before changing AppOps.</span></p>
+          <summary>
+            <span class="lang-id">Apakah AppsPerms membutuhkan akses root?</span>
+            <span class="lang-en">Does AppsPerms require root access?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">Tidak harus. AppsPerms memanfaatkan Shizuku yang dapat dijalankan lewat Wireless Debugging / ADB pada Android 11+ tanpa PC dan tanpa root. Jika HP kamu sudah di-root, Shizuku juga bisa dijalankan via root.</span>
+            <span class="lang-en">Not necessarily. AppsPerms uses Shizuku, which can run through Wireless Debugging / ADB on Android 11+ without a PC and without root. If your device is rooted, Shizuku can also start via root mode.</span>
+          </p>
         </details>
+
         <details class="faq-item">
-          <summary><span class="lang-id">Mengapa aplikasi meminta akses Shizuku?</span><span class="lang-en">Why does the app request Shizuku access?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Membaca dan mengubah AppOps membutuhkan hak akses sistem yang tidak dimiliki aplikasi biasa. Izinkan hanya aplikasi yang kamu percayai, dan baca penjelasan sebelum memakai mode berisiko.</span><span class="lang-en">Reading and changing AppOps requires privileges that ordinary apps do not have. Only authorize apps you trust, and read the explanation before using risky modes.</span></p>
+          <summary>
+            <span class="lang-id">Mengapa AppsPerms membutuhkan akses Shizuku?</span>
+            <span class="lang-en">Why does AppsPerms need Shizuku access?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">Membaca dan mengubah status AppOps tersembunyi memerlukan hak akses sistem istimewa (UID 2000 shell). Shizuku menyediakan jembatan aman untuk eksekusi API sistem tersebut tanpa merusak integritas Android.</span>
+            <span class="lang-en">Reading and modifying hidden AppOps requires privileged system permissions (UID 2000 shell). Shizuku provides a secure bridge to execute system APIs without compromising Android system integrity.</span>
+          </p>
         </details>
+
         <details class="faq-item">
-          <summary><span class="lang-id">Apakah aplikasi memakai internet?</span><span class="lang-en">Does the app use the internet?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Manifest AppsPerms tidak meminta izin INTERNET. Ilustrasi di aplikasi juga dibundel secara lokal. Tautan website, bantuan, dan rilis dibuka di browser eksternal, yang dapat memakai koneksi internetnya sendiri.</span><span class="lang-en">AppsPerms does not request the INTERNET permission. In-app illustrations are bundled locally too. Website, help, and release links open in an external browser, which may use its own internet connection.</span></p>
+          <summary>
+            <span class="lang-id">Apakah data saya aman dan tanpa koneksi internet?</span>
+            <span class="lang-en">Is my data secure and completely offline?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">AppsPerms memiliki nol (0) izin INTERNET di AndroidManifest.xml. Secara teknis, aplikasi ini mustahil mengirim data ke luar perangkat. Semua konfigurasi tersimpan lokal.</span>
+            <span class="lang-en">AppsPerms declares zero (0) INTERNET permissions in AndroidManifest.xml. It is technically impossible for the app to send data off your device. All configurations remain strictly local.</span>
+          </p>
         </details>
+
         <details class="faq-item">
-          <summary><span class="lang-id">Bagaimana memeriksa keamanan APK?</span><span class="lang-en">How do I check APK security?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Unduh dari sumber resmi, bandingkan SHA-256, dan buka laporan VirusTotal untuk berkas tersebut pada bagian <a href="#keamanan">Audit Keamanan</a>. Hasil scan adalah laporan pada waktu tertentu, bukan jaminan keamanan mutlak. Ilustrasi perisai bukan laporan scan.</span><span class="lang-en">Download from an official source, compare the SHA-256, and open the report for that file in the <a href="#keamanan">Security Audit</a> section. A scan is a point-in-time report, not a guarantee of safety. The shield illustration is not a scan report.</span></p>
+          <summary>
+            <span class="lang-id">Bagaimana cara verifikasi keaslian APK?</span>
+            <span class="lang-en">How do I verify the authenticity of the APK?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">Unduh APK dari link resmi dl.appsperms.xyverse.my.id, cocokkan nilai SHA-256 berkas dengan laporan audit pada bagian Keamanan di atas. Kamu juga bisa mengunggah berkas APK ke VirusTotal secara mandiri.</span>
+            <span class="lang-en">Download the APK from the official dl.appsperms.xyverse.my.id link, then compare its SHA-256 hash with the Security audit table above. You can also independently submit the file to VirusTotal.</span>
+          </p>
         </details>
+
         <details class="faq-item">
-          <summary><span class="lang-id">Bagaimana memperbarui atau mencari versi lama?</span><span class="lang-en">How do I update or find an older version?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Gunakan bagian <a href="#semua-versi">Semua Versi</a> atau GitHub Releases. Baca catatan perubahan dan cadangkan konfigurasi sebelum mengganti versi. Saat pindah dari paket lama OverlayOps ke AppsPerms, ikuti petunjuk migrasi pada rilis.</span><span class="lang-en">Use <a href="#semua-versi">All Versions</a> or GitHub Releases. Read the release notes and back up your configuration before changing versions. When moving from the old OverlayOps package to AppsPerms, follow the migration notes in the release.</span></p>
+          <summary>
+            <span class="lang-id">Bagaimana cara migrasi dari OverlayOps ke AppsPerms?</span>
+            <span class="lang-en">How do I migrate from OverlayOps to AppsPerms?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">Karena ID paket berubah dari app.overlayops menjadi app.appsperms, uninstall aplikasi lama terlebih dahulu, pasang versi AppsPerms baru, lalu setujui izin Shizuku sekali lagi. Konfigurasi dapat dipindahkan via fitur Backup &amp; Restore.</span>
+            <span class="lang-en">Because the package ID changed from app.overlayops to app.appsperms, uninstall the old app first, install the new AppsPerms build, and grant Shizuku permission once again. You can transfer settings via Backup &amp; Restore.</span>
+          </p>
         </details>
+
         <details class="faq-item">
-          <summary><span class="lang-id">Kenapa pencarian atau daftar aplikasi kosong?</span><span class="lang-en">Why are search results or the app list empty?</span></summary>
-          <p class="faq-answer"><span class="lang-id">Periksa status Shizuku dan izinnya, hapus kata kunci pencarian, lalu longgarkan filter tipe atau status. Coba tab Semua app dan muat ulang. Jika masih bermasalah, sertakan laporan perangkat saat membuat issue tanpa membagikan data pribadi.</span><span class="lang-en">Check the Shizuku connection and authorization, clear your search query, and loosen the type or status filters. Try the All apps tab and refresh. If it persists, attach a device report to an issue without sharing private data.</span></p>
+          <summary>
+            <span class="lang-id">Kenapa daftar aplikasi atau pencarian kosong?</span>
+            <span class="lang-en">Why is the application list or search empty?</span>
+          </summary>
+          <p class="faq-answer">
+            <span class="lang-id">Pastikan Shizuku sedang aktif dan izin AppsPerms sudah disetujui. Coba ketuk tombol refresh atau bersihkan filter pencarian. Pada ROM OEM tertentu (One UI / HyperOS), pastikan tidak ada profil yang terisolasi tanpa izin.</span>
+            <span class="lang-en">Ensure Shizuku is currently running and authorized. Tap the refresh button or clear search filters. On certain OEM skins (One UI / HyperOS), verify there are no restricted user profiles blocking app enumeration.</span>
+          </p>
         </details>
       </div>
+
       <div class="faq-empty" id="faq-empty" hidden>
         <picture class="paper-illustration empty-art" data-illustration="empty-404" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/empty-404-320.webp 320w, images/illustrations/empty-404-640.webp 640w, images/illustrations/empty-404-960.webp 960w" sizes="160px">
           <img src="images/illustrations/empty-404.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
-        <h3><span class="lang-id">Belum ketemu jawabannya</span><span class="lang-en">No matching answers yet</span></h3>
-        <p><span class="lang-id">Coba kata kunci yang lebih singkat, atau tampilkan semua pertanyaan.</span><span class="lang-en">Try a shorter keyword, or show all questions.</span></p>
-        <button class="illustration-link" id="faq-reset" type="button"><span class="lang-id">Tampilkan semua FAQ</span><span class="lang-en">Show all questions</span></button>
+        <h3>
+          <span class="lang-id">Belum ketemu jawabannya</span>
+          <span class="lang-en">No matching answers found</span>
+        </h3>
+        <p>
+          <span class="lang-id">Coba gunakan kata kunci pencarian yang lebih singkat, atau tampilkan semua pertanyaan.</span>
+          <span class="lang-en">Try a shorter keyword, or reset the search to view all questions.</span>
+        </p>
+        <button class="illustration-link" id="faq-reset" type="button">
+          <span class="lang-id">Tampilkan semua FAQ</span>
+          <span class="lang-en">Show all questions</span>
+        </button>
       </div>
     </section>
 
@@ -1655,25 +1720,45 @@
       });
     })();
 
-    /* ===== Native Download & Redirect to Thanks ===== */
+    /* ===== Seamless APK Download & Instant Thanks Navigation ===== */
     (function () {
-      var CURRENT_VERSION = '1.7.1';
+      var RELEASE_URL = 'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk';
+      var DEBUG_URL = 'https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk';
 
-      ['btnRelease', 'btnDebug'].forEach(function (id) {
-        var a = document.getElementById(id);
-        if (!a) return;
-        a.addEventListener('click', function () {
-          var variant = a.getAttribute('data-variant') || 'release';
-          var hint = document.getElementById('dlHint');
-          if (hint) {
-            hint.textContent = 'Unduhan dimulai ✓ — membawa kamu ke halaman terima kasih…';
-            hint.classList.add('show');
-          }
-          setTimeout(function () {
-            window.location.href = 'thanks.html?v=' + encodeURIComponent(CURRENT_VERSION) + '&var=' + encodeURIComponent(variant);
-          }, 700);
+      function triggerDownloadAndThanks(e, variant) {
+        if (e) e.preventDefault();
+        var downloadUrl = (variant === 'debug') ? DEBUG_URL : RELEASE_URL;
+
+        // Trigger download via hidden iframe
+        var ifr = document.createElement('iframe');
+        ifr.style.display = 'none';
+        ifr.src = downloadUrl;
+        document.body.appendChild(ifr);
+
+        var hint = document.getElementById('dlHint');
+        if (hint) {
+          hint.classList.add('show');
+        }
+
+        // Navigate to thanks page in the same tab
+        setTimeout(function () {
+          window.location.href = 'thanks?v=1.7.1&var=' + encodeURIComponent(variant);
+        }, 400);
+      }
+
+      var btnRel = document.getElementById('btnRelease');
+      if (btnRel) {
+        btnRel.addEventListener('click', function (e) {
+          triggerDownloadAndThanks(e, 'release');
         });
-      });
+      }
+
+      var btnDbg = document.getElementById('btnDebug');
+      if (btnDbg) {
+        btnDbg.addEventListener('click', function (e) {
+          triggerDownloadAndThanks(e, 'debug');
+        });
+      }
 
       /* Live VirusTotal & Hash Fetching from CI */
       fetch('data/virustotal.json', { cache: 'no-store' }).then(function (r) {
@@ -1681,17 +1766,14 @@
       }).then(function (d) {
         if (!d) return;
         if (d.version) {
-          CURRENT_VERSION = d.version;
           var hb = document.getElementById('heroVerBadge');
           if (hb) hb.textContent = 'v' + d.version;
           var hs = document.getElementById('hashWhen');
           if (hs) hs.textContent = '· v' + d.version;
         }
-        if (d.release) {
-          if (d.release.sha256) {
-            var hr = document.getElementById('hashRelease');
-            if (hr) hr.innerHTML = d.release.sha256 + ' <span style="color:var(--text-muted);" id="hashWhen">· v' + (d.version || CURRENT_VERSION) + '</span>';
-          }
+        if (d.release && d.release.sha256) {
+          var hr = document.getElementById('hashRelease');
+          if (hr) hr.innerHTML = d.release.sha256 + ' <span style="color:var(--text-muted);" id="hashWhen">· v' + (d.version || '1.7.1') + '</span>';
         }
         var vt = d.virustotal || {};
         if (vt.checked) {
@@ -1699,12 +1781,10 @@
           if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
           var pl = document.getElementById('vtPillText');
           if (pl) pl.textContent = vt.detected + '/' + vt.total + ' Clean di VirusTotal';
-          var vd = document.getElementById('vtVerdict');
-          if (vd) vd.textContent = (vt.detected === 0 ? '100% Clean · No Security Vendors Flagged This File' : vt.detected + ' vendor menandai — cek link sebelum install');
           var lk = document.getElementById('vtLink');
           if (lk && vt.permalink) lk.href = vt.permalink;
           var up = document.getElementById('vtUpdated');
-          if (up) up.textContent = 'Diperbarui otomatis oleh CI · ' + (d.updated_utc || '?') + ' UTC · rilis v' + (d.version || CURRENT_VERSION);
+          if (up) up.innerHTML = '<span class="lang-id">Diperbarui otomatis oleh CI · rilis v' + (d.version || '1.7.1') + '</span><span class="lang-en">Automatically updated by CI · release v' + (d.version || '1.7.1') + '</span>';
         }
       }).catch(function () {});
     })();
