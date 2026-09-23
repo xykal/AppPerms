@@ -246,3 +246,21 @@
 - XyVerse Rules Enforcer: Success (Aturan anti-emoji 100%, secrets bersih, dan standar XyVerse terpenuhi)
 - Illustration & Web Checks: Success (12 unit test validasi ilustrasi lulus 100%)
 - Deploy Cloudflare Pages: Success (Website appsperms.xyverse.my.id terbarui)
+
+### 2026-09-23 - Web Changelogs, Version Sharing & Open Graph Card Overhaul
+**Status:** Done
+**Dikerjain oleh:** AI Agent + xykalnotkel
+
+**Yang dikerjain:**
+- Membuat kartu Open Graph (og-cover.png) 1200x630 baru berestetika matte dark pekat ("solid deep dark", 0% neon) dengan logo vektor AppsPerms, badge status 0/64 Clean VirusTotal, 0 Izin Internet, Tanpa Iklan, domain appsperms.xyverse.my.id, dan branding resmi "Built-in XyVerse by Kall".
+- Menambahkan Open Graph dan Twitter Card meta tags pada docs/thanks.html dan menyempurnakan meta tags di docs/index.html.
+- Merancang dan mengimplementasikan grid direktori versi ringkas (Version Directory) di web lengkap dengan tombol "Changelog & APK" dan tombol "Bagikan" untuk tiap rilis.
+- Menyusun catatan perubahan (changelog) komprehensif berstruktur kategori standar ("Apa yang Baru", "Apa yang Diubah", "Apa yang Diperbaiki", "Detail Teknis & Integritas") untuk seluruh versi (v1.7.1, v1.7.0, v1.6.0, v1.5.0, v1.4.2, v1.3.0, v1.0.0).
+- Mengintegrasikan tombol salin tautan versi mandiri (Share Version), permalink anchor (#v171, #v170, dst.), hash deep-linking router di JavaScript, dan floating toast feedback visual saat tautan disalin.
+- Memverifikasi 0% emoji dan 12 unit test illustrations lolos 100%.
+
+**File yang diubah:**
+- docs/images/og-cover.png -> kartu OG image baru beresolusi 1200x630 matte dark
+- docs/index.html -> daftar versi interaktif, tombol share, changelog terstruktur, toast
+- docs/thanks.html -> Open Graph meta tags lengkap
+- PROGRESS.md -> catatan kemajuan pengembangan
