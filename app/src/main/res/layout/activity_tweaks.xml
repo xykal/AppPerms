@@ -40,7 +40,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tweaks_display_title"
+                    android:text="@string/tweaks_display"
                     android:textColor="@color/brand"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:minHeight="44dp"
-                        android:text="@string/tweaks_btn_change"
+                        android:text="@string/tweaks_size_change"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -81,7 +81,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:minHeight="44dp"
-                        android:text="@string/tweaks_btn_reset"
+                        android:text="@string/tweaks_reset"
                         app:cornerRadius="8dp" />
                 </LinearLayout>
             </LinearLayout>
@@ -98,7 +98,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tweaks_anim_title"
+                    android:text="@string/tweaks_anim"
                     android:textColor="@color/brand"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -193,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:minHeight="42dp"
-                        android:text="@string/tweaks_snapshot_save"
+                        android:text="@string/snapshot_save"
                         app:cornerRadius="8dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -204,7 +204,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:minHeight="42dp"
-                        android:text="@string/tweaks_snapshot_restore"
+                        android:text="@string/snapshot_restore"
                         app:cornerRadius="8dp" />
                 </LinearLayout>
 
@@ -215,7 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:minHeight="42dp"
-                    android:text="@string/tweaks_diag_button"
+                    android:text="@string/tweak_diagnostics"
                     app:cornerRadius="8dp" />
             </LinearLayout>
 

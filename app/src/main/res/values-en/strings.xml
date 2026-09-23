@@ -450,4 +450,21 @@ Examples:
     <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Work Automation</string>
     <string name="about_xycloud">• XyCloudStore — Marketplace &amp; Digital Store</string>
     <string name="about_faq">Guide &amp; FAQ (browser)</string>
+    <string name="history_btn_undo">Undo All</string>
+    <string name="history_btn_copy">Copy</string>
+    <string name="history_btn_clear">Clear</string>
+    <string name="settings_lang_title">Display Language</string>
+    <string name="settings_lang_desc">Choose AppsPerms application interface language</string>
+    <string name="settings_risk_title">Confirm Risky Modes</string>
+    <string name="settings_risk_desc">Show confirmation dialog before applying modes that may affect stability</string>
+    <string name="settings_uid_title">Shared UID Warning</string>
+    <string name="settings_uid_desc">Warn when an application shares its UID with other packages</string>
+    <string name="settings_sort_title">Default Sort Order</string>
+    <string name="settings_sort_desc">Default application order applied on startup</string>
+    <string name="term_copy_output">Copy terminal output</string>
+    <string name="term_clear_label">Clear terminal</string>
+    <string name="term_input_hint">Type shell command (e.g. pm list packages)…</string>
+    <string name="tweaks_reading">Reading display state…</string>
+    <string name="tweaks_snapshot_title">Safe State Snapshot</string>
+    <string name="tweaks_snapshot_body">Save current resolution and animation scales to quickly restore if display issues occur.</string>
 </resources>

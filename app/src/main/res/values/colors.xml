@@ -3,6 +3,8 @@
     <color name="bg">#0F1115</color>
     <color name="surface">#171A21</color>
     <color name="surface_2">#1F232C</color>
+    <color name="surface_container">#1A1E26</color>
+    <color name="surface_container_low">#14171E</color>
     <color name="brand">#FFB020</color>
     <color name="brand_dark">#C97F00</color>
     <color name="brand_container">#3A2C0C</color>

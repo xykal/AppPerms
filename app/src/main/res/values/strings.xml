@@ -451,4 +451,21 @@ Contoh:
     <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Otomasi Kerja</string>
     <string name="about_xycloud">• XyCloudStore — Marketplace &amp; Toko Digital</string>
     <string name="about_faq">Panduan &amp; FAQ (browser)</string>
+    <string name="history_btn_undo">Undo Semua</string>
+    <string name="history_btn_copy">Salin</string>
+    <string name="history_btn_clear">Bersihkan</string>
+    <string name="settings_lang_title">Bahasa Tampilan</string>
+    <string name="settings_lang_desc">Pilih bahasa antarmuka aplikasi AppsPerms</string>
+    <string name="settings_risk_title">Konfirmasi Mode Berisiko</string>
+    <string name="settings_risk_desc">Tampilkan dialog konfirmasi sebelum menerapkan mode yang dapat mempengaruhi kestabilan</string>
+    <string name="settings_uid_title">Peringatan Shared UID</string>
+    <string name="settings_uid_desc">Peringatkan bila aplikasi berbagi UID dengan aplikasi lain</string>
+    <string name="settings_sort_title">Pengurutan Daftar Default</string>
+    <string name="settings_sort_desc">Urutan aplikasi yang diterapkan saat aplikasi dibuka</string>
+    <string name="term_copy_output">Salin output terminal</string>
+    <string name="term_clear_label">Bersihkan terminal</string>
+    <string name="term_input_hint">Ketik perintah shell (mis: pm list packages)…</string>
+    <string name="tweaks_reading">Membaca status…</string>
+    <string name="tweaks_snapshot_title">Snapshot Kondisi Aman</string>
+    <string name="tweaks_snapshot_body">Simpan konfigurasi resolusi dan skala animasi saat ini untuk dipulihkan kapan saja bila tampilan bermasalah.</string>
 </resources>
