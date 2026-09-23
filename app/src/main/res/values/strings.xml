@@ -468,4 +468,6 @@ Contoh:
     <string name="tweaks_reading">Membaca status…</string>
     <string name="tweaks_snapshot_title">Snapshot Kondisi Aman</string>
     <string name="tweaks_snapshot_body">Simpan konfigurasi resolusi dan skala animasi saat ini untuk dipulihkan kapan saja bila tampilan bermasalah.</string>
+    <string name="history_clear_confirm">Hapus semua catatan riwayat perubahan?</string>
+    <string name="history_undo_confirm">Kembalikan %1$d perubahan ke status awal?</string>
 </resources>

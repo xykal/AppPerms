@@ -120,7 +120,7 @@ class HistoryActivity : AppCompatActivity() {
             }
             val clip = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clip.setPrimaryClip(ClipData.newPlainText("history_report", text))
-            Snackbar.make(binding.root, R.string.history_copied, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, getString(R.string.copied, "riwayat"), Snackbar.LENGTH_SHORT).show()
         }
 
         binding.btnHistoryClear.setOnClickListener {
@@ -128,7 +128,7 @@ class HistoryActivity : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.history_btn_clear)
                 .setMessage(R.string.history_clear_confirm)
-                .setPositiveButton(R.string.dialog_clear) { _, _ ->
+                .setPositiveButton(R.string.history_clear) { _, _ ->
                     ioExecutor.execute {
                         store.clear()
                         runOnUiThread {
@@ -144,7 +144,7 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun confirmUndo(plan: List<HistoryLine>) {
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.history_undo_title)
+            .setTitle(R.string.history_undo_all)
             .setMessage(getString(R.string.history_undo_confirm, plan.size))
             .setPositiveButton(R.string.dialog_apply) { _, _ ->
                 binding.btnHistoryUndo.isEnabled = false
@@ -153,13 +153,18 @@ class HistoryActivity : AppCompatActivity() {
                     var applied = 0
                     var skipped = 0
                     for (item in plan) {
-                        val current = AppOpsBridge.getOp(item.pkg, item.op)
-                        if (current == item.from) {
+                        try {
+                            val uid = packageManager.getPackageUid(item.pkg, 0)
+                            val current = AppOpsBridge.getStatus(item.op, uid, item.pkg)
+                            if (current == item.from) {
+                                skipped++
+                                continue
+                            }
+                            val err = AppOpsBridge.setStatus(item.op, uid, item.pkg, item.from.mode)
+                            if (err == null) applied++ else skipped++
+                        } catch (_: Exception) {
                             skipped++
-                            continue
                         }
-                        val err = AppOpsBridge.setOp(item.pkg, item.op, item.from)
-                        if (err == null) applied++ else skipped++
                     }
                     store.clear()
                     runOnUiThread {
@@ -173,12 +178,8 @@ class HistoryActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun statusArrow(status: OpStatus): String = when (status) {
-        OpStatus.ALLOWED -> getString(R.string.status_allowed)
-        OpStatus.ERRORED -> getString(R.string.status_errored)
-        OpStatus.IGNORED -> getString(R.string.status_ignored)
-        OpStatus.DEFAULT -> getString(R.string.status_default)
-    }
+    private fun statusArrow(status: OpStatus): String =
+        getString(status.labelRes)
 
     private fun dp(value: Int): Int =
         (value * resources.displayMetrics.density).toInt()

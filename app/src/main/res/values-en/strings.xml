@@ -467,4 +467,6 @@ Examples:
     <string name="tweaks_reading">Reading display state…</string>
     <string name="tweaks_snapshot_title">Safe State Snapshot</string>
     <string name="tweaks_snapshot_body">Save current resolution and animation scales to quickly restore if display issues occur.</string>
+    <string name="history_clear_confirm">Clear all change history records?</string>
+    <string name="history_undo_confirm">Revert %1$d changes to initial status?</string>
 </resources>
