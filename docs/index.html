@@ -394,6 +394,125 @@
     }
 
     /* ===== "Semua Versi" Tabs Component ===== */
+    .version-directory {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .version-dir-card {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+    .version-dir-card:hover {
+      border-color: var(--outline-light);
+      transform: translateY(-2px);
+    }
+    .version-dir-card.latest {
+      border-color: rgba(229, 152, 0, 0.45);
+      background: linear-gradient(180deg, rgba(229, 152, 0, 0.04) 0%, var(--surface) 100%);
+    }
+    .version-dir-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .version-dir-num {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .version-dir-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .version-dir-summary {
+      font-size: 0.84rem;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+    .version-dir-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .version-dir-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      border: 1px solid var(--outline-light);
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .version-dir-btn:hover {
+      background: var(--surface-3);
+      border-color: var(--brand);
+      color: var(--brand);
+      text-decoration: none;
+    }
+    .version-dir-btn.primary {
+      background: var(--brand);
+      color: #0A0C10;
+      border-color: var(--brand-dark);
+    }
+    .version-dir-btn.primary:hover {
+      background: #F0A515;
+      color: #0A0C10;
+    }
+    .version-anchor-link {
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--brand);
+      text-decoration: none;
+      background: rgba(229, 152, 0, 0.08);
+      border: 1px solid rgba(229, 152, 0, 0.25);
+      padding: 2px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .version-anchor-link:hover {
+      background: rgba(229, 152, 0, 0.2);
+      border-color: var(--brand);
+      text-decoration: none;
+    }
+    .v-share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--surface-2);
+      border: 1px solid var(--outline-light);
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .v-share-btn:hover {
+      background: var(--surface-3);
+      border-color: var(--brand);
+      color: var(--brand);
+    }
     .versions-container {
       background: var(--surface);
       border: 1px solid var(--outline);
@@ -509,20 +628,53 @@
     }
     .changelog-category {
       margin-top: 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--outline);
+      border-radius: 10px;
+      padding: 14px 16px;
     }
     .changelog-category-title {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 700;
-      color: var(--brand);
-      margin-bottom: 8px;
+      color: var(--text);
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+    .changelog-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .changelog-badge.new {
+      background: rgba(61, 220, 132, 0.12);
+      color: var(--ok);
+      border: 1px solid rgba(61, 220, 132, 0.3);
+    }
+    .changelog-badge.changed {
+      background: rgba(229, 152, 0, 0.12);
+      color: var(--brand);
+      border: 1px solid rgba(229, 152, 0, 0.3);
+    }
+    .changelog-badge.fixed {
+      background: rgba(87, 160, 255, 0.12);
+      color: #57A0FF;
+      border: 1px solid rgba(87, 160, 255, 0.3);
+    }
+    .changelog-badge.tech {
+      background: rgba(192, 132, 252, 0.12);
+      color: #C084FC;
+      border: 1px solid rgba(192, 132, 252, 0.3);
     }
     .changelog-list {
       list-style: none;
       padding: 0;
-      margin: 0 0 14px;
+      margin: 0;
     }
     .changelog-list li {
       position: relative;
@@ -539,6 +691,72 @@
       color: var(--brand);
       font-size: 1.1rem;
       line-height: 1;
+    }
+    .version-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .version-spec-card {
+      min-width: 0;
+      background: var(--surface-3);
+      border: 1px solid var(--outline);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .version-spec-card .k {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .version-spec-card .v {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      word-break: break-all;
+      overflow-wrap: anywhere;
+    }
+    .version-spec-card .v.mono {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--brand);
+      word-break: break-all;
+      overflow-wrap: anywhere;
+    }
+    .version-spec-card .v.ok {
+      color: var(--ok);
+    }
+    .share-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #181C23;
+      color: #ECEFF4;
+      border: 1px solid #2A313E;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .share-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
     /* ===== Security & VirusTotal Section ===== */
