@@ -266,7 +266,7 @@
 - PROGRESS.md -> catatan kemajuan pengembangan
 
 ### 2026-09-23 - Version Bump v1.7.2 & Official Release Rollout
-**Status:** In Progress / Releasing
+**Status:** Done / Published
 **Dikerjain oleh:** AI Agent + xykalnotkel
 
 **Yang dikerjain:**
@@ -276,6 +276,10 @@
 - Merender ulang kartu Open Graph (docs/images/og-cover.png) dengan label pill v1.7.2.
 - Memperbarui badge versi di README.md.
 - Membuat tag git v1.7.2 dan memicu workflow CI/CD otomatis untuk membangun APK release, scan VirusTotal, dan mempublikasikan rilis resmi di GitHub Releases.
+- Audit VirusTotal v1.7.2 resmi: 0/67 Clean (100% aman).
+- SHA-256 Release Build v1.7.2: `60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a`.
+- SHA-256 Debug Build v1.7.2: `ce03c429a52dfd8c016b05024767231c3b383f0ec5cb0c3a46f0cd613efd6392`.
+- Publikasi website live ke Cloudflare Pages (appsperms.xyverse.my.id) berhasil sukses.
 
 **File yang diubah:**
 - app/build.gradle.kts -> versionCode 12, versionName "1.7.2"
