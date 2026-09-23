@@ -264,3 +264,24 @@
 - docs/index.html -> daftar versi interaktif, tombol share, changelog terstruktur, toast
 - docs/thanks.html -> Open Graph meta tags lengkap
 - PROGRESS.md -> catatan kemajuan pengembangan
+
+### 2026-09-23 - Version Bump v1.7.2 & Official Release Rollout
+**Status:** In Progress / Releasing
+**Dikerjain oleh:** AI Agent + xykalnotkel
+
+**Yang dikerjain:**
+- Menaikkan versi aplikasi menjadi v1.7.2 (versionCode 12, versionName "1.7.2") di app/build.gradle.kts sesuai standar SemVer profesional.
+- Memperbarui rute unduhan langsung di docs/_redirects ke target v1.7.2 (AppsPerms-1.7.2-release.apk).
+- Mengintegrasikan panel tab dan direktori versi v1.7.2 di website docs/index.html serta memperbarui fallback version di docs/thanks.html.
+- Merender ulang kartu Open Graph (docs/images/og-cover.png) dengan label pill v1.7.2.
+- Memperbarui badge versi di README.md.
+- Membuat tag git v1.7.2 dan memicu workflow CI/CD otomatis untuk membangun APK release, scan VirusTotal, dan mempublikasikan rilis resmi di GitHub Releases.
+
+**File yang diubah:**
+- app/build.gradle.kts -> versionCode 12, versionName "1.7.2"
+- docs/_redirects -> rute APK v1.7.2
+- docs/images/og-cover.png -> kartu OG v1.7.2
+- docs/index.html -> tab dan entri rilis v1.7.2
+- docs/thanks.html -> referensi v1.7.2
+- README.md -> badge v1.7.2
+- PROGRESS.md -> catatan kemajuan v1.7.2

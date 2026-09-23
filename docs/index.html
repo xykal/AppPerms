@@ -1034,7 +1034,7 @@
           <span class="dot"></span>
           <span>Built-in XyVerse by Kall</span>
           <span style="opacity:0.3;">|</span>
-          <span id="heroVerBadge">v1.7.1</span>
+          <span id="heroVerBadge">v1.7.2</span>
         </div>
 
         <h1 class="hero-title">
@@ -1231,24 +1231,46 @@
 
       <!-- Version Quick Directory & Share Cards -->
       <div class="version-directory">
-        <!-- v1.7.1 Card -->
+        <!-- v1.7.2 Card -->
         <div class="version-dir-card latest">
           <div class="version-dir-head">
-            <span class="version-dir-num">v1.7.1</span>
+            <span class="version-dir-num">v1.7.2</span>
             <span class="version-badge-status">
               <span class="lang-id">Terbaru · Stabil</span>
               <span class="lang-en">Latest · Stable</span>
             </span>
-            <span class="version-dir-date">22 Sep 2026</span>
+            <span class="version-dir-date">23 Sep 2026</span>
           </div>
           <p class="version-dir-summary">
             <span class="lang-id">5 layar Activity mandiri penuh, carousel logo asli ekosistem XyVerse, 17 ikon Material 3 modern, dan perbaikan resource linking.</span>
             <span class="lang-en">5 dedicated full Activity screens, official XyVerse ecosystem logo carousel, 17 modern Material 3 icons, and resource linking fixes.</span>
           </p>
           <div class="version-dir-actions">
-            <button type="button" class="version-dir-btn primary" data-jump="v171">
+            <button type="button" class="version-dir-btn primary" data-jump="v172">
               <span class="lang-id">Changelog &amp; APK</span>
               <span class="lang-en">Changelog &amp; APK</span>
+            </button>
+            <button type="button" class="version-dir-btn version-dir-share" data-share="v172" title="Bagikan versi v1.7.2">
+              <span class="lang-id">Bagikan</span>
+              <span class="lang-en">Share</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- v1.7.1 Card -->
+        <div class="version-dir-card">
+          <div class="version-dir-head">
+            <span class="version-dir-num">v1.7.1</span>
+            <span class="version-dir-date">22 Sep 2026</span>
+          </div>
+          <p class="version-dir-summary">
+            <span class="lang-id">Perbaikan linking warna Material surface_container &amp; surface_container_low serta paritas lokalisasi string.</span>
+            <span class="lang-en">Material 3 surface container colors linking fixes and full localization string key parity.</span>
+          </p>
+          <div class="version-dir-actions">
+            <button type="button" class="version-dir-btn primary" data-jump="v171">
+              <span class="lang-id">Changelog &amp; Info</span>
+              <span class="lang-en">Changelog &amp; Info</span>
             </button>
             <button type="button" class="version-dir-btn version-dir-share" data-share="v171" title="Bagikan versi v1.7.1">
               <span class="lang-id">Bagikan</span>
@@ -1393,10 +1415,11 @@
       <div class="versions-container">
         <!-- Version Tab Bar -->
         <div class="version-nav" id="versionNav">
-          <button class="version-tab-btn active" data-target="v171">
-            <span class="lang-id">v1.7.1 (Terbaru)</span>
-            <span class="lang-en">v1.7.1 (Latest)</span>
+          <button class="version-tab-btn active" data-target="v172">
+            <span class="lang-id">v1.7.2 (Terbaru)</span>
+            <span class="lang-en">v1.7.2 (Latest)</span>
           </button>
+          <button class="version-tab-btn" data-target="v171">v1.7.1</button>
           <button class="version-tab-btn" data-target="v170">v1.7.0</button>
           <button class="version-tab-btn" data-target="v160">v1.6.0</button>
           <button class="version-tab-btn" data-target="v150">v1.5.0</button>
@@ -1405,8 +1428,148 @@
           <button class="version-tab-btn" data-target="v100">v1.0.0</button>
         </div>
 
+                <!-- Version Pane v1.7.2 -->
+        <div class="version-pane active" id="pane-v172">
+          <div class="version-header">
+            <div class="version-title-wrap">
+              <span class="version-tag">AppsPerms v1.7.2</span>
+              <a href="#v172" class="version-anchor-link" data-v="v172" title="Tautan langsung ke versi v1.7.2">#v1.7.2</a>
+              <span class="version-badge-status">
+                <span class="lang-id">Rilis Stabil</span>
+                <span class="lang-en">Latest Stable</span>
+              </span>
+              <span class="version-date">2026-09-23</span>
+            </div>
+            <div class="version-downloads">
+              <a href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" target="_blank" rel="noopener" class="v-dl-btn primary">
+                <span class="lang-id">Download APK</span>
+                <span class="lang-en">Download APK</span>
+              </a>
+              <a href="https://github.com/xykalnotkel/OverlayOps/releases/tag/v1.7.2" target="_blank" rel="noopener" class="v-dl-btn">
+                <span>GitHub Release</span>
+              </a>
+              <button type="button" class="v-share-btn" data-share="v172" title="Bagikan versi v1.7.2">
+                <span class="lang-id">Bagikan</span>
+                <span class="lang-en">Share</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Apa yang Baru -->
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="changelog-badge new">
+                <span class="lang-id">Apa yang Baru</span>
+                <span class="lang-en">What's New</span>
+              </span>
+              <span class="lang-id">Fitur &amp; Antarmuka Mandiri</span>
+              <span class="lang-en">Features &amp; Dedicated UI</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id"><strong>Layar Mandiri Penuh (Dedicated Activities):</strong> Mengonversi panel modal bottom sheet (Tentang, Terminal, Tweaks, Pengaturan, Riwayat) menjadi Activity layar penuh mandiri dengan Toolbar Material 3, tombol navigasi kembali, dan transisi layar mulus tanpa glitch.</span>
+                <span class="lang-en"><strong>Dedicated Full Activities:</strong> Converted modal bottom sheets (About, Terminal, Tweaks, Settings, History) into dedicated full-screen Activities with Material 3 Toolbars, back navigation, and smooth glitch-free transitions.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Carousel Horizontal Ekosistem XyVerse:</strong> Menghadirkan carousel horizontal interaktif di layar About yang memajang logo vektor asli aplikasi resmi XyVerse (AppsPerms, XyDesk, XyCloudStore, XyStudio AI) beserta badge kategori dan tautan eksplorasi repositori resmi.</span>
+                <span class="lang-en"><strong>XyVerse Ecosystem Horizontal Carousel:</strong> Introduced an interactive horizontal carousel on the About screen showcasing official vector logos of XyVerse applications (AppsPerms, XyDesk, XyCloudStore, XyStudio AI) with category badges and repository links.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>17 Ikon Vektor Material 3 Tajam:</strong> Desain ulang seluruh ikon sidebar menu drawer ke format vektor XML presisi tinggi yang seragam pada baseline 24dp.</span>
+                <span class="lang-en"><strong>17 Sharp Material 3 Vector Icons:</strong> Completely redesigned all navigation drawer icons into high-precision XML vectors standardized on a clean 24dp baseline.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Fitur Berbagi Versi &amp; Permalinks Web:</strong> Penambahan tombol bagikan instan ke clipboard dengan toast visual feedback, permalink per rilis, dan router hash deep-linking.</span>
+                <span class="lang-en"><strong>Version Share Permalinks:</strong> Added instant clipboard sharing with visual toast feedback, per-release permalinks, and hash deep-linking router.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Apa yang Diubah -->
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="changelog-badge changed">
+                <span class="lang-id">Apa yang Diubah</span>
+                <span class="lang-en">What's Changed</span>
+              </span>
+              <span class="lang-id">Penyelarasan Desain &amp; Branding</span>
+              <span class="lang-en">Design &amp; Branding Alignment</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id"><strong>Branding Tunggal Resmi:</strong> Standardisasi kredit branding tunggal resmi "Built-in XyVerse by Kall" sesuai arsitektur ekosistem XyVerse.</span>
+                <span class="lang-en"><strong>Single Official Branding:</strong> Standardized on the single credit "Built-in XyVerse by Kall" across all ecosystem repositories.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Estetika Deep Matte Dark (Pekat):</strong> Menghapus seluruh elemen pendaran neon berlebihan dan menggantinya dengan palet matte gelap pekat yang hemat daya dan nyaman di mata.</span>
+                <span class="lang-en"><strong>Solid Deep Matte Dark Aesthetic:</strong> Removed aggressive neon glow filters in favor of solid, energy-efficient deep matte dark surfaces.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Kebijakan Anti-Emoji 0%:</strong> Memastikan 0% emoji di seluruh kode Kotlin, file layout XML, drawable, teks antarmuka, dan dokumentasi teknis.</span>
+                <span class="lang-en"><strong>Strict 0% Emoji Standard:</strong> Enforced zero-emoji policy across all Kotlin code, XML layouts, drawables, strings, and technical documentation.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Apa yang Diperbaiki -->
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="changelog-badge fixed">
+                <span class="lang-id">Apa yang Diperbaiki</span>
+                <span class="lang-en">Bug Fixes</span>
+              </span>
+              <span class="lang-id">Stabilitas &amp; Linking Sumber Daya</span>
+              <span class="lang-en">Stability &amp; Resource Linking</span>
+            </div>
+            <ul class="changelog-list">
+              <li>
+                <span class="lang-id"><strong>Android Resource Linking Task:</strong> Memperbaiki kegagalan kompilasi gradle dengan melengkapi definisi token warna Material 3 surface_container &amp; surface_container_low serta sinkronisasi string dwibahasa di values/ dan values-en/.</span>
+                <span class="lang-en"><strong>Android Resource Linking Task:</strong> Resolved gradle compilation failures by defining missing Material 3 surface container colors and synchronizing bilingual string keys across values/ and values-en/.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Navigasi Dialog &amp; Bridge Binding:</strong> Memperbaiki method header showBatchDialog pada MainActivity.kt dan memetakan pemanggilan method AppOpsBridge.setStatus pada HistoryActivity.kt secara akurat.</span>
+                <span class="lang-en"><strong>Dialog Navigation &amp; Bridge Binding:</strong> Restored showBatchDialog method header in MainActivity.kt and bound AppOpsBridge.setStatus execution accurately in HistoryActivity.kt.</span>
+              </li>
+              <li>
+                <span class="lang-id"><strong>Responsivitas Seluler Web:</strong> Mencegah horizontal viewport overflow pada perangkat layar 320px dengan penyesuaian min-width dan word-break SHA-256.</span>
+                <span class="lang-en"><strong>Mobile Web Responsiveness:</strong> Prevented horizontal viewport overflow on 320px displays via min-width and SHA-256 word-break adaptations.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Detail Teknis & Spesifikasi -->
+          <div class="changelog-category">
+            <div class="changelog-category-title">
+              <span class="changelog-badge tech">
+                <span class="lang-id">Detail Teknis &amp; Integritas</span>
+                <span class="lang-en">Technical Details &amp; Integrity</span>
+              </span>
+              <span class="lang-id">Spesifikasi Build</span>
+              <span class="lang-en">Build Specifications</span>
+            </div>
+            <div class="version-specs-grid">
+              <div class="version-spec-card">
+                <span class="k"><span class="lang-id">Target OS</span><span class="lang-en">Target OS</span></span>
+                <span class="v">Android 8.0+ (API 26) s.d. Android 16</span>
+              </div>
+              <div class="version-spec-card">
+                <span class="k"><span class="lang-id">Audit VirusTotal</span><span class="lang-en">VirusTotal Audit</span></span>
+                <span class="v ok">0/64 Clean (0 Deteksi)</span>
+              </div>
+              <div class="version-spec-card">
+                <span class="k"><span class="lang-id">Izin Internet</span><span class="lang-en">Internet Permission</span></span>
+                <span class="v ok"><span class="lang-id">Nol (0) - Desain Offline Penuh</span><span class="lang-en">Zero (0) - Fully Offline Design</span></span>
+              </div>
+              <div class="version-spec-card">
+                <span class="k"><span class="lang-id">Rute Unduhan Resmi</span><span class="lang-en">Official Download Route</span></span>
+                <span class="v mono">dl.appsperms.xyverse.my.id/AppsPerms-latest.apk</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Version Pane v1.7.1 -->
-        <div class="version-pane active" id="pane-v171">
+        <div class="version-pane" id="pane-v171">
           <div class="version-header">
             <div class="version-title-wrap">
               <span class="version-tag">AppsPerms v1.7.1</span>
@@ -2595,7 +2758,7 @@
 
         // Navigate to thanks page in the same tab
         setTimeout(function () {
-          window.location.href = 'thanks?v=1.7.1&var=' + encodeURIComponent(variant);
+          window.location.href = 'thanks?v=1.7.2&var=' + encodeURIComponent(variant);
         }, 400);
       }
 
@@ -2626,7 +2789,7 @@
         }
         if (d.release && d.release.sha256) {
           var hr = document.getElementById('hashRelease');
-          if (hr) hr.innerHTML = d.release.sha256 + ' <span style="color:var(--text-muted);" id="hashWhen">· v' + (d.version || '1.7.1') + '</span>';
+          if (hr) hr.innerHTML = d.release.sha256 + ' <span style="color:var(--text-muted);" id="hashWhen">· v' + (d.version || '1.7.2') + '</span>';
         }
         var vt = d.virustotal || {};
         if (vt.checked) {
@@ -2645,7 +2808,7 @@
           var lk = document.getElementById('vtLink');
           if (lk && vt.permalink) lk.href = vt.permalink;
           var up = document.getElementById('vtUpdated');
-          if (up) up.innerHTML = '<span class="lang-id">Diperbarui otomatis oleh CI · rilis v' + (d.version || '1.7.1') + '</span><span class="lang-en">Automatically updated by CI · release v' + (d.version || '1.7.1') + '</span>';
+          if (up) up.innerHTML = '<span class="lang-id">Diperbarui otomatis oleh CI · rilis v' + (d.version || '1.7.2') + '</span><span class="lang-en">Automatically updated by CI · release v' + (d.version || '1.7.2') + '</span>';
         }
       }).catch(function () {});
     })();

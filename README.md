@@ -1,6 +1,6 @@
 # AppsPerms
 
-[![Version](https://img.shields.io/badge/version-1.7.1-orange.svg?style=flat-square)](https://github.com/xykalnotkel/OverlayOps/releases)
+[![Version](https://img.shields.io/badge/version-1.7.2-orange.svg?style=flat-square)](https://github.com/xykalnotkel/OverlayOps/releases)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
 [![VirusTotal](https://img.shields.io/badge/virustotal-0%2F72%20clean-brightgreen.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
 [![Platform](https://img.shields.io/badge/platform-Shizuku%20%7C%20Root-informational.svg?style=flat-square)](https://shizuku.rikka.app/)
