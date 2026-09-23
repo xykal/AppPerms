@@ -213,3 +213,30 @@
 
 **Next Step:**
 - Pantau proses build GitHub Actions dan publikasi Cloudflare Pages.
+
+
+### 2026-09-23 - Dedicated Activity Screens, Modern Sidebar Icons & XyVerse Horizontal Carousel
+**Status:** Done
+**Dikerjain oleh:** AI Agent + xykalnotkel
+
+**Yang dikerjain:**
+- Mengganti seluruh ikon di sidebar menu drawer (17 ikon) dengan Material 3 vector drawables yang tajam, proporsional, dan seragam.
+- Mengonversi fitur utama dari BottomSheet modal menjadi layar Activity mandiri penuh:
+  - AboutActivity (Layar Tentang & Ekosistem XyVerse)
+  - TerminalActivity (Layar penuh konsol terminal Shizuku dengan preset, riwayat, dan auto-scroll)
+  - TweaksActivity (Layar penuh tuning resolusi, kerapatan piksel wm density dengan auto-revert timer, dan skala animasi)
+  - SettingsActivity (Layar pengaturan preferensi, bahasa, mode berisiko, dan default sort)
+  - HistoryActivity (Layar audit riwayat modifikasi AppOps, undo massal, salin laporan, dan bersihkan)
+- Mengembangkan carousel horizontal interaktif (HorizontalScrollView) pada layar About yang memajang logo asli APK-APK dari ekosistem XyVerse (AppsPerms, XyDesk, XyCloudStore, XyStudio AI) lengkap dengan badge kategori, deskripsi ringkas, dan tautan eksplorasi.
+- Mendaftarkan kelima Activity baru di AndroidManifest.xml.
+- Memastikan paritas 0% emoji di seluruh kode Kotlin, file layout XML, dan resource drawable.
+- Memverifikasi 12 unit test illustrations lokal lulus 100%.
+
+**File yang diubah/dibuat:**
+- app/src/main/res/drawable/ic_*.xml -> update 17 ikon sidebar Material 3
+- app/src/main/res/drawable/ic_logo_*.xml -> 4 aset logo asli ekosistem XyVerse
+- app/src/main/res/layout/activity_*.xml -> 5 layout layar mandiri Activity
+- app/src/main/java/app/appsperms/ui/*Activity.kt -> 5 implementasi Activity
+- app/src/main/java/app/appsperms/ui/MainActivity.kt -> navigasi ke Activity mandiri
+- app/src/main/AndroidManifest.xml -> deklarasi Activity baru
+- PROGRESS.md -> dokumentasi pembaruan UI/UX

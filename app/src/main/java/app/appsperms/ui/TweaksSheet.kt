@@ -2,6 +2,8 @@ package app.appsperms.ui
 
 import android.app.Activity
 import android.os.CountDownTimer
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
@@ -43,8 +45,32 @@ object TweaksSheet {
     fun show(activity: Activity, canOperate: Boolean, onNotify: (String) -> Unit) {
         val dialog = BottomSheetDialog(activity)
         val b = SheetTweaksBinding.inflate(android.view.LayoutInflater.from(activity))
+        bindViews(
+            activity, canOperate,
+            b.dispStatus, b.btnSizeChange, b.btnSizeReset,
+            b.animStatus, b.btnAnimOff, b.btnAnimHalf, b.btnAnimFull,
+            b.btnSnapshot, b.btnRestoreSnapshot, b.btnTweakDiagnostics,
+            onNotify,
+        )
         dialog.setContentView(b.root)
+        dialog.show()
+    }
 
+    fun bindViews(
+        activity: Activity,
+        canOperate: Boolean,
+        dispStatus: TextView,
+        btnSizeChange: View,
+        btnSizeReset: View,
+        animStatus: TextView,
+        btnAnimOff: View,
+        btnAnimHalf: View,
+        btnAnimFull: View,
+        btnSnapshot: View,
+        btnRestoreSnapshot: View,
+        btnTweakDiagnostics: View,
+        onNotify: (String) -> Unit,
+    ) {
         // v1.5: Pastikan sisa setting berbahaya bersih
         AppPrefs.cleanDeprecatedKeys(activity)
 
@@ -53,13 +79,13 @@ object TweaksSheet {
         // ------------------------------------------------------------ tampilan
         TweaksBridge.readDisplay { info, error ->
             if (!alive()) return@readDisplay
-            b.dispStatus.text = when {
+            dispStatus.text = when {
                 error != null -> activity.getString(R.string.tweaks_read_fail, error)
                 else -> formatDisplay(activity, info)
             }
         }
 
-        b.btnSizeChange.setOnClickListener {
+        btnSizeChange.setOnClickListener {
             if (!canOperate) {
                 onNotify(activity.getString(R.string.tweaks_need_shizuku))
                 return@setOnClickListener
@@ -69,7 +95,7 @@ object TweaksSheet {
             }
         }
 
-        b.btnSizeReset.setOnClickListener {
+        btnSizeReset.setOnClickListener {
             if (!canOperate) {
                 onNotify(activity.getString(R.string.tweaks_need_shizuku))
                 return@setOnClickListener
@@ -83,7 +109,7 @@ object TweaksSheet {
                         else activity.getString(R.string.tweaks_apply_fail, err),
                     )
                     TweaksBridge.readDisplay { info, _ ->
-                        if (alive()) b.dispStatus.text = formatDisplay(activity, info)
+                        if (alive()) dispStatus.text = formatDisplay(activity, info)
                     }
                 }
             }
@@ -92,12 +118,12 @@ object TweaksSheet {
         // ------------------------------------------------------------- animasi
         TweaksBridge.readAnimScales { scale ->
             if (!alive()) return@readAnimScales
-            b.animStatus.text = activity.getString(
+            animStatus.text = activity.getString(
                 R.string.tweaks_anim_current,
                 scale?.toString() ?: activity.getString(R.string.tweaks_anim_unknown),
             )
         }
-        listOf(b.btnAnimOff to 0f, b.btnAnimHalf to 0.5f, b.btnAnimFull to 1f)
+        listOf(btnAnimOff to 0f, btnAnimHalf to 0.5f, btnAnimFull to 1f)
             .forEach { (btn, scale) ->
                 btn.setOnClickListener {
                     if (!canOperate) {
@@ -110,14 +136,14 @@ object TweaksSheet {
                             if (err == null) activity.getString(R.string.tweaks_anim_set, formatScale(scale))
                             else activity.getString(R.string.tweaks_apply_fail, err),
                         )
-                        b.animStatus.text =
+                        animStatus.text =
                             activity.getString(R.string.tweaks_anim_current, formatScale(scale))
                     }
                 }
             }
 
         // ------------------------------------------------------------- snapshot aman
-        b.btnSnapshot.setOnClickListener {
+        btnSnapshot.setOnClickListener {
             TweaksBridge.readDisplay { info, err ->
                 if (err != null) return@readDisplay onNotify(activity.getString(R.string.tweaks_apply_fail, err))
                 TweaksBridge.readAnimScales { anim ->
@@ -128,7 +154,7 @@ object TweaksSheet {
                 }
             }
         }
-        b.btnRestoreSnapshot.setOnClickListener {
+        btnRestoreSnapshot.setOnClickListener {
             val parts = AppPrefs.tuningSnapshot(activity)?.split('|')
             if (parts == null || parts.size != 3) return@setOnClickListener onNotify(activity.getString(R.string.snapshot_empty))
             val size = parts[0].takeIf { it.isNotBlank() }?.let(WmParser::parseSize)
@@ -143,7 +169,7 @@ object TweaksSheet {
                     }
                 }.setNegativeButton(R.string.dialog_cancel, null).show()
         }
-        b.btnTweakDiagnostics.setOnClickListener {
+        btnTweakDiagnostics.setOnClickListener {
             TweaksBridge.readDisplay { info, _ -> TweaksBridge.readAnimScales { anim ->
                 MaterialAlertDialogBuilder(activity).setTitle(R.string.tweak_diag_title)
                     .setMessage(activity.getString(R.string.tweak_diag_body, formatDisplay(activity, info),
@@ -158,8 +184,6 @@ object TweaksSheet {
             showKeepDialog(activity, pc, onDone = { pendingConfirm = null }, onNotify = onNotify)
             onNotify(activity.getString(R.string.res_confirm_hint))
         }
-
-        dialog.show()
     }
 
     // ------------------------------------------------------ dialog resolusi

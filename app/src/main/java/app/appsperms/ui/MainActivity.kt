@@ -416,11 +416,7 @@ class MainActivity : AppCompatActivity() {
 
     /** Pengaturan ringan: bahasa, konfirmasi mode berisiko, peringatan UID, urutan daftar. */
     private fun showSettings() {
-        SettingsSheet.show(this) { message ->
-            snack(message)
-            // Urutan default bisa berubah -> langsung diterapkan supaya konsisten.
-            viewModel.setSort(AppPrefs.defaultSort(this))
-        }
+        startActivity(Intent(this, SettingsActivity::class.java))
     }
 
     /**
@@ -428,9 +424,7 @@ class MainActivity : AppCompatActivity() {
      * Seperti LADB / Brevent: jalankan pm, appops, dumpsys tanpa PC
      */
     private fun showTerminal() {
-        TerminalSheet.show(this) { message ->
-            snack(message)
-        }
+        startActivity(Intent(this, TerminalActivity::class.java))
     }
 
     /**
@@ -438,20 +432,7 @@ class MainActivity : AppCompatActivity() {
      * paketnya di daftar (jalur cepat buat koreksi satu app).
      */
     private fun showHistorySheet() {
-        viewModel.historyLines { lines ->
-            HistorySheet.show(
-                this,
-                lines,
-                viewModel.state.value.snapshot.canOperate,
-                onUndo = { finish ->
-                    viewModel.undoHistory { applied, skipped, error ->
-                        finish(applied, skipped, error)
-                        viewModel.refresh(showSpinner = false)
-                    }
-                },
-                onClear = { viewModel.clearHistory() },
-            )
-        }
+        startActivity(Intent(this, HistoryActivity::class.java))
     }
 
     /** Isi kolom pencarian dari tempat lain (mis. sheet riwayat). */
@@ -520,8 +501,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showTweaks() {
-        val canOperate = viewModel.state.value.snapshot.canOperate
-        TweaksSheet.show(this, canOperate) { message -> snack(message) }
+        startActivity(Intent(this, TweaksActivity::class.java))
     }
 
     private fun showBatchDialog() {
@@ -654,7 +634,9 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showAbout() = AboutSheet.show(this)
+    private fun showAbout() {
+        startActivity(Intent(this, AboutActivity::class.java))
+    }
 
     // ---------------------------------------------------------------- detail
 

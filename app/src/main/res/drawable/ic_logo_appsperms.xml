@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+    <!-- Squircle Background -->
+    <path
+        android:fillColor="#171A21"
+        android:pathData="M0,16C0,7.16 7.16,0 16,0h24c8.84,0 16,7.16 16,16v24c0,8.84 -7.16,16 -16,16H16C7.16,56 0,48.84 0,40V16z"/>
+    <!-- Outer Border -->
+    <path
+        android:strokeColor="#E59800"
+        android:strokeWidth="1.5"
+        android:pathData="M1,16C1,7.72 7.72,1 16,1h24c8.28,0 15,6.72 15,15v24c0,8.28 -6.72,15 -15,15H16C7.72,55 1,48.28 1,40V16z"/>
+    <!-- Shield / AppOps frame -->
+    <path
+        android:strokeColor="#ECEFF4"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M20,13h16a4,4 0 0,1 4,4v22a4,4 0 0,1 -4,4H20a4,4 0 0,1 -4,-4V17a4,4 0 0,1 4,-4z"/>
+    <!-- Toggle active amber badge -->
+    <path
+        android:fillColor="#E59800"
+        android:pathData="M24,24h18a3,3 0 0,1 3,3v12a3,3 0 0,1 -3,3H24a3,3 0 0,1 -3,-3V27a3,3 0 0,1 3,-3z"/>
+    <!-- Toggle lines -->
+    <path
+        android:fillColor="#0A0C10"
+        android:pathData="M27,28h12a1,1 0 0,1 1,1v1a1,1 0 0,1 -1,1H27a1,1 0 0,1 -1,-1v-1a1,1 0 0,1 1,-1z"/>
+    <path
+        android:fillColor="#0A0C10"
+        android:pathData="M27,33h7a1,1 0 0,1 1,1v1a1,1 0 0,1 -1,1H27a1,1 0 0,1 -1,-1v-1a1,1 0 0,1 1,-1z"/>
+</vector>

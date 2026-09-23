@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="56dp"
+    android:height="56dp"
+    android:viewportWidth="56"
+    android:viewportHeight="56">
+    <!-- Deep Violet Squircle Background -->
+    <path
+        android:fillColor="#1F1033"
+        android:pathData="M0,16C0,7.16 7.16,0 16,0h24c8.84,0 16,7.16 16,16v24c0,8.84 -7.16,16 -16,16H16C7.16,56 0,48.84 0,40V16z"/>
+    <!-- Outer Violet Purple Border -->
+    <path
+        android:strokeColor="#A855F7"
+        android:strokeWidth="1.5"
+        android:pathData="M1,16C1,7.72 7.72,1 16,1h24c8.28,0 15,6.72 15,15v24c0,8.28 -6.72,15 -15,15H16C7.72,55 1,48.28 1,40V16z"/>
+    <!-- Central AI Studio Star Spark -->
+    <path
+        android:fillColor="#A855F7"
+        android:pathData="M28,12l3.5,9.5L41,25l-9.5,3.5L28,38l-3.5,-9.5L15,25l9.5,-3.5z"/>
+    <!-- Secondary AI Spark -->
+    <path
+        android:fillColor="#EC4899"
+        android:pathData="M39,33l2,5.5L46.5,40.5l-5.5,2L39,48l-2,-5.5L31.5,40.5l5.5,-2z"/>
+    <!-- Code Bracket Accents -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M17,17l-5,5 5,5M17,33l-5,5 5,5"/>
+</vector>

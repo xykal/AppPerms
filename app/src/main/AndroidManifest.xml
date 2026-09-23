@@ -35,6 +35,31 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.AboutActivity"
+            android:exported="false"
+            android:label="@string/nav_about" />
+
+        <activity
+            android:name=".ui.TerminalActivity"
+            android:exported="false"
+            android:label="@string/nav_terminal" />
+
+        <activity
+            android:name=".ui.TweaksActivity"
+            android:exported="false"
+            android:label="@string/nav_tweaks" />
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:label="@string/nav_settings" />
+
+        <activity
+            android:name=".ui.HistoryActivity"
+            android:exported="false"
+            android:label="@string/nav_history" />
+
         <!-- Simpan pilihan bahasa otomatis di Android < 13 (dipakai AppCompat). -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
