@@ -21,13 +21,13 @@ object AboutSheet {
         )
         b.aboutFaq.setOnClickListener { open(context, "https://appsperms.xyverse.my.id/#faq") }
         b.aboutWebsite.setOnClickListener { open(context, "https://appsperms.xyverse.my.id/") }
-        b.aboutSource.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps") }
-        b.aboutUpdate.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps/releases/latest") }
+        b.aboutSource.setOnClickListener { open(context, "https://github.com/xykal/AppPerms") }
+        b.aboutUpdate.setOnClickListener { open(context, "https://github.com/xykal/AppPerms/releases/latest") }
         b.aboutChannel.setOnClickListener { open(context, "https://t.me/xyverse") }
-        b.aboutFeedback.setOnClickListener { open(context, "https://github.com/xykalnotkel/OverlayOps/issues") }
-        b.aboutXyDesk.setOnClickListener { open(context, "https://github.com/xykalnotkel/xydesk") }
-        b.aboutXyStudio.setOnClickListener { open(context, "https://github.com/xykalnotkel") }
-        b.aboutXyCloud.setOnClickListener { open(context, "https://github.com/xykalnotkel") }
+        b.aboutFeedback.setOnClickListener { open(context, "https://github.com/xykal/AppPerms/issues") }
+        b.aboutXyDesk.setOnClickListener { open(context, "https://github.com/xykal/XyDesk") }
+        b.aboutXyStudio.setOnClickListener { open(context, "https://github.com/xykal") }
+        b.aboutXyCloud.setOnClickListener { open(context, "https://github.com/xykal") }
 
         dialog.setContentView(b.root)
         dialog.show()

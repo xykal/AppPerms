@@ -293,7 +293,7 @@
     <!-- report & about -->
     <string name="device_report">Device report</string>
     <string name="about_title">About AppsPerms</string>
-    <string name="about_body">AppsPerms — a lightweight AppOps manager focused on SYSTEM_ALERT_WINDOW (Display over other apps) plus 18 related ops (camera, microphone, clipboard, location, and more).\n\nBuilt in XyVerse (@xykalnotkel)\n\nHow it works: reads and writes directly through Shizuku without permanent root. Super responsive, 100% transparent, no ads, and no internet permission (data can never leave the device).</string>
+    <string name="about_body">AppsPerms — a lightweight AppOps manager focused on SYSTEM_ALERT_WINDOW (Display over other apps) plus 18 related ops (camera, microphone, clipboard, location, and more).\n\nBuilt in XyVerse (@xykal)\n\nHow it works: reads and writes directly through Shizuku without permanent root. Super responsive, 100% transparent, no ads, and no internet permission (data can never leave the device).</string>
 
 
     <!-- groups -->
@@ -362,7 +362,7 @@
 ✓ Changes can be restored to Android defaults</string>
     <string name="about_website">Website</string>
     <string name="about_source">Source code</string>
-    <string name="about_credit">Built with care in XyVerse · @xykalnotkel</string>
+    <string name="about_credit">Built with care in XyVerse · @xykal</string>
     <string name="safe_tuning_title">Safe protection &amp; profiles</string>
     <string name="protected_app_none">No protected application</string>
     <string name="protected_app_value">Protected: %1$s</string>
@@ -444,7 +444,7 @@ Examples:
     <string name="about_channel">XyVerse Channel</string>
     <string name="about_feedback">Feedback &amp; Issues</string>
     <string name="about_contributors_title">CONTRIBUTORS &amp; SPECIAL THANKS</string>
-    <string name="about_contributors_body">• Kall (@xykalnotkel) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Samsung One UI 8.5 Research, Terminal i18n &amp; multi-profile\n• Rikka — Creator of Shizuku &amp; App Ops\n• LSPosed Developers — HiddenApiBypass</string>
+    <string name="about_contributors_body">• Kall (@xykal) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Samsung One UI 8.5 Research, Terminal i18n &amp; multi-profile\n• Rikka — Creator of Shizuku &amp; App Ops\n• LSPosed Developers — HiddenApiBypass</string>
     <string name="about_ecosystem_title">ALSO FROM XYVERSE</string>
     <string name="about_xydesk">• XyDesk — Remote Desktop &amp; PC Controller</string>
     <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Work Automation</string>

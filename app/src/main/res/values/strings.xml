@@ -294,7 +294,7 @@
     <!-- laporan & tentang -->
     <string name="device_report">Laporan perangkat</string>
     <string name="about_title">Tentang AppsPerms</string>
-    <string name="about_body">AppsPerms — pengelola AppOps ringan yang fokus ke SYSTEM_ALERT_WINDOW (Display over other apps) dan 18 op terkait (kamera, mikrofon, clipboard, lokasi, dst).\n\nBuilt in XyVerse (@xykalnotkel)\n\nCara kerja: baca/tulis langsung via Shizuku tanpa root permanen. Super responsif, 100% transparan, tanpa iklan, dan tanpa izin internet (data tidak pernah keluar dari perangkat).</string>
+    <string name="about_body">AppsPerms — pengelola AppOps ringan yang fokus ke SYSTEM_ALERT_WINDOW (Display over other apps) dan 18 op terkait (kamera, mikrofon, clipboard, lokasi, dst).\n\nBuilt in XyVerse (@xykal)\n\nCara kerja: baca/tulis langsung via Shizuku tanpa root permanen. Super responsif, 100% transparan, tanpa iklan, dan tanpa izin internet (data tidak pernah keluar dari perangkat).</string>
 
 
     <!-- ================= v1.4 i18n OpCatalog ================= -->
@@ -363,7 +363,7 @@
 ✓ Perubahan dapat dikembalikan ke bawaan Android</string>
     <string name="about_website">Website</string>
     <string name="about_source">Source code</string>
-    <string name="about_credit">Built with care in XyVerse · @xykalnotkel</string>
+    <string name="about_credit">Built with care in XyVerse · @xykal</string>
     <string name="safe_tuning_title">Proteksi &amp; profil aman</string>
     <string name="protected_app_none">Tidak ada aplikasi yang dilindungi</string>
     <string name="protected_app_value">Dilindungi: %1$s</string>
@@ -445,7 +445,7 @@ Contoh:
     <string name="about_channel">Saluran XyVerse</string>
     <string name="about_feedback">Kirim Masukan / Isu</string>
     <string name="about_contributors_title">KONTRIBUTOR &amp; APRESIASI KHUSUS</string>
-    <string name="about_contributors_body">• Kall (@xykalnotkel) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Riset Samsung One UI 8.5, Terminal i18n &amp; multi-profile\n• Rikka — Pencipta Shizuku &amp; App Ops\n• Pengembang LSPosed — HiddenApiBypass</string>
+    <string name="about_contributors_body">• Kall (@xykal) — Founder &amp; Lead Developer\n• @BuddhaDiedLaughing — Riset Samsung One UI 8.5, Terminal i18n &amp; multi-profile\n• Rikka — Pencipta Shizuku &amp; App Ops\n• Pengembang LSPosed — HiddenApiBypass</string>
     <string name="about_ecosystem_title">JUGA DARI XYVERSE</string>
     <string name="about_xydesk">• XyDesk — Remote Desktop &amp; PC Controller</string>
     <string name="about_xystudio">• XyStudio AI — AI Studio &amp; Otomasi Kerja</string>

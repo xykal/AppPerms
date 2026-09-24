@@ -34,24 +34,24 @@ class AboutActivity : AppCompatActivity() {
 
         // Tautan Aksi Utama
         binding.btnAboutWebsite.setOnClickListener { openUrl("https://appsperms.xyverse.my.id/") }
-        binding.btnAboutSource.setOnClickListener { openUrl("https://github.com/xykalnotkel/OverlayOps") }
-        binding.btnAboutUpdate.setOnClickListener { openUrl("https://github.com/xykalnotkel/OverlayOps/releases/latest") }
+        binding.btnAboutSource.setOnClickListener { openUrl("https://github.com/xykal/AppPerms") }
+        binding.btnAboutUpdate.setOnClickListener { openUrl("https://github.com/xykal/AppPerms/releases/latest") }
         binding.btnAboutChannel.setOnClickListener { openUrl("https://t.me/xyverse") }
         binding.btnAboutFaq.setOnClickListener { openUrl("https://appsperms.xyverse.my.id/#faq") }
-        binding.btnAboutFeedback.setOnClickListener { openUrl("https://github.com/xykalnotkel/OverlayOps/issues") }
+        binding.btnAboutFeedback.setOnClickListener { openUrl("https://github.com/xykal/AppPerms/issues") }
 
         // Ekosistem XyVerse (Horizontal Carousel Cards)
         binding.cardEcosystemAppsPerms.setOnClickListener {
             openUrl("https://appsperms.xyverse.my.id/")
         }
         binding.cardEcosystemXyDesk.setOnClickListener {
-            openUrl("https://github.com/xykalnotkel/xydesk")
+            openUrl("https://github.com/xykal/XyDesk")
         }
         binding.cardEcosystemXyCloud.setOnClickListener {
-            openUrl("https://github.com/xykalnotkel")
+            openUrl("https://github.com/xykal")
         }
         binding.cardEcosystemXyStudio.setOnClickListener {
-            openUrl("https://github.com/xykalnotkel")
+            openUrl("https://github.com/xykal")
         }
     }
 

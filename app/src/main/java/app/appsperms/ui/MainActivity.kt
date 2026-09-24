@@ -482,11 +482,11 @@ class MainActivity : AppCompatActivity() {
             )
 
             MenuAction.FEEDBACK -> startActivitySafely(
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykalnotkel/OverlayOps/issues"))
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykal/AppPerms/issues"))
             )
 
             MenuAction.UPDATE -> startActivitySafely(
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykalnotkel/OverlayOps/releases/latest"))
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/xykal/AppPerms/releases/latest"))
             )
 
             MenuAction.SHIZUKU -> openShizukuApp()

@@ -1,13 +1,13 @@
 # AppsPerms
 
-[![Version](https://img.shields.io/badge/version-1.7.2-orange.svg?style=flat-square)](https://github.com/xykalnotkel/OverlayOps/releases)
+[![Version](https://img.shields.io/badge/version-1.7.2-orange.svg?style=flat-square)](https://github.com/xykal/AppPerms/releases)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
 [![VirusTotal](https://img.shields.io/badge/virustotal-0%2F72%20clean-brightgreen.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
 [![Platform](https://img.shields.io/badge/platform-Shizuku%20%7C%20Root-informational.svg?style=flat-square)](https://shizuku.rikka.app/)
 [![Privacy](https://img.shields.io/badge/privacy-0%20internet%20permission-success.svg?style=flat-square)](https://appsperms.xyverse.my.id/)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/xykalnotkel/OverlayOps/build.yml?branch=main&style=flat-square)](https://github.com/xykalnotkel/OverlayOps/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/xykal/AppPerms/build.yml?branch=main&style=flat-square)](https://github.com/xykal/AppPerms/actions)
 
-Built-in XyVerse by Kall (@xykalnotkel)
+Built-in XyVerse by Kall (@xykal)
 
 [Bahasa Indonesia](#ringkasan-bahasa-indonesia) | [English Summary](#english-summary)
 
@@ -33,8 +33,8 @@ Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other ap
 
 | Varian | Link Unduh Langsung | Mirror Cadangan | Catatan |
 |---|---|---|---|
-| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~1.98 MB) |
-| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Logging logcat aktif, unstripped (~6.0 MB) |
+| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~1.98 MB) |
+| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Logging logcat aktif, unstripped (~6.0 MB) |
 
 ### Website Resmi & Keamanan
 
@@ -73,8 +73,8 @@ It focuses on controlling `SYSTEM_ALERT_WINDOW` (*Display over other apps*) alon
 
 | Variant | Direct Download Link | Mirror | Notes |
 |---|---|---|---|
-| Release APK (Recommended) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Signed by official XyVerse RSA-4096 keystore, R8 minified |
-| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykalnotkel/OverlayOps/releases/latest) | Full logcat logging, unstripped |
+| Release APK (Recommended) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed by official XyVerse RSA-4096 keystore, R8 minified |
+| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Full logcat logging, unstripped |
 
 Official Portal: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.id/)
 
@@ -92,7 +92,7 @@ Official Portal: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my
 
 Proyek ini dibangun dan dikembangkan berkat kontribusi dari:
 
-- **Kall ([@xykalnotkel](https://github.com/xykalnotkel))** — Founder & Lead Developer
+- **Kall ([@xykal](https://github.com/xykal))** — Founder & Lead Developer
 - **[BuddhaDiedLaughing](https://github.com/BuddhaDiedLaughing)** — One UI 8.5 Research, Shizuku Terminal i18n & multi-profile plumbing
 - **[Rikka](https://github.com/RikkaApps)** — Pencipta Shizuku & App Ops API
 - **[LSPosed Developers](https://github.com/LSPosed)** — HiddenApiBypass library

@@ -269,7 +269,7 @@ jobs:
             git add docs/data/virustotal.json
             [ -f out/virustotal-report.png ] && git add docs/images/virustotal-report.png
             if ! git diff --cached --quiet; then
-              git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykalnotkel.local" \
+              git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykal.local" \
                   commit -q -m "docs: hasil scan VirusTotal & hash v$VERSION (otomatis CI)"
               git push "https://github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/main \
                 || echo "::warning::push docs gagal (main sudah bergeser?) — file tetap ada di artefak build."
