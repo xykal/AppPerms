@@ -1,9 +1,5 @@
-# AppsPerms Fixed Redirects v3 - Beautiful + Anti-Suspend + APK Ready
-# Primary: Cloudflare Pages /apk/ direct hosting (anti-suspend, paling tahan banting)
-# Fallback: GitHub xykal/AppPerms aktif
-
-# === PRIMARY: Serve APK langsung dari Cloudflare Pages (200) - ANTI SUSPEND ===
-# File APK ada di docs/apk/ dan sudah ter-deploy
+# AppsPerms Redirects v4 - Clean
+# APK direct hosting (anti-suspend)
 /AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
 /AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
 /AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.2-release.apk 200
@@ -14,19 +10,10 @@
 /apk/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
 /apk/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
 
-# === FALLBACK: GitHub aktif xykal/AppPerms (jika file lokal tidak ada, ini akan dipakai via JS multi-mirror) ===
-# Untuk direct access yang tidak lewat JS, kita tetap redirect ke GitHub aktif sebagai cadangan
-# Tapi karena di atas sudah 200, ini hanya akan terpakai jika file di /apk/ tidak ada (Cloudflare akan 404, bukan lanjut ke rule ini)
-# Jadi JS di index.html yang handle fallback: coba /apk/ dulu via HEAD, kalau 404 coba GitHub
-
-# Legacy path yang masih pakai xykalnotkel (suspend) - arahkan ke repo aktif
+# Legacy
 /old/* https://github.com/xykal/AppPerms/releases/latest 302
 /dl/* /apk/:splat 302
 
-# SPA
-/thanks /thanks.html 200
-/thanks/ /thanks.html 200
-# --- Add explicit 200 for GSC verification to prevent 308 ---
+# GSC verification - serve directly to prevent 308 loop
 /googleb2a7847179613098.html /googleb2a7847179613098.html 200
 /googleb2a7847179613098 /googleb2a7847179613098 200
-/googleb2a7847179613098.html /googleb2a7847179613098 200!
