@@ -1,17 +1,17 @@
-# AppsPerms Redirects v4 - Clean
-# APK direct hosting (anti-suspend)
-/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
-/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
-/AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.2-release.apk 200
-/AppsPerms-1.7.2-debug.apk /apk/AppsPerms-1.7.2-debug.apk 200
-/AppsPerms-1.7.1-release.apk /apk/AppsPerms-1.7.1-release.apk 200
-/AppsPerms-1.7.1-debug.apk /apk/AppsPerms-1.7.1-debug.apk 200
-/AppsPerms-1.7.0-release.apk /apk/AppsPerms-1.7.0-release.apk 200
-/apk/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
-/apk/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
+# AppsPerms Redirects v5 - Direct APK hosting anti-suspend
+# APKs are hosted directly in /apk/ folder, served statically by Cloudflare Pages
+# No self-referential 200 needed for APKs
 
-# Legacy
-/old/* https://github.com/xykal/AppPerms/releases/latest 302
+# Legacy download paths -> new direct paths
+/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 302
+/AppsPerms-debug-latest.apk /apk/AppsPerms-latest.apk 302
+/AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.3-release.apk 302
+/AppsPerms-1.7.2-debug.apk /apk/AppsPerms-latest.apk 302
+/AppsPerms-1.7.1-release.apk /apk/AppsPerms-1.7.3-release.apk 302
+/AppsPerms-1.7.0-release.apk /apk/AppsPerms-1.7.3-release.apk 302
+
+# dl subdomain legacy (dl.appsperms.xyverse.my.id/* -> /apk/*)
+# This is handled via Cloudflare DNS + Pages, but keep fallback
 /dl/* /apk/:splat 302
 
 # GSC verification - serve directly to prevent 308 loop
