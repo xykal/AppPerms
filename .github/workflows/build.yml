@@ -6,6 +6,7 @@ on:
     tags: [ 'v*' ]
     paths-ignore:
       - 'docs/**'
+      - '.github/workflows/pages.yml'
       - '**.md'
       - 'LICENSE'
   pull_request:
