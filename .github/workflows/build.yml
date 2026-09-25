@@ -183,27 +183,58 @@ jobs:
 
           # Buat alias latest yang nyaman untuk website
           # Primary: universal stable adalah yang direkomendasikan
-          if [ -f "out/AppsPerms-${FULL}-universal-release.apk" ]; then
-            cp "out/AppsPerms-${FULL}-universal-release.apk" out/AppsPerms-latest.apk
-            cp "out/AppsPerms-${FULL}-universal-release.apk" docs/apk/AppsPerms-latest.apk
-            cp "out/AppsPerms-${FULL}-universal-release.apk" "docs/apk/AppsPerms-${VERSION}-release.apk"
-          elif [ -f "out/AppsPerms-${FULL}-universal-debug.apk" ]; then
-            cp "out/AppsPerms-${FULL}-universal-debug.apk" out/AppsPerms-latest.apk
-            cp "out/AppsPerms-${FULL}-universal-debug.apk" docs/apk/AppsPerms-latest.apk
+          # Fix: support both naming with channel (AppsPerms-1.8.0-stable-universal-release.apk) and without
+          UNIVERSAL_RELEASE=""
+          for cand in "out/AppsPerms-${FULL}-${CHANNEL}-universal-release.apk" "out/AppsPerms-${FULL}-universal-release.apk" "out/AppsPerms-${VERSION}-${CHANNEL}-universal-release.apk"; do
+            if [ -f "$cand" ]; then UNIVERSAL_RELEASE="$cand"; break; fi
+          done
+          if [ -n "$UNIVERSAL_RELEASE" ]; then
+            cp "$UNIVERSAL_RELEASE" out/AppsPerms-latest.apk
+            cp "$UNIVERSAL_RELEASE" docs/apk/AppsPerms-latest.apk
+            cp "$UNIVERSAL_RELEASE" "docs/apk/AppsPerms-${VERSION}-release.apk"
+            echo "Latest alias from $UNIVERSAL_RELEASE"
+          else
+            # fallback: any universal release
+            FALLBACK=$(ls out/*universal-release.apk 2>/dev/null | head -n1 || true)
+            if [ -n "$FALLBACK" ]; then
+              cp "$FALLBACK" out/AppsPerms-latest.apk
+              cp "$FALLBACK" docs/apk/AppsPerms-latest.apk
+              cp "$FALLBACK" "docs/apk/AppsPerms-${VERSION}-release.apk"
+              echo "Latest alias fallback from $FALLBACK"
+            fi
+          fi
+          UNIVERSAL_DEBUG=""
+          for cand in "out/AppsPerms-${FULL}-${CHANNEL}-universal-debug.apk" "out/AppsPerms-${FULL}-universal-debug.apk"; do
+            if [ -f "$cand" ]; then UNIVERSAL_DEBUG="$cand"; break; fi
+          done
+          if [ -z "$UNIVERSAL_RELEASE" ] && [ -n "$UNIVERSAL_DEBUG" ]; then
+            cp "$UNIVERSAL_DEBUG" out/AppsPerms-latest.apk
+            cp "$UNIVERSAL_DEBUG" docs/apk/AppsPerms-latest.apk
           fi
 
-          # Alias per ABI
+          # Alias per ABI - support both naming conventions
           for abi in arm64-v8a armeabi-v7a x86_64 x86 universal; do
-            if [ -f "out/AppsPerms-${FULL}-${abi}-release.apk" ]; then
-              cp "out/AppsPerms-${FULL}-${abi}-release.apk" "docs/apk/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
-              cp "out/AppsPerms-${FULL}-${abi}-release.apk" "out/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
+            ABI_SRC=""
+            for cand in "out/AppsPerms-${FULL}-${CHANNEL}-${abi}-release.apk" "out/AppsPerms-${FULL}-${abi}-release.apk" "out/AppsPerms-${VERSION}-${CHANNEL}-${abi}-release.apk"; do
+              if [ -f "$cand" ]; then ABI_SRC="$cand"; break; fi
+            done
+            if [ -n "$ABI_SRC" ]; then
+              cp "$ABI_SRC" "docs/apk/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
+              cp "$ABI_SRC" "out/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
+              echo "ABI $abi alias from $ABI_SRC"
             fi
           done
 
           # Debug alias
-          if [ -f "out/AppsPerms-${FULL}-universal-debug.apk" ]; then
-            cp "out/AppsPerms-${FULL}-universal-debug.apk" out/AppsPerms-debug-latest.apk
-            cp "out/AppsPerms-${FULL}-universal-debug.apk" docs/apk/AppsPerms-debug-latest.apk
+          if [ -n "$UNIVERSAL_DEBUG" ]; then
+            cp "$UNIVERSAL_DEBUG" out/AppsPerms-debug-latest.apk
+            cp "$UNIVERSAL_DEBUG" docs/apk/AppsPerms-debug-latest.apk
+          else
+            FALLBACK_DBG=$(ls out/*universal-debug.apk 2>/dev/null | head -n1 || true)
+            if [ -n "$FALLBACK_DBG" ]; then
+              cp "$FALLBACK_DBG" out/AppsPerms-debug-latest.apk
+              cp "$FALLBACK_DBG" docs/apk/AppsPerms-debug-latest.apk
+            fi
           fi
 
           # SHA256SUMS
