@@ -1,6 +1,41 @@
-/AppsPerms-latest.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.2/AppsPerms-1.7.2-release.apk 302
-/AppsPerms-debug-latest.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.2/AppsPerms-1.7.2-debug.apk 302
-/AppsPerms-1.7.2-release.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.2/AppsPerms-1.7.2-release.apk 302
-/AppsPerms-1.7.2-debug.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.2/AppsPerms-1.7.2-debug.apk 302
-/AppsPerms-1.7.1-release.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.1/AppsPerms-1.7.1-release.apk 302
-/AppsPerms-1.7.1-debug.apk https://github.com/xykalnotkel/OverlayOps/releases/download/v1.7.1/AppsPerms-1.7.1-debug.apk 302
+# AppsPerms Fixed Redirects - Tidak lagi bergantung ke akun xykalnotkel yang ke-suspend
+# Strategi: Serve APK langsung dari Cloudflare Pages (folder /apk/), fallback ke GitHub xykal/AppPerms yang aktif
+
+# === PRIMARY: Direct serving dari Cloudflare Pages (paling tahan banting) ===
+# File APK ditaruh di docs/apk/ dan akan ter-deploy otomatis via wrangler pages deploy
+/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
+/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
+/apk/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
+/apk/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
+
+# Versioned files - serve langsung kalau ada di /apk/
+# Contoh: /apk/AppsPerms-1.7.2-release.apk akan di-serve langsung tanpa redirect
+/AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.2-release.apk 200
+/AppsPerms-1.7.2-debug.apk /apk/AppsPerms-1.7.2-debug.apk 200
+/AppsPerms-1.7.1-release.apk /apk/AppsPerms-1.7.1-release.apk 200
+/AppsPerms-1.7.1-debug.apk /apk/AppsPerms-1.7.1-debug.apk 200
+/AppsPerms-1.7.0-release.apk /apk/AppsPerms-1.7.0-release.apk 200
+
+# === FALLBACK 1: GitHub Releases di akun aktif xykal/AppPerms (bukan xykalnotkel yang suspend) ===
+# Jika file lokal tidak ada, Cloudflare akan redirect ke GitHub (302)
+# Urutan fallback: coba dulu serve lokal, kalau 404 baru ke sini (Pages akan cek file existence dulu untuk 200)
+/apk/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-1.7.2-release.apk 302
+/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-1.7.2-release.apk 302
+
+# === FALLBACK 2: Legacy - arahkan semua versi lama ke repo aktif ===
+/AppsPerms-1.7.2-release.apk https://github.com/xykal/AppPerms/releases/download/v1.7.2/AppsPerms-1.7.2-release.apk 302
+/AppsPerms-1.7.2-debug.apk https://github.com/xykal/AppPerms/releases/download/v1.7.2/AppsPerms-1.7.2-debug.apk 302
+/AppsPerms-1.7.1-release.apk https://github.com/xykal/AppPerms/releases/download/v1.7.1/AppsPerms-1.7.1-release.apk 302
+/AppsPerms-1.7.1-debug.apk https://github.com/xykal/AppPerms/releases/download/v1.7.1/AppsPerms-1.7.1-debug.apk 302
+
+# === LEGACY COMPAT: Redirect dari path lama OverlayOps ke AppPerms baru ===
+# Dulu _redirects lama mengarah ke xykalnotkel/OverlayOps yang sudah suspend (404)
+/old/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk 302
+
+# === SPA & Pages ===
+/thanks /thanks.html 200
+/thanks/ /thanks.html 200
+
+# === CATCH-ALL untuk dl subdomain ===
+# Jika ada request ke /dl/* arahkan ke /apk/*
+/dl/* /apk/:splat 302

@@ -1,0 +1,21 @@
+name = "appsperms-dl"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Custom domain: dl.appsperms.xyverse.my.id
+# Setup di Cloudflare Dashboard -> Workers -> Custom Domains
+
+# R2 Bucket untuk hosting APK (opsional, kalau mau unlimited storage)
+# [[r2_buckets]]
+# binding = "APK_BUCKET"
+# bucket_name = "appsperms-apk"
+
+[vars]
+# Primary GitHub repo yang aktif (bukan yang suspend)
+GITHUB_REPO = "xykal/AppPerms"
+GITHUB_VERSION = "v1.7.2"
+# Fallback CDN
+PRIMARY_ORIGIN = "https://appsperms.xyverse.my.id"
+
+# [env.production]
+# routes = [{ pattern = "dl.appsperms.xyverse.my.id/*", zone_name = "xyverse.my.id" }]

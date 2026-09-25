@@ -1,0 +1,35 @@
+# Security & Caching Headers untuk AppsPerms
+# Cloudflare Pages _headers format
+
+/apk/*
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment
+  X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: *
+
+# Alias root APKs
+/AppsPerms-latest.apk
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment; filename="AppsPerms-latest.apk"
+  X-Content-Type-Options: nosniff
+
+/AppsPerms-debug-latest.apk
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment; filename="AppsPerms-debug-latest.apk"
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
+  X-Robots-Tag: index, follow
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Content-Type: text/html; charset=utf-8
+
+/thanks.html
+  Cache-Control: public, max-age=0, must-revalidate

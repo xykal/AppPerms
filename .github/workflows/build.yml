@@ -1,10 +1,9 @@
-name: Build APK
+name: Build APK - Fixed Resilient Hosting (Anti-Suspend)
 
 on:
   push:
     branches: [ main, master ]
     tags: [ 'v*' ]
-    # Perubahan web/dokumentasi tidak perlu membangun APK.
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -16,12 +15,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: build-${{ github.ref }}
+  group: build-fixed-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Assemble APK (debug + release)
+    name: Assemble APK (debug + release) + Deploy Resilient
     runs-on: ubuntu-latest
     timeout-minutes: 40
 
@@ -29,7 +28,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # fetch penuh: step VT perlu commit docs & push balik ke main
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -46,7 +44,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # Keystore release disimpan sebagai GitHub Secret (base64), bukan di repo.
       - name: Siapkan keystore release
         id: keystore
         run: |
@@ -60,7 +57,7 @@ jobs:
             echo "::warning::Secret KEYSTORE_BASE64 belum ada — build release dilewati, hanya debug."
           fi
 
-      - name: Unit test (parser AppOps & pemetaan status)
+      - name: Unit test
         run: bash ./gradlew :app:testDebugUnitTest --no-daemon --console=plain --stacktrace
 
       - name: Build debug
@@ -75,7 +72,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: bash ./gradlew :app:assembleRelease --no-daemon --console=plain
 
-      - name: Kumpulkan artefak + fingerprint
+      - name: Kumpulkan artefak + copy ke docs/apk untuk Cloudflare Pages direct hosting
         id: artifact
         run: |
           set -euo pipefail
@@ -83,90 +80,53 @@ jobs:
           VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
           NAME="AppsPerms-$VERSION"
           mkdir -p out
+          mkdir -p docs/apk
 
           DEBUG_APK=app/build/outputs/apk/debug/app-debug.apk
           cp "$DEBUG_APK" "out/$NAME-debug.apk"
+          cp "$DEBUG_APK" "docs/apk/$NAME-debug.apk"
+          cp "$DEBUG_APK" "docs/apk/AppsPerms-debug-latest.apk"
 
           if [ -f app/build/outputs/apk/release/app-release.apk ]; then
             cp app/build/outputs/apk/release/app-release.apk "out/$NAME-release.apk"
+            cp app/build/outputs/apk/release/app-release.apk "docs/apk/$NAME-release.apk"
+            cp app/build/outputs/apk/release/app-release.apk "docs/apk/AppsPerms-latest.apk"
+            cp app/build/outputs/apk/release/app-release.apk "docs/apk/AppsPerms-$VERSION-release.apk"
             echo "signed=yes" >> "$GITHUB_OUTPUT"
           else
             echo "signed=no" >> "$GITHUB_OUTPUT"
           fi
 
-          # APK ini tidak punya native lib -> satu file jalan di semua ABI.
-          # Blok di bawah otomatis bikin varian per-ABI kalau nanti ada .so.
-          if unzip -l "$DEBUG_APK" | grep -qE 'lib/(arm|x86)'; then
-            echo "native=yes" >> "$GITHUB_OUTPUT"
-            sign_abi() {
-              ABI="$1"; OUT="out/$NAME-$ABI.apk"
-              cp "$DEBUG_APK" "$OUT"
-              for OTHER in arm64-v8a armeabi-v7a x86 x86_64; do
-                [ "$OTHER" != "$ABI" ] && zip -q -d "$OUT" "lib/$OTHER/*" >/dev/null 2>&1 || true
-              done
-              zip -q -d "$OUT" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA' >/dev/null 2>&1 || true
-              "$BT/zipalign" -f -p 4 "$OUT" "$OUT.aligned"
-              KS="$RUNNER_TEMP/debug.keystore"
-              keytool -genkeypair -keystore "$KS" -storepass android -keypass android \
-                -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
-                -dname "CN=Android Debug,O=Android,C=US" >/dev/null 2>&1
-              "$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --key-pass pass:android \
-                --ks-key-alias androiddebugkey --out "$OUT" "$OUT.aligned"
-              rm -f "$OUT.aligned"
-            }
-            for ABI in arm64-v8a armeabi-v7a x86 x86_64; do sign_abi "$ABI"; done
-          else
-            echo "native=no" >> "$GITHUB_OUTPUT"
-            cat > out/CATATAN-ABI.txt <<EOF
-          $NAME tidak mengandung native library (.so) — semuanya kode Java/Kotlin.
-          Artinya SATU APK ini jalan di semua arsitektur:
-            - armeabi-v7a  (32-bit ARM)   OK
-            - arm64-v8a    (64-bit ARM)   OK
-            - x86 / x86_64 (emulator)     OK
-          Jadi tidak perlu build terpisah per-ABI.
-          EOF
-          fi
+          # SHA256 untuk verifikasi
+          for f in docs/apk/*.apk; do
+            echo "$(sha256sum "$f" | cut -d' ' -f1)  $(basename "$f")" 
+          done > docs/apk/SHA256SUMS
+          cat docs/apk/SHA256SUMS
 
-          # Fingerprint sertifikat yang dipakai (buat didaftarkan di Google/Firebase)
-          {
-            echo "## Hasil build OverlayOps $VERSION"
-            echo
-            echo "| file | ukuran | sha256 |"
-            echo "|---|---|---|"
-            for f in out/*.apk; do
-              printf '| %s | %s | %s |\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" "$(sha256sum "$f" | cut -c1-32)…"
-            done
-            echo
-            for f in out/*.apk; do
-              echo "### Fingerprint: $(basename "$f")"
-              echo '```'
-              "$BT/apksigner" verify --print-certs "$f" 2>/dev/null \
-                | grep -Ei "Signer #1 certificate (DN|SHA-1|SHA-256)" || echo "(tidak terbaca)"
-              echo '```'
-            done
-            echo
-            echo "versionName: \`$VERSION\` · commit: \`$GITHUB_SHA\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          # Catatan rilis (dipakai step Release + di-append step VirusTotal)
+          # Release notes
           {
             echo "APK **AppsPerms** — pengelola AppOps + Tuning via Shizuku."
             echo
-            echo "- \`AppsPerms-$VERSION-release.apk\` → signed keystore resmi, di-minify (R8), **disarankan**"
-            echo "- \`AppsPerms-$VERSION-debug.apk\` → buat troubleshooting"
+            echo "### 📦 Hosting Baru (Anti-Suspend)"
+            echo "- APK sekarang di-host langsung di Cloudflare Pages \`/apk/\` — tidak lagi bergantung ke akun xykalnotkel yang ke-suspend"
+            echo "- Mirror: GitHub Releases aktif di xykal/AppPerms + Cloudflare Pages"
+            echo
+            echo "- \`$NAME-release.apk\` → signed keystore resmi, di-minify (R8), **disarankan**"
+            echo "- \`$NAME-debug.apk\` → buat troubleshooting"
             echo
             echo "| berkas | ukuran | sha256 |"
             echo "|---|---|---|"
             for f in out/*.apk; do
-              printf '| `%s` | %s | `%s` |\n' "$(basename \"$f\")" "$(du -h \"$f\" | cut -f1)" "$(sha256sum \"$f\" | cut -d' ' -f1)"
+              printf '| `%s` | %s | `%s` |\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" "$(sha256sum "$f" | cut -d' ' -f1)"
             done
             echo
             echo "> ⚠️ **Mulai v1.3.0 nama paketnya berubah** (\`app.overlayops\` → \`app.appsperms\`). Uninstall versi lama dulu."
             echo
-            echo "Situs: https://appsperms.xyverse.my.id/ · data scan: \`docs/data/virustotal.json\`"
+            echo "Situs: https://appsperms.xyverse.my.id/ · direct APK: https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk"
           } > out/release-notes.md
 
           ls -lh out
+          ls -lh docs/apk/
 
       - name: Scan VirusTotal & perbarui data situs (hanya rilis bertag v*)
         if: startsWith(github.ref, 'refs/tags/v')
@@ -189,7 +149,6 @@ jobs:
           if [ -z "${VT_API_KEY:-}" ]; then
             echo "::warning::Secret VT_API_KEY belum diset — scan VirusTotal dilewati; hash & ukuran tetap diperbarui."
           else
-            # Header v3 yang benar: X-Apikey (tanpa strip); -L wajib (www->api redirect)
             H="X-Apikey: $VT_API_KEY"
             J=$(curl -sL -H "$H" "$V3/files/$REL_SHA" || true)
             AID=""
@@ -207,9 +166,6 @@ jobs:
                 [ "$ST" = "completed" ] && break
                 sleep 15
               done
-              # Angka dibaca dari respons /analyses (instan). Metadata /files/{sha}
-              # baru disinkronkan VT beberapa menit pasca-scan -> 0/0 kalau dibaca
-              # buru-buru (penyebab catatan rilis v1.4.1 pertama jadi "0 / 0").
               AN=$(curl -sL -H "$H" "$V3/analyses/$AID" || true)
               DET=$(jq -r '[(.data.attributes.stats.malicious // 0), (.data.attributes.stats.suspicious // 0)] | add' <<<"$AN")
               TOT=$(jq -r '[.data.attributes.stats | (.malicious // 0) + (.suspicious // 0) + (.undetected // 0) + (.harmless // 0)] | add' <<<"$AN")
@@ -220,29 +176,24 @@ jobs:
               fi
             fi
             if [ "$CHECKED" != "true" ] && jq -e '.data.attributes.last_analysis_stats' >/dev/null 2>&1 <<<"$J"; then
-              # fallback: file yang sudah dikenal VirusTotal (jalur tanpa upload)
               DET=$(jq -r '[(.data.attributes.last_analysis_stats.malicious // 0), (.data.attributes.last_analysis_stats.suspicious // 0)] | add' <<<"$J")
               TOT=$(jq -r '[.data.attributes.last_analysis_stats | (.malicious // 0) + (.suspicious // 0) + (.undetected // 0) + (.harmless // 0)] | add' <<<"$J")
               CHECKED=true
             fi
           fi
 
-          # 1) data live untuk website (index.html & thanks.html membaca file ini).
-          #    SELALU ditulis — hash & ukuran akurat walau scan VT dilewati
-          #    (blok virustotal membawa checked:false, situs menampilkan fallback).
           jq -n --arg v "$VERSION" --arg now "$NOW" \
              --arg rfile "AppsPerms-$VERSION-release.apk" --arg dfile "AppsPerms-$VERSION-debug.apk" \
              --arg rsha "$REL_SHA" --arg dsha "$DBG_SHA" --argjson rmb "$REL_MB" --argjson dmb "$DBG_MB" \
              --argjson checked "$CHECKED" --argjson det "$DET" --argjson tot "$TOT" --arg perma "$PERMA" \
-             '{updated_utc:$now, version:$v, generated_by:"GitHub Actions build.yml (otomatis tiap tag v*)",
-               release:{file:$rfile, sha256:$rsha, size_mb:$rmb},
-               debug:{file:$dfile, sha256:$dsha, size_mb:$dmb},
-               virustotal:{checked:$checked, detected:$det, total:$tot, permalink:$perma, checked_utc:$now}}' \
+             '{updated_utc:$now, version:$v, generated_by:"GitHub Actions build.yml (otomatis tiap tag v*) - FIXED hosting",
+               release:{file:$rfile, sha256:$rsha, size_mb:$rmb, direct_url:"/apk/AppsPerms-latest.apk"},
+               debug:{file:$dfile, sha256:$dsha, size_mb:$dmb, direct_url:"/apk/AppsPerms-debug-latest.apk"},
+               virustotal:{checked:$checked, detected:$det, total:$tot, permalink:$perma, checked_utc:$now},
+               hosting:{primary:"Cloudflare Pages /apk/", fallback:"GitHub xykal/AppPerms", anti_suspend:true}}' \
              > docs/data/virustotal.json
           cp docs/data/virustotal.json out/virustotal.json
 
-          # 2) kartu hasil scan (PNG) — hanya saat scan benar-benar jalan, supaya
-          #    screenshot CLEAN yang ada tidak tertimpa kartu "belum tersedia"
           if [ "$CHECKED" = "true" ]; then
             if python3 -c "import PIL" 2>/dev/null || pip install --quiet pillow; then
               python3 docs/tools/make-vt-card.py --data docs/data/virustotal.json --out docs/images/virustotal-report.png \
@@ -250,7 +201,6 @@ jobs:
             fi
           fi
 
-          # 3) laporan ke catatan rilis
           {
             echo
             echo "### 🔐 Audit VirusTotal (scan otomatis CI)"
@@ -261,30 +211,29 @@ jobs:
               echo "- Scan otomatis **dilewati** (secret \`VT_API_KEY\` belum diset). Scan manual: $PERMA"
             fi
             echo "- SHA-256 release APK: \`$REL_SHA\`"
+            echo "- Direct hosting: \`/apk/AppsPerms-latest.apk\` (Cloudflare Pages, anti-suspend)"
           } >> out/release-notes.md
 
-          # 4) push balik data (+kartu jika ada) ke main
-          #    (perubahan docs/ TIDAK memicu build APK — lihat paths-ignore)
-          if true; then
-            git add docs/data/virustotal.json
-            [ -f out/virustotal-report.png ] && git add docs/images/virustotal-report.png
-            if ! git diff --cached --quiet; then
-              git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykal.local" \
-                  commit -q -m "docs: hasil scan VirusTotal & hash v$VERSION (otomatis CI)"
-              git push "https://github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/main \
-                || echo "::warning::push docs gagal (main sudah bergeser?) — file tetap ada di artefak build."
-            fi
+          git add docs/data/virustotal.json docs/apk/
+          [ -f out/virustotal-report.png ] && git add docs/images/virustotal-report.png
+          if ! git diff --cached --quiet; then
+            git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykal.local" \
+                commit -q -m "docs: hasil build v$VERSION + APK direct hosting anti-suspend (otomatis CI)"
+            git push "https://github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/main \
+              || echo "::warning::push docs gagal — file tetap ada di artefak build."
           fi
 
-      - name: Upload artifact
+      - name: Upload artifact (APK + data)
         uses: actions/upload-artifact@v4
         with:
-          name: AppsPerms-${{ github.run_number }}
-          path: out/*
+          name: AppsPerms-${{ github.run_number }}-fixed
+          path: |
+            out/*
+            docs/apk/*
           if-no-files-found: error
           retention-days: 30
 
-      - name: Release (kalau push tag v*)
+      - name: Release ke GitHub aktif xykal/AppPerms (bukan xykalnotkel yang suspend)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
@@ -294,10 +243,12 @@ jobs:
             out/virustotal.json
           generate_release_notes: true
           body_path: out/release-notes.md
+          # Pastikan repo ini adalah xykal/AppPerms yang aktif
+          # Kalau masih di repo lama yang suspend, release akan gagal -> itu tanda harus migrasi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publikasikan situs ke Cloudflare Pages
+      - name: Deploy ke Cloudflare Pages (primary hosting anti-suspend)
         if: always() && !cancelled()
         continue-on-error: true
         env:
@@ -305,12 +256,36 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_PAGES_PROJECT: appsperms
         run: |
-          # Situs kini di-serve Cloudflare Pages (appsperms.xyverse.my.id).
-          # Deploy tiap run supaya data/hash/kartu hasil step di atas langsung
-          # tayang — juga saat commit-balik docs ke main.
           if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
             echo "::notice::Secret CLOUDFLARE_API_TOKEN/ACCOUNT_ID belum diset — lewati publish Pages."
+            echo "APK sudah ada di docs/apk/ dan akan ter-publish saat push ke main (via Pages Git integration)"
             exit 0
           fi
           npx --yes wrangler@3 pages deploy docs \
             --project-name="$CLOUDFLARE_PAGES_PROJECT" --branch=main --commit-dirty=true
+
+      - name: (Opsional) Upload ke R2 bucket untuk dl subdomain
+        if: startsWith(github.ref, 'refs/tags/v')
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET: appsperms-apk
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "Skip R2 upload - no token"
+            exit 0
+          fi
+          # Upload ke R2 jika bucket ada
+          for f in out/*.apk; do
+            base=$(basename "$f")
+            echo "Upload $base ke R2 $R2_BUCKET..."
+            npx --yes wrangler@3 r2 object put "$R2_BUCKET/$base" --file="$f" --content-type="application/vnd.android.package-archive" || echo "R2 upload gagal untuk $base (bucket mungkin belum dibuat)"
+            # Juga upload sebagai latest
+            if [[ "$base" == *"-release.apk" ]]; then
+              npx --yes wrangler@3 r2 object put "$R2_BUCKET/AppsPerms-latest.apk" --file="$f" --content-type="application/vnd.android.package-archive" || true
+            fi
+            if [[ "$base" == *"-debug.apk" ]]; then
+              npx --yes wrangler@3 r2 object put "$R2_BUCKET/AppsPerms-debug-latest.apk" --file="$f" --content-type="application/vnd.android.package-archive" || true
+            fi
+          done

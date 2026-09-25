@@ -1,0 +1,13 @@
+# PLACEHOLDER
+# File APK asli tidak ada di repo ini karena belum di-build
+# Setelah build, taruh file di sini:
+# - AppsPerms-latest.apk (copy dari AppsPerms-1.7.2-release.apk)
+# - AppsPerms-debug-latest.apk
+# - AppsPerms-1.7.2-release.apk
+# - AppsPerms-1.7.2-debug.apk
+#
+# Untuk testing lokal, bisa download dari mirror yang masih aktif
+# atau build sendiri via ./gradlew :app:assembleDebug
+#
+# SHA-256 v1.7.2 release yang terakhir tercatat:
+# 60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a

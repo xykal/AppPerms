@@ -1,0 +1,11 @@
+# Contoh SHA256SUMS - ganti dengan hasil build asli
+# Format: <sha256>  <filename>
+# v1.7.2 yang tercatat sebelumnya:
+60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a  AppsPerms-1.7.2-release.apk
+ce03c429a52dfd8c016b05024767231c3b383f0ec5cb0c3a46f0cd613efd6392  AppsPerms-1.7.2-debug.apk
+60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a  AppsPerms-latest.apk
+ce03c429a52dfd8c016b05024767231c3b383f0ec5cb0c3a46f0cd613efd6392  AppsPerms-debug-latest.apk
+
+# Cara generate:
+# sha256sum docs/apk/*.apk > docs/apk/SHA256SUMS
+# cat docs/apk/SHA256SUMS

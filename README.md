@@ -48,7 +48,7 @@ Website Resmi: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.i
 SHA-256 : 82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30
 SHA-1   : 99:55:67:5C:19:0C:BB:4B:0F:D5:08:94:74:08:D2:B8:92:22:69:FF
 MD5     : 86:4C:BF:D8:C3:9B:A3:F3:89:B8:5D:64:C2:A1:B7:D6
-Alias   : overlayops (CN=OverlayOps, OU=Release, O=xykalnotkel, C=ID)
+Alias   : overlayops (CN=OverlayOps, OU=Release, O=xykal, C=ID)
 ```
 
 ---

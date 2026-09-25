@@ -3,101 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0A0C10">
+  <meta name="theme-color" content="#080A0E">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
   <link rel="canonical" href="https://appsperms.xyverse.my.id/thanks">
-  <title>AppsPerms — Panduan Unduh &amp; Pemasangan | Built-in XyVerse by Kall</title>
-
-  <!-- Open Graph / Meta -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AppsPerms · XyVerse">
-  <meta property="og:locale" content="id_ID">
-  <meta property="og:url" content="https://appsperms.xyverse.my.id/thanks">
-  <meta property="og:title" content="AppsPerms — Panduan Unduh &amp; Pemasangan">
+  <title>AppsPerms — Panduan Unduh & Pemasangan | Built-in XyVerse by Kall</title>
+  <meta property="og:title" content="AppsPerms — Panduan Unduh & Pemasangan">
   <meta property="og:description" content="Terima kasih telah mengunduh AppsPerms. Panduan verifikasi hash SHA-256 dan instalasi via Shizuku tanpa root.">
   <meta property="og:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="AppsPerms — pengelola AppOps &amp; izin sistem Android via Shizuku">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AppsPerms — Panduan Unduh &amp; Pemasangan">
-  <meta name="twitter:description" content="Terima kasih telah mengunduh AppsPerms. Panduan verifikasi hash SHA-256 dan instalasi via Shizuku tanpa root.">
-  <meta name="twitter:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
-
-  <!-- Language Pre-detection (Anti-flicker) -->
   <script>
     (function () {
       var saved = localStorage.getItem('site_lang');
-      var lang = saved || ((navigator.language || navigator.userLanguage || '').toLowerCase().startsWith('id') ? 'id' : 'en');
+      var lang = saved || ((navigator.language || '').toLowerCase().startsWith('id') ? 'id' : 'en');
       document.documentElement.lang = lang;
     })();
   </script>
-
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%2312151B' stroke='%23212631' stroke-width='2'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23ECEFF4' stroke-width='4'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23E59800'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%230A0C10'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%230A0C10'/%3E%3Cpath d='M48,31h12' stroke='%23ECEFF4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
-
   <style>
-    /* ===== Solid Matte Deep Dark Palette (Zero Neon) ===== */
     :root {
-      --bg: #0A0C10;
-      --surface: #12151B;
-      --surface-2: #181C23;
-      --surface-3: #20252F;
-      --outline: #1E232D;
-      --outline-light: #2A313E;
-      --brand: #E59800;
-      --brand-dark: #B37400;
-      --brand-container: #201704;
-      --text: #ECEFF4;
-      --text-dim: #8B949E;
-      --text-muted: #57606A;
+      --bg: #080A0E;
+      --surface: #12151D;
+      --surface-2: #181C27;
+      --surface-3: #1E2330;
+      --outline: #1C212E;
+      --outline-light: #2A3242;
+      --brand: #FFA500;
+      --brand-2: #FFB52E;
+      --brand-dark: #CC8400;
+      --text: #F0F2F5;
+      --text-dim: #9AA3B2;
+      --text-muted: #626C7D;
       --ok: #3DDC84;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --ok-bg: rgba(61,220,132,0.1);
+      --ok-border: rgba(61,220,132,0.2);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.35);
     }
-
-    /* ===== Language Display Rules ===== */
     html[lang="id"] .lang-en { display: none !important; }
     html[lang="en"] .lang-id { display: none !important; }
-
     *, *::before, *::after { box-sizing: border-box; }
     * { margin: 0; padding: 0; }
-
     html {
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--text);
       font-family: var(--font);
       font-size: 15px;
-      line-height: 1.55;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
     body {
-      background: var(--bg);
+      background: 
+        radial-gradient(800px 400px at 50% -10%, rgba(255,165,0,0.06), transparent 60%),
+        radial-gradient(600px 300px at 80% 100%, rgba(61,220,132,0.04), transparent 60%),
+        var(--bg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     a { color: var(--brand); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--outline); }
-
-    .container {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 0 16px;
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--surface-2);
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1px solid var(--outline);
+      color: var(--brand-2);
     }
-
-    /* ===== Topbar ===== */
+    .container { width: 100%; max-width: 780px; margin: 0 auto; padding: 0 20px; }
     header.topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 16px 0;
+      padding: 18px 0;
       border-bottom: 1px solid var(--outline);
+      backdrop-filter: blur(12px);
     }
     .brand {
       display: flex;
@@ -109,562 +97,374 @@
       color: var(--text);
     }
     .brand:hover { text-decoration: none; }
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
     .topbar-link {
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       color: var(--text-dim);
       text-decoration: none;
       border: 1px solid var(--outline);
       background: var(--surface-2);
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
       transition: all 0.15s;
+      font-weight: 500;
     }
-    .topbar-link:hover { color: var(--text); border-color: var(--outline-light); text-decoration: none; }
-
+    .topbar-link:hover { color: var(--text); border-color: var(--outline-light); background: var(--surface-3); text-decoration: none; transform: translateY(-1px); }
     .lang-toggle-btn {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       background: var(--surface-2);
       border: 1px solid var(--outline);
       border-radius: 20px;
-      padding: 3px 8px;
+      padding: 4px;
       cursor: pointer;
       font-size: 0.78rem;
       font-weight: 700;
-      color: var(--text-dim);
-      transition: border-color 0.15s, color 0.15s;
+      color: var(--text-muted);
+      transition: all 0.2s;
     }
-    .lang-toggle-btn:hover { border-color: var(--brand); color: var(--text); }
-    .lang-toggle-btn span.active-lang {
-      background: var(--brand);
-      color: #0A0C10;
-      border-radius: 12px;
-      padding: 1px 6px;
-    }
-
-    main {
-      flex: 1 0 auto;
-      padding: 30px 0 50px;
-    }
-
-    /* ===== Status Icon ===== */
+    .lang-toggle-btn span { padding: 3px 10px; border-radius: 14px; transition: all 0.2s; }
+    .lang-toggle-btn span.active-lang { background: var(--text); color: var(--bg); box-shadow: var(--shadow-sm); }
+    main { flex: 1 0 auto; padding: 32px 0 56px; }
     .status-badge {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 16px;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 20px;
       border-radius: 50%;
-      background: var(--surface-2);
+      background: linear-gradient(135deg, var(--surface-2), var(--surface));
       border: 2px solid var(--ok);
       display: grid;
       place-items: center;
+      box-shadow: 0 0 0 6px var(--ok-bg), var(--shadow-md);
+      animation: float 3s ease-in-out infinite;
     }
-    .status-badge svg {
-      width: 32px;
-      height: 32px;
-      stroke: var(--ok);
-    }
-
-    .hero-text {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .hero-text h1 {
-      font-size: clamp(1.6rem, 5vw, 2.2rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-      color: #FFFFFF;
-    }
-    .hero-text p {
-      color: var(--text-dim);
-      font-size: 0.95rem;
-      max-width: 580px;
-      margin: 0 auto;
-      line-height: 1.55;
-    }
-
-    /* ===== Download Status Card ===== */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    .status-badge svg { width: 32px; height: 32px; stroke: var(--ok); }
+    .hero-text { text-align: center; margin-bottom: 28px; }
+    .hero-text h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 850; letter-spacing: -0.02em; margin-bottom: 10px; color: var(--text); line-height: 1.2; }
+    .hero-text p { color: var(--text-dim); font-size: 0.95rem; max-width: 580px; margin: 0 auto; line-height: 1.6; }
     .dl-card {
-      background: var(--surface);
+      background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface) 100%);
       border: 1px solid var(--outline);
-      border-radius: 14px;
-      padding: 18px;
+      border-radius: var(--radius-lg);
+      padding: 20px;
       margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
     }
-    .dl-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .dl-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .dl-title {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-    }
+    .dl-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .dl-title-wrap { display: flex; align-items: center; gap: 10px; }
+    .dl-title { font-weight: 700; font-size: 1rem; color: var(--text); }
     .variant-tag {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      background: var(--brand-container);
-      color: var(--brand);
-      border: 1px solid var(--brand-dark);
-      padding: 2px 8px;
-      border-radius: 6px;
+      letter-spacing: 0.05em;
+      background: var(--brand);
+      color: #0A0C10;
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(255,165,0,0.25);
     }
-    .dl-desc {
-      font-size: 0.88rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
-
-    /* ===== Action Buttons ===== */
-    .btn-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    @media (min-width: 520px) {
-      .btn-row { flex-direction: row; }
-    }
-    .btn-cf-glossy, .btn-dark-glossy {
+    .dl-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+    .btn-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    @media (min-width: 560px) { .btn-row { flex-direction: row; } }
+    .btn-primary, .btn-secondary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      min-height: 46px;
-      padding: 10px 18px;
+      gap: 10px;
+      min-height: 48px;
+      padding: 12px 20px;
       font-weight: 700;
       font-size: 0.92rem;
-      border-radius: 10px;
+      border-radius: 12px;
       text-decoration: none;
       flex: 1;
       cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+      letter-spacing: -0.01em;
     }
-    .btn-cf-glossy {
+    .btn-primary {
       color: #0A0C10;
-      background: #E59800;
-      border: 1px solid #D18700;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      border: 1px solid var(--brand-dark);
+      box-shadow: 0 4px 16px rgba(255,165,0,0.25);
     }
-    .btn-cf-glossy:hover {
-      text-decoration: none;
-      background: #F0A515;
-      transform: translateY(-1px);
-    }
-    .btn-dark-glossy {
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,165,0,0.35); text-decoration: none; }
+    .btn-secondary {
       color: var(--text);
       background: var(--surface-2);
       border: 1px solid var(--outline-light);
+      box-shadow: var(--shadow-sm);
     }
-    .btn-dark-glossy:hover {
-      text-decoration: none;
-      background: var(--surface-3);
-      border-color: #3E4758;
-      transform: translateY(-1px);
-    }
-
-    /* ===== Info Cards ===== */
+    .btn-secondary:hover { background: var(--surface-3); border-color: var(--outline-light); transform: translateY(-1px); text-decoration: none; box-shadow: var(--shadow-md); }
     .card {
       background: var(--surface);
       border: 1px solid var(--outline);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: var(--radius-lg);
+      padding: 22px;
       margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s;
     }
-    .card h2 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    ol.steps {
-      list-style: none;
-      counter-reset: s;
-      display: grid;
-      gap: 12px;
-    }
-    ol.steps li {
-      counter-increment: s;
-      display: grid;
-      grid-template-columns: 26px 1fr;
-      gap: 12px;
-      font-size: 0.88rem;
-      color: var(--text-dim);
-      line-height: 1.55;
-    }
+    .card:hover { border-color: var(--outline-light); }
+    .card h2 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.01em; }
+    ol.steps { list-style: none; counter-reset: s; display: grid; gap: 14px; }
+    ol.steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 14px; font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
     ol.steps li::before {
       content: counter(s);
-      width: 26px;
-      height: 26px;
+      width: 32px;
+      height: 32px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
+      border-radius: 10px;
       background: var(--surface-2);
       border: 1px solid var(--outline);
       color: var(--brand);
-      font-weight: 700;
-      font-size: 0.78rem;
+      font-weight: 800;
+      font-size: 0.85rem;
       font-family: var(--mono);
+      flex-shrink: 0;
     }
     ol.steps li strong { color: var(--text); }
-
     .note-box {
       border-left: 3px solid var(--brand);
       background: var(--surface-2);
-      border-radius: 8px;
-      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 16px;
       font-size: 0.85rem;
       color: var(--text-dim);
-      line-height: 1.5;
-      margin-top: 14px;
+      line-height: 1.6;
+      margin-top: 18px;
+      border: 1px solid var(--outline);
+      border-left: 3px solid var(--brand);
     }
     .note-box strong { color: var(--text); }
-
     .hash-display {
       font-family: var(--mono);
       font-size: 0.82rem;
-      color: var(--brand);
+      color: var(--brand-2);
       background: var(--surface-2);
       border: 1px solid var(--outline);
-      border-radius: 8px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 12px 14px;
       word-break: break-all;
-      display: block;
-      margin-top: 6px;
-    }
-
-    .pills-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
     }
+    .hash-display span { flex: 1; }
+    .copy-btn {
+      background: var(--surface-3);
+      border: 1px solid var(--outline-light);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .pills-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: var(--surface-2);
       border: 1px solid var(--outline);
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 6px 12px;
+      border-radius: 10px;
       font-size: 0.78rem;
       color: var(--text-dim);
+      font-weight: 500;
     }
     .pill svg { color: var(--ok); }
-
-    /* ===== Footer ===== */
     footer {
       border-top: 1px solid var(--outline);
-      padding: 22px 0;
-      font-size: 0.84rem;
+      padding: 24px 0;
+      font-size: 0.85rem;
       color: var(--text-dim);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
-    @media (min-width: 640px) {
-      footer { flex-direction: row; justify-content: space-between; align-items: center; }
-    }
-    .footer-links {
-      display: flex;
-      gap: 16px;
-    }
-    .footer-links a { color: var(--text-dim); }
+    @media (min-width: 640px) { footer { flex-direction: row; justify-content: space-between; align-items: center; } }
+    .footer-links { display: flex; gap: 18px; }
+    .footer-links a { color: var(--text-dim); font-weight: 500; }
     .footer-links a:hover { color: var(--brand); text-decoration: none; }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <!-- Topbar -->
     <header class="topbar">
       <a href="index.html" class="brand">
-        <svg width="22" height="22" viewBox="0 0 108 108" fill="none">
-          <rect width="108" height="108" rx="28" fill="#12151B"/>
-          <path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#ECEFF4" stroke-width="8"/>
-          <rect x="46" y="44" width="36" height="26" rx="6" fill="#E59800"/>
-          <rect x="51" y="50" width="22" height="4" rx="2" fill="#0A0C10"/>
-          <rect x="51" y="58" width="14" height="4" rx="2" fill="#0A0C10"/>
-        </svg>
+        <svg width="22" height="22" viewBox="0 0 108 108" fill="none"><rect width="108" height="108" rx="28" fill="#12151B"/><path d="M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z" stroke="#F0F2F5" stroke-width="8"/><rect x="46" y="44" width="36" height="26" rx="6" fill="#FFA500"/><rect x="51" y="50" width="22" height="4" rx="2" fill="#080A0E"/><rect x="51" y="58" width="14" height="4" rx="2" fill="#080A0E"/></svg>
         <span>AppsPerms</span>
       </a>
-
       <div class="topbar-actions">
-        <a href="index.html" class="topbar-link">
-          <span class="lang-id">&larr; Kembali ke Beranda</span>
-          <span class="lang-en">&larr; Back to Home</span>
-        </a>
-        <button class="lang-toggle-btn" id="langToggle" aria-label="Toggle language">
-          <span class="opt-id">ID</span>
-          <span>/</span>
-          <span class="opt-en">EN</span>
-        </button>
+        <a href="index.html" class="topbar-link"><span class="lang-id">← Beranda</span><span class="lang-en">← Home</span></a>
+        <button class="lang-toggle-btn" id="langToggle" aria-label="Toggle language"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
       </div>
     </header>
 
     <main>
-      <!-- Status Icon -->
       <div class="status-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
 
-      <!-- Hero Text -->
       <div class="hero-text">
-        <h1>
-          <span class="lang-id">Unduhan Siap Dipasang</span>
-          <span class="lang-en">Download Ready to Install</span>
-        </h1>
-        <p>
-          <span class="lang-id">Berkas <strong>AppsPerms <span id="verText">v1.7.2</span></strong> telah dikirim ke peramban Anda. Bebas iklan, nol izin internet, dan 100% aman via Shizuku.</span>
-          <span class="lang-en"><strong>AppsPerms <span id="verTextEn">v1.7.2</span></strong> has been sent to your browser. Ad-free, zero internet permissions, and 100% safe via Shizuku.</span>
-        </p>
+        <h1><span class="lang-id">Unduhan siap dipasang</span><span class="lang-en">Download ready to install</span></h1>
+        <p><span class="lang-id">Berkas <strong>AppsPerms <span id="verText">v1.7.2</span></strong> telah dikirim ke browser. Bebas iklan, 0 izin internet, anti-suspend hosting.</span><span class="lang-en"><strong>AppsPerms <span id="verTextEn">v1.7.2</span></strong> has been sent to your browser. Ad-free, zero internet, suspend-proof hosting.</span></p>
       </div>
 
-      <!-- Download Card -->
       <div class="dl-card">
         <div class="dl-head">
-          <div class="dl-title-wrap">
-            <span class="dl-title">
-              <span class="lang-id">Status Berkas APK</span>
-              <span class="lang-en">APK File Status</span>
-            </span>
-            <span class="variant-tag" id="varTag">Release</span>
-          </div>
-          <div>
-            <span id="fileText" style="font-family:var(--mono); font-size:0.84rem; color:var(--text-dim);">AppsPerms-latest.apk</span>
-          </div>
+          <div class="dl-title-wrap"><span class="dl-title"><span class="lang-id">Status Berkas</span><span class="lang-en">File Status</span></span><span class="variant-tag" id="varTag">Release</span></div>
+          <div><span id="fileText" style="font-family:var(--mono); font-size:0.84rem; color:var(--text-dim);">AppsPerms-latest.apk</span></div>
         </div>
-        <p class="dl-desc">
-          <span class="lang-id">Jika proses pengunduhan tidak berjalan secara otomatis, gunakan tombol <strong>Unduh Manual</strong> di bawah ini. Berkas akan tersimpan di folder Download perangkat Anda.</span>
-          <span class="lang-en">If your browser did not automatically start the download, click the <strong>Manual Download</strong> button below. The file is saved directly into your Download folder.</span>
-        </p>
+        <p class="dl-desc"><span class="lang-id">Jika download tidak otomatis, pakai tombol Manual di bawah. File tersimpan di folder Download.</span><span class="lang-en">If download didn't start automatically, use Manual button below. File saved to Download folder.</span></p>
       </div>
 
-      <!-- Buttons -->
       <div class="btn-row">
-        <a id="btnManualDl" class="btn-cf-glossy" href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span class="lang-id">Unduh Manual (Jika Belum Mulai)</span>
-          <span class="lang-en">Manual Download (If Not Started)</span>
+        <a id="btnManualDl" class="btn-primary" href="/apk/AppsPerms-latest.apk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span class="lang-id">Unduh Manual</span><span class="lang-en">Manual Download</span>
         </a>
-        <a class="btn-dark-glossy" href="index.html#panduan">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 16v-4"></path>
-            <path d="M12 8h.01"></path>
-          </svg>
-          <span class="lang-id">Panduan Shizuku</span>
-          <span class="lang-en">Shizuku Setup Guide</span>
+        <a class="btn-secondary" href="index.html#panduan">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+          <span class="lang-id">Panduan Shizuku</span><span class="lang-en">Shizuku Guide</span>
         </a>
       </div>
 
-      <!-- Installation Steps -->
       <div class="card">
-        <h2>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2">
-            <path d="M12 2v13"></path>
-            <path d="m19 9-7 7-7-7"></path>
-            <path d="M5 21h14"></path>
-          </svg>
-          <span class="lang-id">Panduan Pemasangan (30 Detik)</span>
-          <span class="lang-en">Installation Guide (30 Seconds)</span>
-        </h2>
+        <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFA500" stroke-width="2"><path d="M12 2v13"></path><path d="m19 9-7 7-7-7"></path><path d="M5 21h14"></path></svg><span class="lang-id">Pemasangan 30 detik</span><span class="lang-en">30s Installation</span></h2>
         <ol class="steps">
-          <li>
-            <span>
-              <span class="lang-id">Buka folder <strong>Download</strong> di pengelola berkas atau notifikasi peramban Anda, lalu ketuk berkas APK yang telah diunduh.</span>
-              <span class="lang-en">Open your <strong>Download</strong> folder or browser download notification, then tap the downloaded APK file.</span>
-            </span>
-          </li>
-          <li>
-            <span>
-              <span class="lang-id">Bila muncul dialog keamanan sistem, aktifkan opsi <strong>"Izinkan dari sumber ini"</strong> (Install unknown apps). Ini adalah prosedur standar Android untuk aplikasi non-Play Store.</span>
-              <span class="lang-en">If prompted by Android security, enable <strong>"Install unknown apps"</strong> (Allow from this source). This is standard Android procedure for third-party APKs.</span>
-            </span>
-          </li>
-          <li>
-            <span>
-              <span class="lang-id">Selesaikan proses instalasi lalu buka aplikasi <strong>AppsPerms</strong>.</span>
-              <span class="lang-en">Complete the package installer prompt, then launch <strong>AppsPerms</strong>.</span>
-            </span>
-          </li>
-          <li>
-            <span>
-              <span class="lang-id">Pastikan <strong>Shizuku</strong> sudah aktif, ketuk tombol <strong>Minta izin</strong> pada layar utama, dan pilih <em>"Izinkan selalu"</em>.</span>
-              <span class="lang-en">Ensure <strong>Shizuku</strong> is running, tap <strong>Request permission</strong> on the main screen, and choose <em>"Allow all the time"</em>.</span>
-            </span>
-          </li>
+          <li><span><span class="lang-id">Buka folder <strong>Download</strong>, ketuk APK yang diunduh.</span><span class="lang-en">Open <strong>Download</strong> folder, tap downloaded APK.</span></span></li>
+          <li><span><span class="lang-id">Aktifkan <strong>Izinkan dari sumber ini</strong> jika diminta.</span><span class="lang-en">Enable <strong>Allow from this source</strong> if prompted.</span></span></li>
+          <li><span><span class="lang-id">Selesaikan instalasi, buka <strong>AppsPerms</strong>.</span><span class="lang-en">Complete install, open <strong>AppsPerms</strong>.</span></span></li>
+          <li><span><span class="lang-id">Pastikan <strong>Shizuku</strong> aktif, tap <strong>Minta izin</strong> → <em>Izinkan selalu</em>.</span><span class="lang-en">Ensure <strong>Shizuku</strong> running, tap <strong>Request permission</strong> → <em>Allow all the time</em>.</span></span></li>
         </ol>
-
-        <div class="note-box">
-          <span class="lang-id"><strong>Catatan Migrasi dari OverlayOps:</strong> Jika sebelumnya Anda memasang versi legacy OverlayOps, hapus (uninstall) versi lama terlebih dahulu karena ID paket telah diperbarui menjadi <code>app.appsperms</code>.</span>
-          <span class="lang-en"><strong>Migration Notice from OverlayOps:</strong> If you previously installed legacy OverlayOps, uninstall it first as the package ID has been updated to <code>app.appsperms</code>.</span>
-        </div>
+        <div class="note-box"><span class="lang-id"><strong>Migrasi OverlayOps:</strong> Uninstall versi lama dulu karena ID paket berubah <code>app.overlayops → app.appsperms</code>.</span><span class="lang-en"><strong>OverlayOps Migration:</strong> Uninstall old version first as package ID changed <code>app.overlayops → app.appsperms</code>.</span></div>
       </div>
 
-      <!-- Hash Verification -->
       <div class="card">
-        <h2>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          <span class="lang-id">Verifikasi Keaslian Berkas (SHA-256)</span>
-          <span class="lang-en">File Authenticity Verification (SHA-256)</span>
-        </h2>
-        <span style="font-size:0.8rem; color:var(--text-muted);">
-          <span class="lang-id">Checksum kriptografis resmi rilis v1.7.2:</span>
-          <span class="lang-en">Official cryptographic checksum for release v1.7.2:</span>
-        </span>
-        <code class="hash-display" id="hashText">7d2d10701a6f19f685c5efe53075e7229255fce9d21127d6a7beed78d977f960</code>
-
-        <div class="pills-row">
-          <span class="pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span id="vtThanksPill">0/72 Clean VirusTotal</span>
-          </span>
-          <span class="pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span class="lang-id">0 Izin Internet</span>
-            <span class="lang-en">0 Internet Permission</span>
-          </span>
-          <span class="pill">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>RSA 4096-bit Signed</span>
-          </span>
-        </div>
+        <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFA500" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg><span class="lang-id">Verifikasi SHA-256</span><span class="lang-en">SHA-256 Verification</span></h2>
+        <span style="font-size:0.8rem; color:var(--text-muted);"><span class="lang-id">Checksum resmi v1.7.2:</span><span class="lang-en">Official checksum v1.7.2:</span></span>
+        <div class="hash-display" id="hashContainer"><span id="hashText">60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a</span><button class="copy-btn" id="copyHash">Copy</button></div>
+        <div class="pills-row"><span class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span id="vtThanksPill">0/67 Clean</span></span><span class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span class="lang-id">0 Izin Internet</span><span class="lang-en">0 Internet Permission</span></span><span class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>RSA 4096-bit</span></div>
       </div>
     </main>
 
-    <!-- Footer -->
     <footer>
-      <div>
-        <strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong> (@xykalnotkel).
-      </div>
-      <div class="footer-links">
-        <a href="https://github.com/xykalnotkel/OverlayOps" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/xykalnotkel/OverlayOps/releases" target="_blank" rel="noopener">
-          <span class="lang-id">Semua Rilis</span>
-          <span class="lang-en">All Releases</span>
-        </a>
-        <a href="index.html">
-          <span class="lang-id">Beranda</span>
-          <span class="lang-en">Home</span>
-        </a>
-      </div>
+      <div><strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong> (@xykal) · <span style="color:var(--ok);">✓ Anti-Suspend</span></div>
+      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank">GitHub</a><a href="https://github.com/xykal/AppPerms/releases" target="_blank"><span class="lang-id">Semua Rilis</span><span class="lang-en">All Releases</span></a><a href="index.html"><span class="lang-id">Beranda</span><span class="lang-en">Home</span></a></div>
     </footer>
   </div>
 
   <script>
-    /* ===== Language Switcher ===== */
     (function () {
-      function getActiveLang() {
-        return document.documentElement.lang || 'id';
-      }
-
+      function getLang() { return document.documentElement.lang || 'id'; }
       function setLang(lang) {
         document.documentElement.lang = lang;
         localStorage.setItem('site_lang', lang);
-        updateButtons(lang);
-      }
-
-      function updateButtons(lang) {
-        var isEn = (lang === 'en');
         var btn = document.getElementById('langToggle');
         if (!btn) return;
-        var optId = btn.querySelector('.opt-id');
-        var optEn = btn.querySelector('.opt-en');
-        if (optId) optId.classList.toggle('active-lang', !isEn);
-        if (optEn) optEn.classList.toggle('active-lang', isEn);
+        var idEl = btn.querySelector('.opt-id');
+        var enEl = btn.querySelector('.opt-en');
+        if (idEl) idEl.classList.toggle('active-lang', lang !== 'en');
+        if (enEl) enEl.classList.toggle('active-lang', lang === 'en');
       }
-
-      updateButtons(getActiveLang());
-
+      setLang(getLang());
       var btn = document.getElementById('langToggle');
-      if (btn) {
-        btn.addEventListener('click', function () {
-          var next = getActiveLang() === 'en' ? 'id' : 'en';
-          setLang(next);
-        });
-      }
+      if (btn) btn.addEventListener('click', function(){ setLang(getLang() === 'en' ? 'id' : 'en'); });
     })();
 
-    /* ===== Parameters, Trigger & CI Sync ===== */
     (function () {
       var params = new URLSearchParams(window.location.search);
       var variant = params.get('var') === 'debug' ? 'debug' : 'release';
       var version = params.get('v') || '1.7.2';
-
       var vtTag = document.getElementById('varTag');
       if (vtTag) vtTag.textContent = variant === 'debug' ? 'Debug' : 'Release';
-
       var vtText = document.getElementById('verText');
       if (vtText) vtText.textContent = 'v' + version;
       var vtTextEn = document.getElementById('verTextEn');
       if (vtTextEn) vtTextEn.textContent = 'v' + version;
-
+      var MIRRORS = {
+        release: ['/apk/AppsPerms-latest.apk','/apk/AppsPerms-1.7.2-release.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk','https://github.com/xykal/AppPerms/releases/download/v1.7.2/AppsPerms-1.7.2-release.apk'],
+        debug: ['/apk/AppsPerms-debug-latest.apk','/apk/AppsPerms-1.7.2-debug.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-debug-latest.apk']
+      };
+      var urls = (variant === 'debug') ? MIRRORS.debug : MIRRORS.release;
       var filename = (variant === 'debug') ? 'AppsPerms-debug-latest.apk' : 'AppsPerms-latest.apk';
-      var targetUrl = 'https://dl.appsperms.xyverse.my.id/' + filename;
-
+      var targetUrl = urls[0];
       var fileEl = document.getElementById('fileText');
       if (fileEl) fileEl.textContent = filename;
-
       var manualBtn = document.getElementById('btnManualDl');
       if (manualBtn) manualBtn.href = targetUrl;
 
-      // If user came directly without download trigger or wants fallback
-      if (!sessionStorage.getItem('dl_triggered_' + version + '_' + variant)) {
-        sessionStorage.setItem('dl_triggered_' + version + '_' + variant, '1');
-        var ifr = document.createElement('iframe');
-        ifr.style.display = 'none';
-        ifr.src = targetUrl;
-        document.body.appendChild(ifr);
+      function tryMirror(urls, idx){
+        idx = idx || 0;
+        if (idx >= urls.length) {
+          if (manualBtn) {
+            manualBtn.textContent = (document.documentElement.lang === 'en' ? 'Open GitHub Releases (all mirrors failed)' : 'Buka GitHub Releases (semua mirror gagal)');
+            manualBtn.href = 'https://github.com/xykal/AppPerms/releases';
+          }
+          return;
+        }
+        fetch(urls[idx], {method:'HEAD', cache:'no-store'}).then(function(r){
+          if (r.ok) {
+            var ifr = document.createElement('iframe');
+            ifr.style.display = 'none';
+            ifr.src = urls[idx];
+            document.body.appendChild(ifr);
+            if (manualBtn) manualBtn.href = urls[idx];
+          } else {
+            tryMirror(urls, idx+1);
+          }
+        }).catch(function(){ tryMirror(urls, idx+1); });
       }
 
-      // Fetch live virustotal & sha256
-      fetch('data/virustotal.json', { cache: 'no-store' }).then(function (r) {
-        return r.ok ? r.json() : null;
-      }).then(function (d) {
+      if (!sessionStorage.getItem('dl_triggered_' + version + '_' + variant)) {
+        sessionStorage.setItem('dl_triggered_' + version + '_' + variant, '1');
+        tryMirror(urls, 0);
+      }
+
+      fetch('data/virustotal.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
         if (!d) return;
         var info = (variant === 'debug' && d.debug && d.debug.sha256) ? d.debug : d.release;
         if (info && info.sha256) {
           var ht = document.getElementById('hashText');
           if (ht) ht.textContent = info.sha256;
+          var copyBtn = document.getElementById('copyHash');
+          if (copyBtn) copyBtn.setAttribute('data-copy', info.sha256);
         }
         var vt = d.virustotal || {};
         if (vt.checked) {
           var pill = document.getElementById('vtThanksPill');
           if (pill) pill.textContent = vt.detected + '/' + vt.total + ' Clean VirusTotal';
         }
-      }).catch(function () {});
+      }).catch(function(){});
+
+      var copyHashBtn = document.getElementById('copyHash');
+      if (copyHashBtn) {
+        copyHashBtn.addEventListener('click', function(){
+          var txt = document.getElementById('hashText').textContent;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(txt).then(function(){
+              copyHashBtn.textContent = 'Copied!';
+              setTimeout(function(){ copyHashBtn.textContent = 'Copy'; }, 2000);
+            });
+          }
+        });
+      }
     })();
   </script>
-
 </body>
 </html>
