@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Placeholder bulat XyVerse - will be replaced with real company logo mark-flat-purple.webp -->
+    <path android:fillColor="#FFFFFF" android:pathData="M0,0h64v64h-64z" android:fillAlpha="0"/>
+    <path android:fillColor="#7C3AED" android:pathData="M32,6 C18,6 6,18 6,32 C6,46 18,58 32,58 C46,58 58,46 58,32 C58,18 46,6 32,6 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M20,20 L28,20 L32,28 L36,20 L44,20 L38,32 L44,44 L36,44 L32,36 L28,44 L20,44 L26,32 Z" android:fillAlpha="0.95"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M32,12 L34,18 L40,18 L35,22 L37,28 L32,24 L27,28 L29,22 L24,18 L30,18 Z" android:fillAlpha="0.9"/>
+</vector>

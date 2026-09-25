@@ -13,6 +13,11 @@ import java.util.Locale
 /**
  * Helper Shizuku: probe status akses, minta izin, dan jalankan perintah `appops`
  * (jalur utama yang paling tahan-banting; binder dipakai sebagai bonus).
+ *
+ * v1.7.4 improvements:
+ * - Support semua UID (owner, work profile, clone, parallel)
+ * - Support emulator detection
+ * - Support multi-user via --user flag
  */
 object ShizukuBridge {
 
@@ -102,11 +107,6 @@ object ShizukuBridge {
 
     // ----------------------------------------------------------------- shell
 
-    /**
-     * Shizuku API 13 menyembunyikan Shizuku.newProcess (masih ada di class, tapi private),
-     * jadi dipanggil lewat refleksi. Kalau gagal, semua fungsi shell mati dan app
-     * jatuh ke jalur binder saja.
-     */
     private val newProcessMethod: Method? by lazy {
         runCatching {
             Shizuku::class.java
@@ -150,10 +150,31 @@ object ShizukuBridge {
 
     // ------------------------------------------------------- perintah appops
 
-    /**
-     * Baca mode overlay SEMUA paket sekaligus (4 perintah) — jauh lebih cepat
-     * daripada satu perintah per paket.
-     */
+    /** Daftar userId di device (0 = owner, 10 = work profile, 999 = clone, etc) */
+    fun listUsers(): List<Int> {
+        val result = shell("pm list users") ?: return listOf(0)
+        if (!result.ok) return listOf(0)
+        // Output: Users: UserInfo{0:Owner:13} running, UserInfo{10:Work profile:30} running
+        val regex = Regex("""UserInfo\{(\d+):""")
+        val users = regex.findAll(result.stdout).map { it.groupValues[1].toInt() }.toList()
+        return if (users.isNotEmpty()) users else listOf(0)
+    }
+
+    /** Apakah device ini emulator? */
+    fun isEmulator(): Boolean {
+        return (Build.FINGERPRINT.contains("generic") ||
+                Build.FINGERPRINT.contains("emulator") ||
+                Build.MODEL.contains("google_sdk") ||
+                Build.MODEL.contains("Emulator") ||
+                Build.MODEL.contains("Android SDK built for") ||
+                Build.MANUFACTURER.contains("Genymotion") ||
+                Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic") ||
+                Build.PRODUCT.contains("sdk") ||
+                Build.HARDWARE.contains("goldfish") ||
+                Build.HARDWARE.contains("ranchu"))
+    }
+
+    /** Baca mode overlay SEMUA paket sekaligus (4 perintah) — jauh lebih cepat */
     fun shellQueryOverlayBulk(): Map<String, OpStatus>? {
         val map = HashMap<String, OpStatus>()
         var anySuccess = false
@@ -167,6 +188,24 @@ object ShizukuBridge {
         return if (anySuccess) map else null
     }
 
+    /** Query overlay untuk semua user */
+    fun shellQueryOverlayBulkAllUsers(): Map<String, OpStatus> {
+        val combined = HashMap<String, OpStatus>()
+        val users = listUsers()
+        for (userId in users) {
+            val result = shell("appops query-op --user $userId ${OpCatalog.OVERLAY.shell} ${OpStatus.shellName(OpStatus.ALLOWED)}")
+            if (result?.ok == true) {
+                AppOpsParser.parseQueryOpPackages(result.stdout).forEach { pkg ->
+                    combined["$pkg:user$userId"] = OpStatus.ALLOWED
+                    if (!combined.containsKey(pkg)) combined[pkg] = OpStatus.ALLOWED
+                }
+            }
+        }
+        // Fallback to bulk without user flag
+        shellQueryOverlayBulk()?.let { combined.putAll(it) }
+        return combined
+    }
+
     /** Semua op milik satu paket dalam SATU perintah: `appops get <pkg>`. */
     fun shellReadOps(pkg: String): Map<String, OpStatus>? {
         val result = shell("appops get $pkg") ?: return null
@@ -176,18 +215,50 @@ object ShizukuBridge {
         return parsed
     }
 
-    /**
-     * Parser `appops get <pkg>` — logikanya dipindah ke [AppOpsParser] supaya bisa
-     * diuji lewat unit test JVM tanpa Android. Fungsi ini tinggal jadi jembatan.
-     */
+    /** Baca ops untuk user tertentu */
+    fun shellReadOpsForUser(pkg: String, userId: Int): Map<String, OpStatus>? {
+        val result = shell("appops get --user $userId $pkg") ?: shell("appops get $pkg")
+        if (result?.ok != true) return null
+        return parseAppOpsGet(result.stdout).ifEmpty { null }
+    }
+
     fun parseAppOpsGet(output: String): Map<String, OpStatus> =
         AppOpsParser.parseAppOpsGet(output)
 
-    /** Tulis satu op: `appops set --uid <pkg> <OP> <mode>`. */
+    /** Tulis satu op: `appops set --uid <pkg> <OP> <mode>` dengan support multi-user */
     fun shellSetOp(pkg: String, shellOp: String, status: OpStatus): String? {
-        val result = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
-            ?: return "perintah appops tidak bisa dijalankan (jalur shell mati)"
-        return if (result.ok) null else result.message
+        // Try with --uid first (sets for all UIDs, handles clones)
+        val resultUid = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
+        if (resultUid?.ok == true) return null
+
+        // Fallback: try per-user
+        val users = listUsers()
+        var lastError: String? = resultUid?.message
+        for (userId in users) {
+            val result = shell("appops set --user $userId $pkg $shellOp ${OpStatus.shellName(status)}")
+            if (result?.ok == true) return null
+            lastError = result?.message ?: lastError
+        }
+
+        // Last fallback: without any flag
+        val resultPlain = shell("appops set $pkg $shellOp ${OpStatus.shellName(status)}")
+        return if (resultPlain?.ok == true) null else resultPlain?.message ?: lastError ?: "perintah appops tidak bisa dijalankan"
+    }
+
+    /** Set op untuk semua user sekaligus */
+    fun shellSetOpAllUsers(pkg: String, shellOp: String, status: OpStatus): String? {
+        val users = listUsers()
+        var firstError: String? = null
+        var anySuccess = false
+        for (userId in users) {
+            val result = shell("appops set --user $userId $pkg $shellOp ${OpStatus.shellName(status)}")
+            if (result?.ok == true) anySuccess = true else if (firstError == null) firstError = result?.message
+        }
+        // Also try --uid
+        val resultUid = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
+        if (resultUid?.ok == true) anySuccess = true
+
+        return if (anySuccess) null else firstError ?: "gagal set untuk semua user"
     }
 
     /** Baca satu op (fallback kalau `appops get <pkg>` tidak bisa diparse). */
@@ -210,11 +281,15 @@ object ShizukuBridge {
             !snapshot.permission -> "berjalan (v${snapshot.version}), izin BELUM diberikan"
             else -> "berjalan (v${snapshot.version}, uid=${snapshot.uid}, ${if (snapshot.isRoot) "root" else "shell"})"
         }
+        val users = if (snapshot.permission) listUsers() else emptyList()
+        val emulator = isEmulator()
         return buildString {
             append("Android ").append(Build.VERSION.RELEASE)
             append(" (SDK ").append(Build.VERSION.SDK_INT).append(")\n")
             append("Perangkat: ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append('\n')
             append("ROM: ").append(Build.DISPLAY).append('\n')
+            append("Emulator: ").append(if (emulator) "Ya (deteksi: ${Build.MODEL})" else "Tidak").append('\n')
+            append("Users: ").append(users.joinToString(", ").ifEmpty { "0 (owner only)" }).append('\n')
             append("Shizuku: ").append(shizuku).append('\n')
             append("Status: ").append(snapshot.state.name).append('\n')
             append("Jalur aktif: ").append(if (snapshot.preferShell) "perintah `appops` (shell)" else "binder IAppOpsService").append('\n')

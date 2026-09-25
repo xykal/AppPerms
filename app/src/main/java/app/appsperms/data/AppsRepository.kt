@@ -12,42 +12,47 @@ import app.appsperms.core.OpDef
 import app.appsperms.core.OpStatus
 import app.appsperms.core.ShizukuBridge
 import app.appsperms.model.AppEntry
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * Baca daftar aplikasi + status AppOps-nya.
  *
- * Strategi baca/write: **shell-first** (`appops query-op` / `appops get` / `appops set`)
- * karena perintah ini resmi & stabil di semua ROM; binder IAppOpsService dipakai kalau
- * refleksi berhasil (lebih cepat, satu panggilan per op).
- *
- * Semua fungsi di sini berat -> panggil dari Dispatchers.IO.
+ * v1.7.4 improvements:
+ * - Support semua UID (owner, work profile, clone, parallel, dual)
+ * - Detect emulator, clone, work profile
+ * - Bulk query for all users
  */
 class AppsRepository(private val context: Context) {
 
     private val pm: PackageManager = context.packageManager
-    // Cache ikon 200 entri agar memori efisien dan scrolling tetap halus tanpa IPC berulang.
     private val iconCache = LruCache<String, Drawable>(200)
 
-    // ------------------------------------------------------------ daftar app
+    companion object {
+        private const val TAG = "AppsRepository"
+    }
 
     fun loadApps(
         preferShell: Boolean,
         onProgress: (done: Int, total: Int) -> Unit = { _, _ -> },
     ): List<AppEntry> {
         val infos: List<ApplicationInfo> = try {
-            pm.getInstalledApplications(PackageManager.MATCH_DISABLED_COMPONENTS)
+            // MATCH_ALL to include work profile, clone, etc
+            val flags = PackageManager.MATCH_DISABLED_COMPONENTS or
+                    PackageManager.MATCH_UNINSTALLED_PACKAGES or
+                    (if (android.os.Build.VERSION.SDK_INT >= 33) PackageManager.MATCH_ALL else 0)
+            pm.getInstalledApplications(flags)
         } catch (t: Throwable) {
-            Log.w(TAG, "getInstalledApplications gagal", t)
-            emptyList()
+            Log.w(TAG, "getInstalledApplications MATCH_ALL gagal, fallback", t)
+            try {
+                pm.getInstalledApplications(PackageManager.MATCH_DISABLED_COMPONENTS)
+            } catch (e: Throwable) {
+                Log.w(TAG, "getInstalledApplications gagal", e)
+                emptyList()
+            }
         }
 
         val total = infos.size
         onProgress(0, total)
 
-        // Ambil himpunan paket yang meminta izin overlay dalam 1 batch call (bukan N IPC calls)
         val declaredOverlaySet: Set<String> = runCatching {
             pm.getInstalledPackages(PackageManager.GET_PERMISSIONS)
                 .asSequence()
@@ -58,18 +63,24 @@ class AppsRepository(private val context: Context) {
                 .toSet()
         }.getOrElse { emptySet() }
 
-        // Satu tembakan untuk semua paket (4 perintah), bukan satu perintah per app.
-        val bulk: Map<String, OpStatus>? = if (preferShell) ShizukuBridge.shellQueryOverlayBulk() else null
+        // Bulk query - try all users version if shell available
+        val bulk: Map<String, OpStatus>? = if (preferShell) {
+            try {
+                ShizukuBridge.shellQueryOverlayBulkAllUsers()
+            } catch (e: Throwable) {
+                ShizukuBridge.shellQueryOverlayBulk()
+            }
+        } else null
 
-        // Berapa paket yang berbagi UID? AppOps disimpan per-UID, jadi app dengan UID
-        // sama (klon / profil kerja) ikut berubah saat salah satunya diubah.
         val uidCounts: Map<Int, Int> = infos.groupingBy { it.uid }.eachCount()
+        val isEmulator = ShizukuBridge.isEmulator()
+        val users = if (preferShell) ShizukuBridge.listUsers() else listOf(0)
 
         val list = ArrayList<AppEntry>(total)
         var count = 0
         for (info in infos) {
             count++
-            val entry = toEntry(info, bulk, declaredOverlaySet, preferShell, uidCounts[info.uid] ?: 1)
+            val entry = toEntry(info, bulk, declaredOverlaySet, preferShell, uidCounts[info.uid] ?: 1, isEmulator, users)
             if (entry != null) {
                 list.add(entry)
             }
@@ -78,7 +89,7 @@ class AppsRepository(private val context: Context) {
             }
         }
 
-        return list.sortedBy { it.labelLower }
+        return list.sortedWith(compareBy<AppEntry> { it.isSpecialUser }.thenBy { it.labelLower })
     }
 
     private fun toEntry(
@@ -87,6 +98,8 @@ class AppsRepository(private val context: Context) {
         declaredOverlaySet: Set<String>,
         preferShell: Boolean,
         sharedUidCount: Int,
+        isEmulatorDevice: Boolean,
+        allUsers: List<Int>,
     ): AppEntry? {
         val pkg = info.packageName ?: return null
         val isSystem = (info.flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
@@ -98,12 +111,27 @@ class AppsRepository(private val context: Context) {
             declaresOverlayPermission(pkg)
         }
 
-        // Ambil dari cache jika sudah pernah di-load (0ms), jangan loadIcon sinkron di scan loop!
         val icon = iconCache.get(pkg)
 
+        // Detect userId from uid: uid = userId * 100000 + appId
+        val userId = info.uid / 100000
+        val isClone = detectClone(pkg, info, userId)
+        val isWorkProfile = userId >= 10 && userId < 100
+        val isEmulatorApp = isEmulatorDevice && (pkg.contains("emulator") || pkg.contains("genymotion"))
+
         val status = when {
-            bulk != null -> bulk[pkg] ?: OpStatus.DEFAULT
-            preferShell -> ShizukuBridge.shellGetOp(pkg, OpCatalog.OVERLAY.shell)
+            bulk != null -> {
+                // Try with user suffix first, then plain
+                bulk["$pkg:user$userId"] ?: bulk[pkg] ?: OpStatus.DEFAULT
+            }
+            preferShell -> {
+                // Try with user flag
+                if (userId != 0) {
+                    ShizukuBridge.shellReadOpsForUser(pkg, userId)?.get(OpCatalog.OVERLAY.shell) ?: OpStatus.DEFAULT
+                } else {
+                    ShizukuBridge.shellGetOp(pkg, OpCatalog.OVERLAY.shell)
+                }
+            }
             else -> AppOpsBridge.getStatus(OpCatalog.OVERLAY.op, info.uid, pkg)
         }
 
@@ -118,10 +146,26 @@ class AppsRepository(private val context: Context) {
             icon = icon,
             overlayStatus = status,
             sharedUidCount = sharedUidCount,
+            userId = userId,
+            isClone = isClone,
+            isWorkProfile = isWorkProfile,
+            isEmulatorApp = isEmulatorApp,
         )
     }
 
-    /** Ikon on-demand: jika belum di-cache, load lalu simpan di LruCache. */
+    private fun detectClone(pkg: String, info: ApplicationInfo, userId: Int): Boolean {
+        // MIUI Dual Apps, Samsung Secure Folder, OxygenOS Parallel Apps, Shelter, Island
+        // Often userId 999 or 10+, or package with suffix, or shared UID >1 with same package prefix
+        if (userId == 999) return true
+        if (userId >= 10) return true // work profile or clone
+        // Check if package is known clone pattern
+        if (pkg.contains(":clone") || pkg.contains(".clone") || pkg.contains("_clone")) return true
+        // Check data dir contains user id
+        val dataDir = info.dataDir ?: ""
+        if (dataDir.contains("/user/") && !dataDir.contains("/user/0/")) return true
+        return false
+    }
+
     fun getOrLoadIcon(pkg: String): Drawable? {
         iconCache.get(pkg)?.let { return it }
         val drawable = runCatching { pm.getApplicationIcon(pkg) }.getOrNull() ?: return null
@@ -137,16 +181,19 @@ class AppsRepository(private val context: Context) {
         false
     }
 
-    // ----------------------------------------------------------- baca 1 paket
-
-    /** Semua op katalog untuk satu paket, urut sesuai [OpCatalog.ALL]. */
     fun readOps(entry: AppEntry, preferShell: Boolean): List<Pair<OpDef, OpStatus>> {
         if (preferShell) {
+            // Try with userId first
+            if (entry.userId != 0) {
+                val parsedUser = ShizukuBridge.shellReadOpsForUser(entry.packageName, entry.userId)
+                if (parsedUser != null) {
+                    return OpCatalog.ALL.map { def -> def to (parsedUser[def.shell] ?: OpStatus.DEFAULT) }
+                }
+            }
             val parsed = ShizukuBridge.shellReadOps(entry.packageName)
             if (parsed != null) {
                 return OpCatalog.ALL.map { def -> def to (parsed[def.shell] ?: OpStatus.DEFAULT) }
             }
-            // parser gagal (ROM beda) -> baca satu-satu
             return OpCatalog.ALL.map { def ->
                 def to ShizukuBridge.shellGetOp(entry.packageName, def.shell)
             }
@@ -154,20 +201,20 @@ class AppsRepository(private val context: Context) {
         return AppOpsBridge.readAll(entry.uid, entry.packageName)
     }
 
-    // ------------------------------------------------------------- tulis op
-
     fun writeOp(entry: AppEntry, def: OpDef, status: OpStatus, preferShell: Boolean): String? {
         if (preferShell) {
+            // For clones/work profile, set for all users to ensure consistency
+            if (entry.isSpecialUser) {
+                return ShizukuBridge.shellSetOpAllUsers(entry.packageName, def.shell, status)
+            }
             return ShizukuBridge.shellSetOp(entry.packageName, def.shell, status)
         }
         val viaBinder = AppOpsBridge.setStatus(def.op, entry.uid, entry.packageName, status.mode)
         if (viaBinder == null) return null
-        // Binder jalan tapi ROM menolak (SecurityException dsb) -> coba jalur shell.
         val viaShell = ShizukuBridge.shellSetOp(entry.packageName, def.shell, status)
         return viaShell ?: viaBinder
     }
 
-    /** Tulis overlay untuk banyak app sekaligus. `onProgress` dipanggil per app. */
     fun writeOverlayBatch(
         entries: List<AppEntry>,
         status: OpStatus,
@@ -184,35 +231,19 @@ class AppsRepository(private val context: Context) {
         return applied to firstError
     }
 
-    // ---------------------------------------------------------------- backup
-
-    /** Backup status eksplisit ke teks sederhana yang gampang dibaca manusia. */
     fun exportBackup(apps: List<AppEntry>): String {
-        val stamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+        val stamp = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.US).format(java.util.Date())
         return buildString {
             append("# AppsPerms backup\n")
             append("# dibuat: ").append(stamp).append('\n')
-            append("# format: <nama paket>=<allow|ignore|deny|foreground>\n")
+            append("# format: <nama paket>=<allow|ignore|deny|foreground>[:userId]\n")
             apps.filter { it.overlayStatus.isExplicit || it.overlayStatus == OpStatus.FOREGROUND }
                 .sortedBy { it.packageName }
-                .forEach { append(it.packageName).append('=').append(OpStatus.shellName(it.overlayStatus)).append('\n') }
+                .forEach {
+                    append(it.packageName)
+                    if (it.userId != 0) append(":user${it.userId}")
+                    append('=').append(OpStatus.shellName(it.overlayStatus)).append('\n')
+                }
         }
-    }
-
-    /** Parse hasil [exportBackup]; baris tidak valid diabaikan. */
-    fun parseBackup(text: String): List<Pair<String, OpStatus>> =
-        text.lineSequence()
-            .map { it.trim() }
-            .filter { it.isNotEmpty() && !it.startsWith("#") && it.contains('=') }
-            .mapNotNull { line ->
-                val pkg = line.substringBefore('=').trim()
-                val status = OpStatus.forShellName(line.substringAfter('=').trim())
-                if (pkg.isEmpty() || status == OpStatus.UNKNOWN) null else pkg to status
-            }
-            .distinctBy { it.first }
-            .toList()
-
-    companion object {
-        private const val TAG = "AppsRepository"
     }
 }
