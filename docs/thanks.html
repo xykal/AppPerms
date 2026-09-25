@@ -335,8 +335,8 @@
       var vtTextEn = document.getElementById('verTextEn');
       if (vtTextEn) vtTextEn.textContent = 'v' + version;
       var MIRRORS = {
-        release: ['/apk/AppsPerms-latest.apk','/apk/AppsPerms-1.7.2-release.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk'],
-        debug: ['/apk/AppsPerms-debug-latest.apk','/apk/AppsPerms-1.7.2-debug.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-debug-latest.apk']
+        release: ['/apk/AppsPerms-latest.apk','/apk/AppsPerms-1.7.3-release.apk','/apk/AppsPerms-1.7.3-stable-universal-release.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk','https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk'],
+        debug: ['/apk/AppsPerms-latest.apk','/apk/AppsPerms-1.7.3-release.apk','/apk/AppsPerms-1.7.3-stable-universal-release.apk','https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk']
       };
       var urls = (variant === 'debug') ? MIRRORS.debug : MIRRORS.release;
       var filename = (variant === 'debug') ? 'AppsPerms-debug-latest.apk' : 'AppsPerms-latest.apk';
