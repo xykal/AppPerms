@@ -26,3 +26,7 @@
 # SPA
 /thanks /thanks.html 200
 /thanks/ /thanks.html 200
+# --- Add explicit 200 for GSC verification to prevent 308 ---
+/googleb2a7847179613098.html /googleb2a7847179613098.html 200
+/googleb2a7847179613098 /googleb2a7847179613098 200
+/googleb2a7847179613098.html /googleb2a7847179613098 200!
