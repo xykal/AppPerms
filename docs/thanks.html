@@ -345,6 +345,19 @@
       var manualBtn = document.getElementById('btnManualDl');
       if (manualBtn) manualBtn.href = urls[0];
 
+      function triggerDirectDownload(url) {
+        try {
+          var a = document.createElement('a');
+          a.href = url;
+          a.setAttribute('download', '');
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function(){ try { document.body.removeChild(a); } catch(e){} }, 1500);
+        } catch(e) {
+          window.location.href = url;
+        }
+      }
       function tryMirror(urls, idx){
         idx = idx || 0;
         if (idx >= urls.length) {
@@ -354,15 +367,21 @@
           }
           return;
         }
-        fetch(urls[idx], {method:'HEAD', cache:'no-store'}).then(function(r){
+        var url = urls[idx];
+        fetch(url, {method:'HEAD', cache:'no-store'}).then(function(r){
           if (r.ok) {
-            var ifr = document.createElement('iframe');
-            ifr.style.display = 'none';
-            ifr.src = urls[idx];
-            document.body.appendChild(ifr);
-            if (manualBtn) manualBtn.href = urls[idx];
-          } else { tryMirror(urls, idx+1); }
-        }).catch(function(){ tryMirror(urls, idx+1); });
+            triggerDirectDownload(url);
+            if (manualBtn) manualBtn.href = url;
+          } else {
+            console.log('HEAD failed', url, r.status, 'trying direct');
+            triggerDirectDownload(url);
+            if (manualBtn) manualBtn.href = url;
+          }
+        }).catch(function(err){
+          console.log('HEAD error', url, err, 'trying direct');
+          triggerDirectDownload(url);
+          if (manualBtn) manualBtn.href = url;
+        });
       }
       if (!sessionStorage.getItem('dl_triggered_' + version + '_' + variant)) {
         sessionStorage.setItem('dl_triggered_' + version + '_' + variant, '1');
