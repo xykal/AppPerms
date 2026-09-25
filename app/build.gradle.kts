@@ -11,7 +11,7 @@ val versionNameFinal = System.getenv("GITHUB_REF")?.let { ref ->
     if (ref.startsWith("refs/tags/")) {
         ref.removePrefix("refs/tags/").removePrefix("v").replace("-stable", "")
     } else null
-} ?: "1.7.3"
+} ?: "1.8.0"
 
 val versionChannel = when {
     System.getenv("GITHUB_REF")?.contains("-beta") == true -> "beta"
@@ -19,7 +19,7 @@ val versionChannel = when {
     else -> "stable"
 }
 
-val versionCodeFinal = 10703
+val versionCodeFinal = 10800
 
 println(">> AppsPerms Build: versionName=$versionNameFinal channel=$versionChannel versionCode=$versionCodeFinal hasKeystore=$hasReleaseKeystore")
 
