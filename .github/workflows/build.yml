@@ -93,7 +93,8 @@ jobs:
             VERSION="${VERSION%-rc*}"
             VERSION="${VERSION%-alpha*}"
           else
-            VERSION=$(grep -oP 'baseVersionName\s*=\s*"\K[^"]+' app/build.gradle.kts)
+            VERSION=$(grep -oP 'baseVersionName\s*=\s*"\K[^"]+' app/build.gradle.kts || grep -oP 'val versionNameFinal = System.getenv.*?\?: "\K[^"]+' app/build.gradle.kts || echo "1.7.3")
+            if [ -z "$VERSION" ]; then VERSION="1.7.3"; fi
           fi
           if [ -z "$CHANNEL" ]; then CHANNEL="stable"; fi
           if [ "$CHANNEL" = "stable" ]; then
