@@ -756,7 +756,7 @@
       
       <picture class="paper-illustration hero-illustration" data-illustration="download" aria-hidden="true">
         <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="200px">
-        <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" decoding="async">
+        <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
       </picture>
 
       <h1 class="hero-title">
@@ -777,7 +777,7 @@
       </div>
 
       <div class="btn-group">
-        <a id="btnRelease" class="btn-primary" href="/apk/AppsPerms-latest.apk" data-variant="release">
+        <a id="btnRelease" class="btn-primary" href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" data-variant="release">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           <span class="lang-id">Download APK</span><span class="lang-en">Download APK</span>
         </a>
@@ -974,7 +974,7 @@
           <img src="images/illustrations/faq.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
-      <div class="faq-tools" id="faq-tools" hidden>
+      <div class="faq-tools" id="faq-tools">
         <picture class="paper-illustration search-art" data-illustration="search" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="68px">
           <img src="images/illustrations/search.png" width="640" height="640" alt="" loading="lazy" decoding="async">
@@ -990,6 +990,8 @@
         <details class="faq-item"><summary><span class="lang-id">Kenapa butuh Shizuku?</span><span class="lang-en">Why Shizuku?</span></summary><p class="faq-answer"><span class="lang-id">AppOps butuh hak sistem. Shizuku jembatan aman tanpa rusak Android.</span><span class="lang-en">AppOps needs system permission. Shizuku is secure bridge.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Data aman & offline?</span><span class="lang-en">Safe & offline?</span></summary><p class="faq-answer"><span class="lang-id">0 izin internet di Manifest. Mustahil kirim data keluar.</span><span class="lang-en">Zero internet permission. Impossible to exfiltrate.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Verifikasi APK?</span><span class="lang-en">Verify APK?</span></summary><p class="faq-answer"><span class="lang-id">Cocokkan SHA-256 di tabel Keamanan atau upload ke VirusTotal.</span><span class="lang-en">Match SHA-256 in Security table or upload to VirusTotal.</span></p></details>
+        <details class="faq-item"><summary><span class="lang-id">Apakah ada versi beta?</span><span class="lang-en">Is there a beta version?</span></summary><p class="faq-answer"><span class="lang-id">Ya, channel beta tersedia di GitHub Releases dengan fitur eksperimen.</span><span class="lang-en">Yes, beta channel is available on GitHub Releases with experimental features.</span></p></details>
+        <details class="faq-item"><summary><span class="lang-id">Kenapa ukuran APK sangat kecil?</span><span class="lang-en">Why is APK size so small?</span></summary><p class="faq-answer"><span class="lang-id">Karena minified dengan R8, 0 library native, dan 0 izin internet. Hanya 2.2MB.</span><span class="lang-en">Because minified with R8, 0 native libs, and 0 internet permission. Only 2.2MB.</span></p></details>
       </div>
       <div class="faq-empty" id="faq-empty" hidden>
         <picture class="paper-illustration empty-art" data-illustration="empty-404" aria-hidden="true">
@@ -1172,18 +1174,20 @@
         var url = urls[idx];
         var isLocal = url.startsWith('/apk/') || url.startsWith('/');
         if (isLocal) {
-          // Try HEAD first, but if fails (CORS, 405), still try direct download
           fetch(url, { method: 'HEAD', cache: 'no-store' }).then(function(r){
-            if (r.ok) { triggerDirectDownload(url); }
-            else { 
-              console.log('HEAD failed for', url, r.status, 'trying direct');
+            if (r.ok) {
               triggerDirectDownload(url);
+            } else {
+              console.log('HEAD failed for', url, r.status, 'trying next mirror');
+              tryDownloadWithFallback(urls, idx+1);
             }
-          }).catch(function(err){ 
-            console.log('HEAD error for', url, err, 'trying direct');
-            triggerDirectDownload(url);
+          }).catch(function(err){
+            console.log('HEAD error for', url, err, 'trying next mirror');
+            tryDownloadWithFallback(urls, idx+1);
           });
-        } else { triggerDirectDownload(url); }
+        } else {
+          triggerDirectDownload(url);
+        }
       }
       function triggerDownloadAndThanks(e, variant) {
         if (e) e.preventDefault();

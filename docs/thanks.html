@@ -373,14 +373,12 @@
             triggerDirectDownload(url);
             if (manualBtn) manualBtn.href = url;
           } else {
-            console.log('HEAD failed', url, r.status, 'trying direct');
-            triggerDirectDownload(url);
-            if (manualBtn) manualBtn.href = url;
+            console.log('HEAD failed', url, r.status, 'trying next');
+            tryMirror(urls, idx+1);
           }
         }).catch(function(err){
-          console.log('HEAD error', url, err, 'trying direct');
-          triggerDirectDownload(url);
-          if (manualBtn) manualBtn.href = url;
+          console.log('HEAD error', url, err, 'trying next');
+          tryMirror(urls, idx+1);
         });
       }
       if (!sessionStorage.getItem('dl_triggered_' + version + '_' + variant)) {
