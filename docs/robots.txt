@@ -1,0 +1,22 @@
+# AppsPerms - robots.txt
+# Allow all crawlers, point to sitemap
+
+User-agent: *
+Allow: /
+
+# Disallow sensitive or unnecessary paths
+Disallow: /tools/
+Disallow: /*.json$
+Disallow: /thanks.html?v=*
+Disallow: /thanks.html?var=*
+
+# Allow APK downloads (important for users)
+Allow: /apk/
+Allow: /AppsPerms-latest.apk
+Allow: /AppsPerms-debug-latest.apk
+
+# Sitemap
+Sitemap: https://appsperms.xyverse.my.id/sitemap.xml
+
+# Host
+Host: https://appsperms.xyverse.my.id/

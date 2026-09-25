@@ -8,7 +8,6 @@
   X-Content-Type-Options: nosniff
   Access-Control-Allow-Origin: *
 
-# Alias root APKs
 /AppsPerms-latest.apk
   Cache-Control: public, max-age=3600, s-maxage=86400
   Content-Type: application/vnd.android.package-archive
@@ -20,16 +19,32 @@
   Content-Type: application/vnd.android.package-archive
   Content-Disposition: attachment; filename="AppsPerms-debug-latest.apk"
 
+/sitemap.xml
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: application/xml; charset=utf-8
+  X-Robots-Tag: index, follow
+
+/robots.txt
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: text/plain; charset=utf-8
+
+/googleb2a7847179613098.html
+  Cache-Control: public, max-age=3600
+  Content-Type: text/html; charset=utf-8
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: interest-cohort=()
+  Permissions-Policy: interest-cohort=(), browsing-topics=()
   X-Robots-Tag: index, follow
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
   Content-Type: text/html; charset=utf-8
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml"
 
 /thanks.html
   Cache-Control: public, max-age=0, must-revalidate
