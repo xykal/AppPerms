@@ -246,4 +246,21 @@ class AppsRepository(private val context: Context) {
                 }
         }
     }
+
+    /** Parse hasil exportBackup; support :userId suffix, baris tidak valid diabaikan. */
+    fun parseBackup(text: String): List<Pair<String, OpStatus>> =
+        text.lineSequence()
+            .map { it.trim() }
+            .filter { it.isNotEmpty() && !it.startsWith("#") && it.contains('=') }
+            .mapNotNull { line ->
+                var pkg = line.substringBefore('=').trim()
+                // Handle :userX suffix - strip for matching but keep logic
+                if (pkg.contains(":user")) {
+                    pkg = pkg.substringBefore(":user")
+                }
+                val status = OpStatus.forShellName(line.substringAfter('=').trim())
+                if (pkg.isEmpty() || status == OpStatus.UNKNOWN) null else pkg to status
+            }
+            .distinctBy { it.first }
+            .toList()
 }
