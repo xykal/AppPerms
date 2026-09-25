@@ -7,14 +7,13 @@
   <meta name="google-site-verification" content="Y5N_dhHLNEJdFVy5hqp2Y6uvig3Y6In4La6M-Sde7lI" />
   <meta name="google-site-verification" content="googleb2a7847179613098" />
   <meta name="color-scheme" content="dark">
-  <title>AppsPerms — Android AppOps & Permissions Manager | Built-in XyVerse by Kall</title>
-  <meta name="description" content="AppsPerms: Pengelola izin tersembunyi (AppOps) untuk Android via Shizuku tanpa root. 1.9 MB, 0 izin internet, 100% offline.">
+  <title>AppsPerms — Android AppOps & Permissions Manager | XyVerse</title>
+  <meta name="description" content="AppsPerms: Kelola 19 izin tersembunyi AppOps via Shizuku tanpa root. 2.2 MB, 0 izin internet, 100% offline.">
   <link rel="canonical" href="https://appsperms.xyverse.my.id/">
-  <meta name="keywords" content="AppsPerms, AppOps, Android permissions, Shizuku, overlay permission, SYSTEM_ALERT_WINDOW, privacy, no root, Android manager, XyVerse">
+  <meta name="keywords" content="AppsPerms, AppOps, Android permissions, Shizuku, overlay permission, SYSTEM_ALERT_WINDOW, privacy, no root, XyVerse">
   <meta name="author" content="Kall (@xykal) - XyVerse">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="robots" content="index, follow">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-
   <script>
     (function () {
       var saved = localStorage.getItem('site_lang');
@@ -22,679 +21,224 @@
       document.documentElement.lang = lang;
     })();
   </script>
-
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AppsPerms · XyVerse">
   <meta property="og:url" content="https://appsperms.xyverse.my.id/">
   <meta property="og:title" content="AppsPerms — Android AppOps & Permissions Manager">
-  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 1.9 MB, 0 izin internet, 100% offline. Built-in XyVerse by Kall.">
+  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 2.2 MB, 0 izin internet, 100% offline.">
   <meta property="og:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23161616' stroke='%232A2A2A' stroke-width='1.5'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23E8E8E8' stroke-width='3.5'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23FFA500'/%3E%3Crect x='51' y='50' width='22' height='4' rx='2' fill='%230E0E0E'/%3E%3Crect x='51' y='58' width='14' height='4' rx='2' fill='%230E0E0E'/%3E%3C/svg%3E">
-
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23161616' stroke='%232A2A2A' stroke-width='1.5'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23E8E8E8' stroke-width='3.5'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23E8E8E8'/%3E%3C/svg%3E">
   <style>
-    /* ===== AppsPerms v3 - Human, Clean, No Cyber/Neon ===== */
+    /* AppsPerms v4 - Human Clean, Consistent Illustrations, No AI/Cyber */
     :root {
       --bg: #0E0E0E;
       --surface: #161616;
       --surface-2: #1E1E1E;
-      --surface-3: #262626;
+      --surface-3: #242424;
       --outline: #252525;
       --outline-light: #2E2E2E;
       --text: #EDEDED;
       --text-dim: #9A9A9A;
       --text-muted: #6E6E6E;
-      --brand: #FFA500;
-      --brand-dark: #E69400;
+      --brand: #EDEDED;
       --ok: #4ADE80;
-      --ok-bg: #1A2E1F;
-      --ok-border: #2A4A32;
+      --radius: 12px;
+      --radius-lg: 16px;
       --font: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       --nav-h: 56px;
-      --radius: 12px;
-      --radius-lg: 16px;
     }
-
     html[lang="id"] .lang-en { display: none !important; }
     html[lang="en"] .lang-id { display: none !important; }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 15px;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-      scroll-padding-top: 80px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      overflow-x: hidden;
-    }
+    html { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; }
+    body { min-height: 100vh; background: var(--bg); overflow-x: hidden; }
     a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--outline-light); }
     a:hover { text-decoration-color: var(--text-dim); }
-    code {
-      font-family: var(--mono);
-      font-size: 0.85em;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      padding: 2px 6px;
-      border-radius: 6px;
-      color: var(--text-dim);
-    }
+    code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-2); border: 1px solid var(--outline); padding: 2px 6px; border-radius: 6px; color: var(--text-dim); }
 
-    /* Nav - Simple, no blur, no glow */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: var(--nav-h);
-      background: var(--bg);
-      border-bottom: 1px solid var(--outline);
-    }
-    .nav-inner {
-      max-width: 1024px;
-      margin: 0 auto;
-      height: 100%;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .brand-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 650;
-      font-size: 1.05rem;
-      letter-spacing: -0.015em;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .brand-wrap:hover { text-decoration: none; }
-    .brand-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      display: grid;
-      place-items: center;
-    }
-    .nav-items-desktop {
-      display: none;
-      align-items: center;
-      gap: 2px;
-    }
-    .nav-link {
-      color: var(--text-dim);
-      font-size: 0.88rem;
-      font-weight: 500;
-      padding: 7px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: color 0.15s, background 0.15s;
-    }
-    .nav-link:hover { color: var(--text); background: var(--surface); text-decoration: none; }
-    .lang-toggle-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: 999px;
-      padding: 3px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-    .lang-toggle-btn span { padding: 3px 10px; border-radius: 999px; }
-    .lang-toggle-btn span.active-lang { background: var(--text); color: var(--bg); }
-    .nav-toggle-mobile {
-      display: flex;
-      width: 36px;
-      height: 36px;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: 8px;
-      color: var(--text);
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .nav-menu-mobile {
-      position: absolute;
-      top: var(--nav-h);
-      left: 0;
-      right: 0;
-      display: none;
-      flex-direction: column;
-      padding: 12px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--outline);
-      gap: 2px;
-    }
+    /* Nav - simple */
+    nav { position: sticky; top: 0; z-index: 100; height: var(--nav-h); background: var(--bg); border-bottom: 1px solid var(--outline); }
+    .nav-inner { max-width: 1024px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .brand-wrap { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.05rem; text-decoration: none; color: var(--text); }
+    .brand-logo { width: 32px; height: 32px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--outline); display: grid; place-items: center; }
+    .nav-links { display: flex; align-items: center; gap: 18px; }
+    .nav-link { font-size: 0.88rem; color: var(--text-dim); text-decoration: none; font-weight: 500; }
+    .nav-link:hover { color: var(--text); text-decoration: none; }
+    .nav-toggle-mobile { display: none; background: var(--surface); border: 1px solid var(--outline); width: 36px; height: 36px; border-radius: 8px; color: var(--text); }
+    .lang-toggle { display: inline-flex; align-items: center; gap: 2px; background: var(--surface); border: 1px solid var(--outline); border-radius: 999px; padding: 3px; cursor: pointer; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+    .lang-toggle span { padding: 3px 10px; border-radius: 999px; }
+    .lang-toggle span.active-lang { background: var(--text); color: var(--bg); }
+    .nav-menu-mobile { display: none; flex-direction: column; padding: 12px; background: var(--bg); border-bottom: 1px solid var(--outline); gap: 2px; }
     .nav-menu-mobile.open { display: flex; }
-    .nav-menu-mobile .nav-link { padding: 10px 12px; }
-    @media (min-width: 860px) {
-      .nav-items-desktop { display: flex; }
-      .nav-toggle-mobile, #langToggleMobile { display: none !important; }
-    }
+    @media (max-width: 860px) { .nav-links { display: none; } .nav-toggle-mobile { display: grid; place-items: center; } }
 
-    /* Main */
-    main {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
-    }
+    main { max-width: 1024px; margin: 0 auto; padding: 0 20px 80px; }
 
-    /* Hero - Centered, Human */
-    .hero {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 72px 0 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 20px;
-    }
-    .app-icon-hero {
-      width: 88px;
-      height: 88px;
-      border-radius: 20px;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      display: grid;
-      place-items: center;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--text-dim);
-    }
-    .hero-title {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 720;
-      letter-spacing: -0.03em;
-      line-height: 1.12;
-      color: var(--text);
-      max-width: 600px;
-    }
-    .hero-sub {
-      font-size: 1.05rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-      max-width: 560px;
-    }
-    .hero-stats {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 4px 0;
-    }
-    .hero-stat {
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
-      font-size: 0.9rem;
-    }
-    .hero-stat b { font-size: 1.15rem; font-weight: 700; color: var(--text); }
-    .hero-stat span { color: var(--text-muted); font-size: 0.85rem; }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 8px 0;
-    }
-    .btn-primary, .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 0 18px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border-radius: 10px;
-      text-decoration: none;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .btn-primary {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-    }
-    .btn-primary:hover { background: #FFFFFF; border-color: #FFFFFF; text-decoration: none; }
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text);
-      border-color: var(--outline-light);
-    }
-    .btn-secondary:hover { background: var(--surface-2); border-color: var(--outline-light); text-decoration: none; }
-
-    .dl-hint {
-      display: none;
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      padding: 8px 12px;
-      border-radius: 8px;
-    }
+    /* Hero - centered logo */
+    .hero { max-width: 720px; margin: 0 auto; padding: 64px 0 48px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+    .app-icon-hero { width: 88px; height: 88px; border-radius: 22px; background: var(--surface); border: 1px solid var(--outline); display: grid; place-items: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--outline); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; color: var(--text-dim); }
+    .hero-title { font-size: clamp(2rem, 5vw, 2.7rem); font-weight: 750; letter-spacing: -0.03em; line-height: 1.12; max-width: 600px; }
+    .hero-sub { font-size: 1.02rem; color: var(--text-dim); line-height: 1.6; max-width: 560px; }
+    .hero-stats { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+    .hero-stat { display: flex; align-items: baseline; gap: 4px; font-size: 0.9rem; }
+    .hero-stat b { font-size: 1.1rem; font-weight: 700; }
+    .hero-stat span { color: var(--text-muted); font-size: 0.82rem; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 6px 0; }
+    .btn-primary, .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 18px; font-weight: 600; font-size: 0.9rem; border-radius: 10px; text-decoration: none; cursor: pointer; border: 1px solid transparent; }
+    .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .btn-primary:hover { background: #fff; text-decoration: none; }
+    .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--outline-light); }
+    .btn-secondary:hover { background: var(--surface-2); text-decoration: none; }
+    .dl-hint { display: none; font-size: 0.85rem; color: var(--text-dim); background: var(--surface); border: 1px solid var(--outline); padding: 8px 12px; border-radius: 8px; }
     .dl-hint.show { display: inline-flex; align-items: center; gap: 8px; }
+    .pills-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--outline); padding: 6px 10px; border-radius: 999px; font-size: 0.78rem; color: var(--text-dim); }
 
-    .pills-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 8px;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      color: var(--text-dim);
+    /* Illustrations - consistent */
+    .paper-illustration { display: block; flex: none; }
+    .paper-illustration img { display: block; width: 100%; height: auto; object-fit: contain; }
+    .hero-illustration { width: 180px; margin-top: 8px; opacity: 0.92; }
+    .section-with-art { display: grid; grid-template-columns: minmax(0,1fr) 120px; gap: 20px; align-items: center; }
+    .section-art { width: 120px; opacity: 0.9; }
+    .update-note { display: grid; grid-template-columns: 64px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 16px; background: var(--surface); border: 1px solid var(--outline); border-radius: 12px; margin-bottom: 20px; }
+    .update-art { width: 64px; opacity: 0.9; }
+    .faq-tools { display: flex; align-items: center; gap: 14px; max-width: 720px; }
+    .search-art { width: 64px; opacity: 0.9; }
+    .faq-empty { text-align: center; padding: 24px; background: var(--surface); border: 1px dashed var(--outline-light); border-radius: 16px; }
+    .empty-art { width: 120px; margin: 0 auto 12px; opacity: 0.9; }
+    @media (max-width: 640px) {
+      .section-with-art { grid-template-columns: 1fr; gap: 12px; }
+      .section-art { width: 100px; margin: 0 auto; }
+      .hero-illustration { width: 150px; }
+      .update-note { grid-template-columns: 56px 1fr; }
+      .update-art { width: 56px; }
+      .faq-tools { gap: 10px; }
+      .search-art { width: 48px; }
     }
 
-    /* Sections - Simple */
+    /* Sections */
     section { margin-top: 64px; scroll-margin-top: 80px; }
-    .sec-head {
-      max-width: 720px;
-      margin: 0 auto 24px;
-      text-align: center;
-    }
-    .sec-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-    .sec-sub {
-      color: var(--text-dim);
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
+    .sec-head { margin-bottom: 20px; }
+    .sec-title { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .sec-sub { font-size: 0.92rem; color: var(--text-dim); line-height: 1.5; }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    @media (min-width: 640px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 960px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
-    .feat-card {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .feat-card-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      display: grid;
-      place-items: center;
-      color: var(--text-dim);
-    }
-    .feat-card-title { font-weight: 650; font-size: 0.95rem; }
-    .feat-card-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.5; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .feat-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px; }
+    .feat-card-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--surface-2); border: 1px solid var(--outline); display: grid; place-items: center; font-size: 1rem; margin-bottom: 10px; }
+    .feat-card-title { font-weight: 650; font-size: 0.95rem; margin-bottom: 6px; }
+    .feat-card-desc { font-size: 0.86rem; color: var(--text-dim); line-height: 1.5; }
 
-    /* Version Directory */
-    .version-directory {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .version-dir-card {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    /* Versions */
+    .version-directory { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .version-dir-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .version-dir-card.latest { border-color: var(--outline-light); background: var(--surface-2); }
     .version-dir-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .version-dir-num { font-weight: 700; font-size: 1.05rem; }
-    .version-badge-status {
-      font-size: 0.7rem;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: var(--surface-3);
-      border: 1px solid var(--outline);
-      color: var(--text-dim);
-      font-weight: 600;
-    }
+    .version-badge-status { font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; background: #1A2E1F; color: #4ADE80; border: 1px solid #2A4A32; font-weight: 700; text-transform: uppercase; }
     .version-dir-date { font-size: 0.78rem; color: var(--text-muted); }
-    .version-dir-summary { font-size: 0.85rem; color: var(--text-dim); line-height: 1.45; }
+    .version-dir-summary { font-size: 0.85rem; color: var(--text-dim); line-height: 1.45; flex: 1; }
     .version-dir-actions { display: flex; gap: 8px; }
-    .version-dir-btn {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--outline-light);
-      background: var(--surface-2);
-      color: var(--text);
-      text-decoration: none;
-      cursor: pointer;
-    }
+    .version-dir-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 0.82rem; font-weight: 600; padding: 9px 12px; border-radius: 9px; cursor: pointer; text-decoration: none; border: 1px solid var(--outline-light); background: var(--surface-2); color: var(--text); }
     .version-dir-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .version-dir-btn:hover { text-decoration: none; }
-
-    .versions-container {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-    }
-    .version-nav {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--outline);
-      scrollbar-width: none;
-    }
+    .versions-container { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 20px; }
+    .version-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 14px; margin-bottom: 20px; border-bottom: 1px solid var(--outline); scrollbar-width: none; }
     .version-nav::-webkit-scrollbar { display: none; }
-    .version-tab-btn {
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      color: var(--text-dim);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
+    .version-tab-btn { background: var(--surface-2); border: 1px solid var(--outline); color: var(--text-dim); padding: 8px 14px; border-radius: 9px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
     .version-tab-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
     .version-pane { display: none; }
     .version-pane.active { display: block; }
-    .version-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--outline);
-    }
-    .version-title-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .version-tag { font-weight: 700; }
-    .version-anchor-link {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      padding: 2px 6px;
-      border-radius: 6px;
-      text-decoration: none;
-    }
-    .version-date { font-size: 0.82rem; color: var(--text-muted); }
+    .version-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .version-title-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .version-tag { font-weight: 700; font-size: 1.05rem; }
+    .version-date { font-size: 0.8rem; color: var(--text-muted); }
     .version-downloads { display: flex; gap: 8px; flex-wrap: wrap; }
-    .v-dl-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      padding: 7px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      color: var(--text);
-    }
+    .v-dl-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 0 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-decoration: none; border: 1px solid var(--outline-light); background: var(--surface-2); color: var(--text); }
     .v-dl-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .v-share-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      padding: 7px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      color: var(--text);
-    }
+    .v-share-btn { background: transparent; border: 1px solid var(--outline); color: var(--text-dim); padding: 0 12px; min-height: 36px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; }
+    .changelog-category { margin-top: 16px; }
+    .changelog-category-title { font-weight: 650; font-size: 0.9rem; margin-bottom: 8px; }
+    .changelog-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .changelog-list li { font-size: 0.88rem; color: var(--text-dim); line-height: 1.5; padding-left: 16px; position: relative; }
+    .changelog-list li::before { content: "•"; position: absolute; left: 0; color: var(--text-muted); }
+    .version-specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
+    .version-spec-card { background: var(--surface-2); border: 1px solid var(--outline); border-radius: 8px; padding: 10px 12px; }
+    .version-spec-card .k { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 2px; }
+    .version-spec-card .v { font-size: 0.85rem; font-weight: 600; }
+    .version-spec-card .v.mono { font-family: var(--mono); font-size: 0.78rem; word-break: break-all; }
 
-    .changelog-category {
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 12px;
-    }
-    .changelog-category-title { font-size: 0.88rem; font-weight: 650; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
-    .changelog-badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--outline); background: var(--surface); color: var(--text-dim); font-weight: 600; }
-    .changelog-list { list-style: none; }
-    .changelog-list li { padding-left: 14px; position: relative; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
-    .changelog-list li::before { content: "·"; position: absolute; left: 2px; color: var(--text-muted); }
-    .version-specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 8px; }
-    .version-spec-card { background: var(--surface); border: 1px solid var(--outline); border-radius: 8px; padding: 10px; }
-    .version-spec-card .k { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; display: block; margin-bottom: 4px; }
-    .version-spec-card .v { font-size: 0.85rem; font-weight: 500; word-break: break-all; }
-    .version-spec-card .v.mono { font-family: var(--mono); font-size: 0.75rem; color: var(--text-dim); }
-
-    .vt-banner {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    @media (min-width: 700px) { .vt-banner { flex-direction: row; align-items: center; justify-content: space-between; } }
+    /* Security */
+    .vt-banner { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
     .vt-score-wrap { display: flex; align-items: center; gap: 14px; }
-    .vt-score { font-size: 1.6rem; font-weight: 700; }
-    .vt-verdict-title { font-weight: 600; font-size: 0.92rem; }
+    .vt-score { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .vt-verdict-title { font-weight: 650; }
     .vt-verdict-desc { font-size: 0.82rem; color: var(--text-dim); }
-    .hash-table {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .hash-table td { padding: 10px 14px; border-bottom: 1px solid var(--outline); }
-    .hash-table tr:last-child td { border-bottom: none; }
-    .hash-table td.label { width: 140px; color: var(--text-dim); font-size: 0.82rem; background: var(--surface-2); }
-    .hash-table td.code { font-family: var(--mono); font-size: 0.8rem; word-break: break-all; }
-    .copy-btn {
-      display: inline-flex;
-      margin-left: 8px;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      border-radius: 6px;
-      padding: 2px 7px;
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      cursor: pointer;
-    }
+    .hash-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); overflow: hidden; }
+    .hash-table td { padding: 12px 14px; border-bottom: 1px solid var(--outline); font-size: 0.88rem; }
+    .hash-table td.label { color: var(--text-muted); font-weight: 500; width: 140px; }
+    .hash-table td.code { font-family: var(--mono); word-break: break-all; color: var(--text-dim); }
+    .copy-btn { margin-left: 8px; background: var(--surface-2); border: 1px solid var(--outline-light); color: var(--text-dim); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
 
-    .steps-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    @media (min-width: 760px) { .steps-list { grid-template-columns: repeat(3, 1fr); } }
-    .step-item {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .step-badge {
-      display: inline-flex;
-      align-self: flex-start;
-      background: var(--surface-2);
-      border: 1px solid var(--outline);
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-dim);
-    }
-    .step-item h4 { font-size: 1rem; font-weight: 650; }
-    .step-item p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.5; }
+    /* Steps */
+    .steps-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .step-item { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px; }
+    .step-badge { display: inline-flex; background: var(--surface-2); border: 1px solid var(--outline); padding: 3px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .step-item h4 { font-size: 0.95rem; font-weight: 650; margin-bottom: 6px; }
+    .step-item p { font-size: 0.86rem; color: var(--text-dim); line-height: 1.5; }
 
-    .faq-item {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: 10px;
-      margin-bottom: 8px;
-      overflow: hidden;
-    }
-    .faq-item summary {
-      list-style: none;
-      padding: 14px 16px;
-      font-weight: 550;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
+    /* FAQ */
+    .faq-tools { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+    .faq-search-wrap { flex: 1; }
+    .faq-search-wrap label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+    .faq-search-wrap input { width: 100%; min-height: 40px; padding: 8px 12px; border: 1px solid var(--outline-light); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
+    .faq-status { font-size: 0.82rem; color: var(--text-dim); margin-top: 8px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); margin-bottom: 8px; }
+    .faq-item summary { padding: 14px 16px; font-weight: 600; font-size: 0.92rem; cursor: pointer; list-style: none; }
     .faq-item summary::-webkit-details-marker { display: none; }
-    .faq-item summary::after { content: "+"; color: var(--text-muted); font-weight: 400; }
-    .faq-item[open] summary::after { content: "−"; }
-    .faq-answer { padding: 0 16px 14px; font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; border-top: 1px solid var(--outline); padding-top: 12px; }
+    .faq-answer { padding: 0 16px 14px; font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+    .faq-empty h3 { font-size: 1rem; margin-bottom: 6px; }
+    .faq-empty p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 12px; }
+    .illustration-link { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 16px; border-radius: 8px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 0.85rem; text-decoration: none; border: 1px solid var(--text); }
 
-    .contrib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-    .contrib-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 16px; }
-    .contrib-name { font-weight: 650; font-size: 0.92rem; }
-    .contrib-role { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
-    .contrib-desc { font-size: 0.84rem; color: var(--text-dim); line-height: 1.45; margin-top: 8px; }
+    /* About - XyVerse bulat + list samping */
+    .about-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 24px; display: grid; grid-template-columns: 88px 1fr; gap: 20px; align-items: start; }
+    .xyverse-logo-wrap { width: 88px; height: 88px; border-radius: 50%; background: #fff; border: 1px solid var(--outline); display: grid; place-items: center; overflow: hidden; flex-shrink: 0; }
+    .xyverse-logo-wrap img { width: 64px; height: 64px; object-fit: contain; }
+    .about-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .about-content p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 14px; }
+    .about-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .about-list-item { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--outline); padding: 6px 10px; border-radius: 999px; font-size: 0.82rem; color: var(--text-dim); }
+    .contrib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
+    .contrib-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px; }
+    .contrib-name { font-weight: 700; font-size: 0.95rem; }
+    .contrib-role { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+    .contrib-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
 
-    footer {
-      margin-top: 64px;
-      padding-top: 24px;
-      border-top: 1px solid var(--outline);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      text-align: center;
+    /* Donate */
+    .donate-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+    .donate-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .donate-info p { font-size: 0.88rem; color: var(--text-dim); }
+    .donate-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .donate-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; text-decoration: none; border: 1px solid var(--outline-light); background: var(--surface-2); color: var(--text); }
+    .donate-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+    footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--outline); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 0.85rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .share-toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface-2); border: 1px solid var(--outline-light); color: var(--text); padding: 10px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 500; opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 200; }
+    .share-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 640px) {
+      .about-card { grid-template-columns: 1fr; gap: 16px; }
+      .xyverse-logo-wrap { width: 72px; height: 72px; }
+      .xyverse-logo-wrap img { width: 52px; height: 52px; }
+      .donate-card { flex-direction: column; align-items: flex-start; }
     }
-    @media (min-width: 640px) { footer { flex-direction: row; justify-content: space-between; text-align: left; } }
-    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .footer-links a { color: var(--text-dim); text-decoration: none; font-weight: 500; }
-    .footer-links a:hover { color: var(--text); }
-
-    .share-toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--outline-light);
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      z-index: 9999;
-      opacity: 0;
-      transition: all 0.25s;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .share-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    .update-note {
-      background: var(--surface);
-      border: 1px solid var(--outline);
-      border-radius: var(--radius-lg);
-      padding: 14px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .update-note h3 { font-size: 0.92rem; font-weight: 650; }
-    .update-note p { font-size: 0.85rem; color: var(--text-dim); }
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "AppsPerms",
-    "alternateName": "OverlayOps",
-    "description": "Pengelola izin tersembunyi (AppOps) untuk Android via Shizuku tanpa root. 19 AppOps, 1.9MB, 0 izin internet.",
-    "applicationCategory": "UtilitiesApplication",
-    "operatingSystem": "Android 8.0+",
-    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "IDR"},
-    "author": {"@type": "Person", "name": "Kall", "url": "https://github.com/xykal"},
-    "publisher": {"@type": "Organization", "name": "XyVerse", "url": "https://xyverse.my.id"},
-    "softwareVersion": "1.7.3",
-    "fileSize": "1.9MB",
-    "downloadUrl": "https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk",
-    "license": "https://github.com/xykal/AppPerms/blob/main/LICENSE",
-    "isAccessibleForFree": true
-  }
-  </script>
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-35X7GHDVPP"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-35X7GHDVPP', { 'anonymize_ip': true, 'allow_google_signals': false });
-  </script>
+  <link rel="stylesheet" href="assets/illustrations.css">
 </head>
 <body>
-
   <nav>
     <div class="nav-inner">
       <a href="#" class="brand-wrap">
@@ -706,37 +250,23 @@
         </div>
         <span>AppsPerms</span>
       </a>
-
-      <div class="nav-items-desktop">
+      <div class="nav-links">
         <a href="#fitur" class="nav-link"><span class="lang-id">Fitur</span><span class="lang-en">Features</span></a>
         <a href="#semua-versi" class="nav-link"><span class="lang-id">Versi</span><span class="lang-en">Versions</span></a>
         <a href="#keamanan" class="nav-link"><span class="lang-id">Keamanan</span><span class="lang-en">Security</span></a>
-        <a href="#panduan" class="nav-link"><span class="lang-id">Panduan</span><span class="lang-en">Guide</span></a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a href="https://github.com/xykal/AppPerms" target="_blank" rel="noopener" class="nav-link">GitHub</a>
-        <button class="lang-toggle-btn" id="langToggle" aria-label="Toggle language">
-          <span class="opt-id">ID</span>
-          <span class="opt-en">EN</span>
-        </button>
+        <a href="#tentang" class="nav-link"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a>
+        <a href="#dukung" class="nav-link"><span class="lang-id">Dukung</span><span class="lang-en">Support</span></a>
+        <button id="langToggle" class="lang-toggle"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
       </div>
-
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="lang-toggle-btn" id="langToggleMobile" aria-label="Toggle language">
-          <span class="opt-id">ID</span>
-          <span class="opt-en">EN</span>
-        </button>
-        <button class="nav-toggle-mobile" id="navToggle" aria-label="Menu" aria-expanded="false">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-      </div>
+      <button id="navToggle" class="nav-toggle-mobile" aria-label="Menu">☰</button>
     </div>
-    <div class="nav-menu-mobile" id="navMenu">
+    <div id="navMenu" class="nav-menu-mobile">
       <a href="#fitur" class="nav-link"><span class="lang-id">Fitur</span><span class="lang-en">Features</span></a>
-      <a href="#semua-versi" class="nav-link"><span class="lang-id">Semua Versi</span><span class="lang-en">All Versions</span></a>
+      <a href="#semua-versi" class="nav-link"><span class="lang-id">Versi</span><span class="lang-en">Versions</span></a>
       <a href="#keamanan" class="nav-link"><span class="lang-id">Keamanan</span><span class="lang-en">Security</span></a>
-      <a href="#panduan" class="nav-link"><span class="lang-id">Panduan</span><span class="lang-en">Guide</span></a>
-      <a href="#faq" class="nav-link">FAQ</a>
-      <a href="https://github.com/xykal/AppPerms" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+      <a href="#tentang" class="nav-link"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a>
+      <a href="#dukung" class="nav-link"><span class="lang-id">Dukung Kami</span><span class="lang-en">Support Us</span></a>
+      <button id="langToggleMobile" class="lang-toggle"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
     </div>
   </nav>
 
@@ -751,93 +281,50 @@
           <rect x="51" y="60" width="14" height="3.5" rx="1.5" fill="#0E0E0E"/>
         </svg>
       </div>
-
       <div class="hero-badge"><span>Built-in XyVerse by Kall</span><span style="opacity:0.4;">•</span><span id="heroVerBadge">v1.7.3</span></div>
-      
-      <picture class="paper-illustration hero-illustration" data-illustration="download" aria-hidden="true">
-        <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="200px">
-        <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
-      </picture>
-
-      <h1 class="hero-title">
-        <span class="lang-id">Kendali penuh izin Android tanpa root</span>
-        <span class="lang-en">Full Android permissions control without root</span>
-      </h1>
-
-      <p class="hero-sub">
-        <span class="lang-id">Kelola 19 AppOps tersembunyi, tuning layar aman, plus Terminal Shizuku langsung dari HP. Ringan 1.9 MB, 100% offline.</span>
-        <span class="lang-en">Manage 19 hidden AppOps, safe screen tuning, and Shizuku Terminal on-device. Lightweight 1.9 MB, 100% offline.</span>
-      </p>
-
+      <h1 class="hero-title"><span class="lang-id">Kelola izin tersembunyi Android tanpa root</span><span class="lang-en">Manage hidden Android permissions without root</span></h1>
+      <p class="hero-sub"><span class="lang-id">AppsPerms membuka 19 AppOps yang disembunyikan sistem — overlay, clipboard, kamera latar, dan lainnya via Shizuku.</span><span class="lang-en">AppsPerms unlocks 19 hidden AppOps — overlay, clipboard, background camera, and more via Shizuku.</span></p>
       <div class="hero-stats">
-        <div class="hero-stat"><b>1.9</b><span>MB</span></div>
+        <div class="hero-stat"><b>2.2</b><span>MB</span></div>
         <div class="hero-stat"><b>19</b><span>AppOps</span></div>
         <div class="hero-stat"><b>0</b><span>internet</span></div>
         <div class="hero-stat"><b>100%</b><span>offline</span></div>
       </div>
-
       <div class="btn-group">
-        <a id="btnRelease" class="btn-primary" href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" data-variant="release">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          <span class="lang-id">Download APK</span><span class="lang-en">Download APK</span>
-        </a>
-        <a id="btnDebug" class="btn-secondary" href="/apk/AppsPerms-debug-latest.apk" data-variant="debug">
-          <span class="lang-id">Debug Build</span><span class="lang-en">Debug Build</span>
-        </a>
+        <a id="btnRelease" class="btn-primary" href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" data-variant="release"><span class="lang-id">Download APK</span><span class="lang-en">Download APK</span></a>
+        <a id="btnDebug" class="btn-secondary" href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" data-variant="release"><span class="lang-id">Mirror</span><span class="lang-en">Mirror</span></a>
       </div>
-
-      <div id="dlHint" class="dl-hint"><span class="lang-id">Menyiapkan download...</span><span class="lang-en">Preparing download...</span></div>
-
+      <div id="dlHint" class="dl-hint"><span class="lang-id">Memulai download...</span><span class="lang-en">Starting download...</span></div>
       <div class="pills-row">
-        <div class="pill"><span id="vtPillText">0/67 Clean</span></div>
+        <div class="pill"><span class="lang-id">Android 8.0+</span><span class="lang-en">Android 8.0+</span></div>
+        <div class="pill"><span class="lang-id">Shizuku / Root</span><span class="lang-en">Shizuku / Root</span></div>
         <div class="pill"><span class="lang-id">0 Izin Internet</span><span class="lang-en">0 Internet Permission</span></div>
-        <div class="pill">Shizuku / Root</div>
+        <div class="pill">Apache 2.0</div>
       </div>
+      <picture class="paper-illustration hero-illustration" data-illustration="download" aria-hidden="true">
+        <source type="image/webp" srcset="images/illustrations/download-320.webp 320w, images/illustrations/download-640.webp 640w, images/illustrations/download-960.webp 960w" sizes="180px">
+        <img src="images/illustrations/download.png" width="640" height="640" alt="" loading="eager" fetchpriority="high" decoding="async">
+      </picture>
     </header>
 
     <section id="fitur">
       <div class="sec-head section-with-art">
         <div class="section-heading">
           <h2 class="sec-title"><span class="lang-id">Fitur utama</span><span class="lang-en">Key features</span></h2>
-        <p class="sec-sub"><span class="lang-id">Dibuat untuk kecepatan dan kontrol penuh.</span><span class="lang-en">Built for speed and full control.</span></p>
+          <p class="sec-sub"><span class="lang-id">Dibuat untuk kecepatan dan kontrol penuh.</span><span class="lang-en">Built for speed and full control.</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="permissions" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/permissions-320.webp 320w, images/illustrations/permissions-640.webp 640w, images/illustrations/permissions-960.webp 960w" sizes="132px">
+          <source type="image/webp" srcset="images/illustrations/permissions-320.webp 320w, images/illustrations/permissions-640.webp 640w, images/illustrations/permissions-960.webp 960w" sizes="120px">
           <img src="images/illustrations/permissions.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
-
       <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-card-icon">◧</div>
-          <div class="feat-card-title"><span class="lang-id">19 AppOps Tersembunyi</span><span class="lang-en">19 Hidden AppOps</span></div>
-          <p class="feat-card-desc"><span class="lang-id">Kontrol overlay, clipboard, kamera latar, lokasi, wake lock tanpa batasan sistem.</span><span class="lang-en">Control overlay, clipboard, background camera, location, wake locks without OS limits.</span></p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-icon">›_</div>
-          <div class="feat-card-title"><span class="lang-id">Terminal Shizuku</span><span class="lang-en">Shizuku Terminal</span></div>
-          <p class="feat-card-desc"><span class="lang-id">Shell langsung dari HP dengan UID 2000 / root, tanpa PC.</span><span class="lang-en">Direct shell from phone with UID 2000 / root, no PC needed.</span></p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-icon">◫</div>
-          <div class="feat-card-title"><span class="lang-id">Safe Screen Tuning</span><span class="lang-en">Safe Screen Tuning</span></div>
-          <p class="feat-card-desc"><span class="lang-id">Ubah resolusi & DPI dengan auto-revert 15 detik anti-brick.</span><span class="lang-en">Tweak resolution & DPI with 15s auto-revert anti-brick.</span></p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-icon">⚡</div>
-          <div class="feat-card-title"><span class="lang-id">Pemindaian Kilat</span><span class="lang-en">Fast Scan</span></div>
-          <p class="feat-card-desc"><span class="lang-id">~150ms scan, hemat RAM, counter realtime.</span><span class="lang-en">~150ms scan, RAM efficient, live counter.</span></p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-icon">⎙</div>
-          <div class="feat-card-title"><span class="lang-id">Batch & Backup</span><span class="lang-en">Batch & Backup</span></div>
-          <p class="feat-card-desc"><span class="lang-id">Ubah izin banyak app sekaligus, backup ke clipboard.</span><span class="lang-en">Bulk permission changes, backup to clipboard.</span></p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-card-icon">◍</div>
-          <div class="feat-card-title"><span class="lang-id">100% Offline</span><span class="lang-en">100% Offline</span></div>
-          <p class="feat-card-desc"><span class="lang-id">0 izin internet di Manifest. Tanpa iklan/tracker.</span><span class="lang-en">0 internet permission. No ads/trackers.</span></p>
-        </div>
+        <div class="feat-card"><div class="feat-card-icon">◧</div><div class="feat-card-title"><span class="lang-id">19 AppOps Tersembunyi</span><span class="lang-en">19 Hidden AppOps</span></div><p class="feat-card-desc"><span class="lang-id">Kontrol overlay, clipboard, kamera latar, lokasi, wake lock tanpa batasan sistem.</span><span class="lang-en">Control overlay, clipboard, background camera, location, wake locks without OS limits.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">›_</div><div class="feat-card-title"><span class="lang-id">Terminal Shizuku</span><span class="lang-en">Shizuku Terminal</span></div><p class="feat-card-desc"><span class="lang-id">Shell langsung dari HP dengan UID 2000 / root, tanpa PC.</span><span class="lang-en">Direct shell from phone with UID 2000 / root, no PC needed.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">◫</div><div class="feat-card-title"><span class="lang-id">Safe Screen Tuning</span><span class="lang-en">Safe Screen Tuning</span></div><p class="feat-card-desc"><span class="lang-id">Ubah resolusi & DPI dengan auto-revert 15 detik anti-brick.</span><span class="lang-en">Tweak resolution & DPI with 15s auto-revert anti-brick.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">⚡</div><div class="feat-card-title"><span class="lang-id">Pemindaian Kilat</span><span class="lang-en">Fast Scan</span></div><p class="feat-card-desc"><span class="lang-id">~150ms scan, hemat RAM, counter realtime.</span><span class="lang-en">~150ms scan, RAM efficient, live counter.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">⎙</div><div class="feat-card-title"><span class="lang-id">Batch & Backup</span><span class="lang-en">Batch & Backup</span></div><p class="feat-card-desc"><span class="lang-id">Ubah izin banyak app sekaligus, backup ke clipboard.</span><span class="lang-en">Bulk permission changes, backup to clipboard.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">◍</div><div class="feat-card-title"><span class="lang-id">100% Offline</span><span class="lang-en">100% Offline</span></div><p class="feat-card-desc"><span class="lang-id">0 izin internet di Manifest. Tanpa iklan/tracker.</span><span class="lang-en">0 internet permission. No ads/trackers.</span></p></div>
       </div>
     </section>
 
@@ -845,45 +332,33 @@
       <div class="sec-head section-with-art">
         <div class="section-heading">
           <h2 class="sec-title"><span class="lang-id">Semua versi</span><span class="lang-en">All versions</span></h2>
-          <p class="sec-sub"><span class="lang-id">Pilih versi untuk lihat changelog dan download.</span><span class="lang-en">Select version to see changelog and download.</span></p>
+          <p class="sec-sub"><span class="lang-id">Pilih versi untuk lihat changelog dan download langsung dari appsperms.xyverse.my.id</span><span class="lang-en">Select version to see changelog and download directly from appsperms.xyverse.my.id</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="versions" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/versions-320.webp 320w, images/illustrations/versions-640.webp 640w, images/illustrations/versions-960.webp 960w" sizes="132px">
+          <source type="image/webp" srcset="images/illustrations/versions-320.webp 320w, images/illustrations/versions-640.webp 640w, images/illustrations/versions-960.webp 960w" sizes="120px">
           <img src="images/illustrations/versions.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
-
       <div class="update-note">
         <picture class="paper-illustration update-art" data-illustration="update" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/update-320.webp 320w, images/illustrations/update-640.webp 640w, images/illustrations/update-960.webp 960w" sizes="72px">
+          <source type="image/webp" srcset="images/illustrations/update-320.webp 320w, images/illustrations/update-640.webp 640w, images/illustrations/update-960.webp 960w" sizes="64px">
           <img src="images/illustrations/update.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <div>
-          <h3><span class="lang-id">Pembaruan tetap dalam kendalimu</span><span class="lang-en">Updates stay in your control</span></h3>
-          <p><span class="lang-id">Baca changelog, pasang manual. Tidak ada download diam-diam.</span><span class="lang-en">Read notes, install manually. No silent downloads.</span></p>
+          <h3><span class="lang-id">Download langsung, tanpa GitHub suspend</span><span class="lang-en">Direct download, no GitHub suspend</span></h3>
+          <p><span class="lang-id">APK di-host langsung di appsperms.xyverse.my.id/apk/ + dl.appsperms.xyverse.my.id + fallback GitHub.</span><span class="lang-en">APK hosted directly on appsperms.xyverse.my.id/apk/ + dl subdomain + GitHub fallback.</span></p>
         </div>
-        <a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener" class="v-dl-btn" style="margin-left:auto; white-space:nowrap;">Releases →</a>
+        <a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn" style="margin-left:auto;">Releases →</a>
       </div>
-        <div style="width:36px; height:36px; border-radius:8px; background:var(--surface-2); border:1px solid var(--outline); display:grid; place-items:center; flex-shrink:0;">↻</div>
-        <div>
-          <h3><span class="lang-id">Pembaruan tetap dalam kendalimu</span><span class="lang-en">Updates stay in your control</span></h3>
-          <p><span class="lang-id">Baca changelog, pasang manual. Tidak ada download diam-diam.</span><span class="lang-en">Read notes, install manually. No silent downloads.</span></p>
-        </div>
-        <a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener" class="v-dl-btn" style="margin-left:auto; white-space:nowrap;">Releases →</a>
-      </div>
-
       <div class="version-directory">
         <div class="version-dir-card latest">
           <div class="version-dir-head"><span class="version-dir-num">v1.7.3</span><span class="version-badge-status"><span class="lang-id">Terbaru</span><span class="lang-en">Latest</span></span><span class="version-dir-date">25 Sep 2026</span></div>
-          <p class="version-dir-summary"><span class="lang-id">Fix build DSL bug, APK 2.2MB minified signed RSA 4096, hosting langsung Cloudflare Pages fix 404</span><span class="lang-en">Fix build DSL bug, 2.2MB minified signed RSA 4096, direct Cloudflare Pages hosting fix 404</span></p>
+          <p class="version-dir-summary"><span class="lang-id">Fix build DSL bug, APK 2.2MB minified signed RSA 4096, hosting langsung appsperms.xyverse.my.id/apk/ fix 404</span><span class="lang-en">Fix build DSL bug, 2.2MB minified signed RSA 4096, direct hosting fix 404</span></p>
           <div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v172"><span class="lang-id">Changelog & APK</span><span class="lang-en">Changelog & APK</span></button><button type="button" class="version-dir-btn version-dir-share" data-share="v172">Share</button></div>
         </div>
         <div class="version-dir-card"><div class="version-dir-head"><span class="version-dir-num">v1.7.1</span><span class="version-dir-date">22 Sep 2026</span></div><p class="version-dir-summary">Fix Material colors & localization.</p><div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v171">Changelog</button><button type="button" class="version-dir-btn version-dir-share" data-share="v171">Share</button></div></div>
         <div class="version-dir-card"><div class="version-dir-head"><span class="version-dir-num">v1.7.0</span><span class="version-dir-date">18 Sep 2026</span></div><p class="version-dir-summary">Navigation Drawer, live counter, lazy icons.</p><div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v170">Changelog</button><button type="button" class="version-dir-btn version-dir-share" data-share="v170">Share</button></div></div>
-        <div class="version-dir-card"><div class="version-dir-head"><span class="version-dir-num">v1.6.0</span><span class="version-dir-date">10 Sep 2026</span></div><p class="version-dir-summary">Terminal Shizuku, dual UID.</p><div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v160">Changelog</button><button type="button" class="version-dir-btn version-dir-share" data-share="v160">Share</button></div></div>
-        <div class="version-dir-card"><div class="version-dir-head"><span class="version-dir-num">v1.5.0</span><span class="version-dir-date">28 Agu 2026</span></div><p class="version-dir-summary">Safe Display Tuning 15s auto-revert.</p><div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v150">Changelog</button><button type="button" class="version-dir-btn version-dir-share" data-share="v150">Share</button></div></div>
       </div>
-
       <div class="versions-container">
         <div class="version-nav" id="versionNav">
           <button class="version-tab-btn active" data-target="v172">v1.7.3</button>
@@ -891,32 +366,32 @@
           <button class="version-tab-btn" data-target="v170">v1.7.0</button>
           <button class="version-tab-btn" data-target="v160">v1.6.0</button>
           <button class="version-tab-btn" data-target="v150">v1.5.0</button>
-          <button class="version-tab-btn" data-target="v142">v1.4.2</button>
-          <button class="version-tab-btn" data-target="v130">v1.3.0</button>
-          <button class="version-tab-btn" data-target="v100">v1.0.0</button>
         </div>
-
         <div class="version-pane active" id="pane-v172">
           <div class="version-header">
             <div class="version-title-wrap"><span class="version-tag">v1.7.3</span><a href="#v172" class="version-anchor-link" data-v="v172">#v1.7.3</a><span class="version-badge-status">Latest</span><span class="version-date">2026-09-25</span></div>
             <div class="version-downloads">
-              <a href="/apk/AppsPerms-latest.apk" class="v-dl-btn primary"><span class="lang-id">Download APK</span><span class="lang-en">Download APK</span></a>
-              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a>
-              <button type="button" class="v-share-btn" data-share="v172">Share</button>
+              <a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
+              <a href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" class="v-dl-btn"><span class="lang-id">Mirror DL</span><span class="lang-en">DL Mirror</span></a>
+              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" target="_blank" class="v-dl-btn">GitHub</a>
             </div>
           </div>
-          <div class="changelog-category"><div class="changelog-category-title">What's New</div><ul class="changelog-list"><li><span class="lang-id"><strong>Hosting langsung:</strong> APK 2.2MB minified di-host di Cloudflare Pages /apk/ — fix 404 dari akun GitHub lama yang ke-suspend.</span><span class="lang-en"><strong>Direct hosting:</strong> 2.2MB minified APK hosted on Cloudflare Pages /apk/ — fix 404 from old suspended GitHub account.</span></li><li><span class="lang-id"><strong>Signed RSA 4096:</strong> Keystore baru overlayops, SHA256 c6bff33e...f6e1f52, v2+v3+v4 signing.</span><span class="lang-en"><strong>Signed RSA 4096:</strong> New overlayops keystore, SHA256 c6bff33e...f6e1f52, v2+v3+v4 signing.</span></li><li>Logo Apps di tengah hero (88px centered), no cyber/no neon UI — clean dark #0E0E0E.</li></ul></div>
-          <div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list"><li>Build DSL bug: <code>Rewrite at slice SCRIPT_SCOPE</code> Kotlin compiler fix — simplify build.gradle.kts version logic.</li><li>Hosting: <code>.gitignore *.apk</code> was blocking docs/apk — add negation <code>!docs/apk/*.apk</code> + <code>git add -f</code> in CI.</li><li>CI: unit test + debug build continue-on-error, release build minified true works in CI (7GB RAM).</li></ul></div>
-          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Target OS</span><span class="v">Android 8.0+ - Android 16</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">0/67 Clean</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - Offline</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">c6bff33e9eefaf1bba7e5e093c2d0ce0560f253c4a21645516fa52919f6e1f52</span></div></div></div>
+          <div class="changelog-category"><div class="changelog-category-title">What's New</div><ul class="changelog-list">
+            <li><span class="lang-id"><strong>Download langsung:</strong> APK 2.2MB di <code>appsperms.xyverse.my.id/apk/</code> + <code>dl.appsperms.xyverse.my.id</code> — fix 404 akun suspend.</span><span class="lang-en"><strong>Direct download:</strong> 2.2MB APK at <code>appsperms.xyverse.my.id/apk/</code> + <code>dl</code> subdomain — fix suspend 404.</span></li>
+            <li><span class="lang-id"><strong>RSA 4096:</strong> Keystore overlayops baru, SHA256 c6bff33e...f6e1f52, v2+v3+v4 signing.</span><span class="lang-en"><strong>RSA 4096:</strong> New overlayops keystore, SHA256 c6bff33e...f6e1f52.</span></li>
+            <li>Logo di tengah hero 88px, ilustrasi konsisten 120px, no cyber/neon.</li>
+          </ul></div>
+          <div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list">
+            <li>Build DSL bug <code>Rewrite at slice SCRIPT_SCOPE</code> — simplify build.gradle.kts</li>
+            <li>Download: iframe → direct anchor, HEAD 404 fallback ke next mirror</li>
+            <li>Hosting: <code>.gitignore *.apk</code> block docs/apk → <code>!docs/apk/*.apk</code> + <code>git add -f</code></li>
+          </ul></div>
+          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Target OS</span><span class="v">Android 8.0+ - 16</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">0/67 Clean</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - Offline</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">c6bff33e9eefaf1bba7e5e093c2d0ce0560f253c4a21645516fa52919f6e1f52</span></div></div></div>
         </div>
-
-        <div class="version-pane" id="pane-v171"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.1</span><a href="#v171" class="version-anchor-link" data-v="v171">#v1.7.1</a><span class="version-date">2026-09-22</span></div><div class="version-downloads"><a href="/apk/AppsPerms-latest.apk" class="v-dl-btn primary">Download APK</a><a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.1" target="_blank" class="v-dl-btn">GitHub</a><button type="button" class="v-share-btn" data-share="v171">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list"><li>Material surface_container colors & localization parity.</li></ul></div></div>
-        <div class="version-pane" id="pane-v170"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.0</span><a href="#v170" class="version-anchor-link" data-v="v170">#v1.7.0</a><span class="version-date">2026-09-18</span></div><div class="version-downloads"><a href="/apk/AppsPerms-1.7.0-release.apk" class="v-dl-btn primary">Download APK</a><button type="button" class="v-share-btn" data-share="v170">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Navigation Drawer, live progress counter, lazy icon decoding.</li></ul></div></div>
-        <div class="version-pane" id="pane-v160"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.6.0</span><a href="#v160" class="version-anchor-link" data-v="v160">#v1.6.0</a><span class="version-date">2026-09-10</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a><button type="button" class="v-share-btn" data-share="v160">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Interactive Shizuku terminal, dual UID modes.</li></ul></div></div>
-        <div class="version-pane" id="pane-v150"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.5.0</span><a href="#v150" class="version-anchor-link" data-v="v150">#v1.5.0</a><span class="version-date">2026-08-28</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a><button type="button" class="v-share-btn" data-share="v150">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Safe Display Tuning 15s auto-revert, animation scales.</li></ul></div></div>
-        <div class="version-pane" id="pane-v142"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.4.2</span><a href="#v142" class="version-anchor-link" data-v="v142">#v1.4.2</a><span class="version-date">2026-08-15</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases/tag/v1.4.2" target="_blank" class="v-dl-btn">GitHub</a><button type="button" class="v-share-btn" data-share="v142">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Automated VirusTotal CI scan, OEM ROM compat.</li></ul></div></div>
-        <div class="version-pane" id="pane-v130"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.3.0</span><a href="#v130" class="version-anchor-link" data-v="v130">#v1.3.0</a><span class="version-date">2026-07-20</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases/tag/v1.3.0" target="_blank" class="v-dl-btn">GitHub</a><button type="button" class="v-share-btn" data-share="v130">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Package migration to app.appsperms, backup/restore.</li></ul></div></div>
-        <div class="version-pane" id="pane-v100"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.0.0</span><a href="#v100" class="version-anchor-link" data-v="v100">#v1.0.0</a><span class="version-date">2026-06-01</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">Archive</a><button type="button" class="v-share-btn" data-share="v100">Share</button></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Initial release: 19 AppOps via Shizuku, 0ms UI.</li></ul></div></div>
+        <div class="version-pane" id="pane-v171"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.1</span><a href="#v171" class="version-anchor-link" data-v="v171">#v1.7.1</a><span class="version-date">2026-09-22</span></div><div class="version-downloads"><a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary">Direct</a><a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.1" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list"><li>Material colors & localization parity.</li></ul></div></div>
+        <div class="version-pane" id="pane-v170"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.0</span><a href="#v170" class="version-anchor-link" data-v="v170">#v1.7.0</a><span class="version-date">2026-09-18</span></div><div class="version-downloads"><a href="https://appsperms.xyverse.my.id/apk/AppsPerms-1.7.0-release.apk" class="v-dl-btn primary">Direct</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Navigation Drawer, live counter, lazy icons.</li></ul></div></div>
+        <div class="version-pane" id="pane-v160"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.6.0</span><a href="#v160" class="version-anchor-link" data-v="v160">#v1.6.0</a><span class="version-date">2026-09-10</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Interactive Shizuku terminal, dual UID modes.</li></ul></div></div>
+        <div class="version-pane" id="pane-v150"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.5.0</span><a href="#v150" class="version-anchor-link" data-v="v150">#v1.5.0</a><span class="version-date">2026-08-28</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Safe Display Tuning 15s auto-revert.</li></ul></div></div>
       </div>
     </section>
 
@@ -927,13 +402,13 @@
           <p class="sec-sub"><span class="lang-id">100% transparan, bisa diverifikasi.</span><span class="lang-en">100% transparent, verifiable.</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="security-report" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/security-report-320.webp 320w, images/illustrations/security-report-640.webp 640w, images/illustrations/security-report-960.webp 960w" sizes="132px">
+          <source type="image/webp" srcset="images/illustrations/security-report-320.webp 320w, images/illustrations/security-report-640.webp 640w, images/illustrations/security-report-960.webp 960w" sizes="120px">
           <img src="images/illustrations/security-report.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
       <div class="vt-banner">
         <div class="vt-score-wrap"><div class="vt-score" id="vtScore">0 / 67</div><div><div class="vt-verdict-title" id="vtVerdict"><span class="lang-id">100% Bersih</span><span class="lang-en">100% Clean</span></div><div class="vt-verdict-desc" id="vtUpdated"><span class="lang-id">Diperbarui otomatis oleh CI</span><span class="lang-en">Auto-updated by CI</span></div></div></div>
-        <div><a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" rel="noopener" class="v-dl-btn">VirusTotal →</a></div>
+        <div><a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" class="v-dl-btn">VirusTotal →</a></div>
       </div>
       <table class="hash-table">
         <tbody>
@@ -947,7 +422,7 @@
     <section id="panduan">
       <div class="update-note">
         <picture class="paper-illustration update-art" data-illustration="update" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/update-320.webp 320w, images/illustrations/update-640.webp 640w, images/illustrations/update-960.webp 960w" sizes="72px">
+          <source type="image/webp" srcset="images/illustrations/update-320.webp 320w, images/illustrations/update-640.webp 640w, images/illustrations/update-960.webp 960w" sizes="64px">
           <img src="images/illustrations/update.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <div>
@@ -970,13 +445,13 @@
           <p class="sec-sub"><span class="lang-id">Jawaban cepat.</span><span class="lang-en">Quick answers.</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="faq" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/faq-320.webp 320w, images/illustrations/faq-640.webp 640w, images/illustrations/faq-960.webp 960w" sizes="132px">
+          <source type="image/webp" srcset="images/illustrations/faq-320.webp 320w, images/illustrations/faq-640.webp 640w, images/illustrations/faq-960.webp 960w" sizes="120px">
           <img src="images/illustrations/faq.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
       <div class="faq-tools" id="faq-tools">
         <picture class="paper-illustration search-art" data-illustration="search" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="68px">
+          <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="64px">
           <img src="images/illustrations/search.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <div class="faq-search-wrap">
@@ -995,7 +470,7 @@
       </div>
       <div class="faq-empty" id="faq-empty" hidden>
         <picture class="paper-illustration empty-art" data-illustration="empty-404" aria-hidden="true">
-          <source type="image/webp" srcset="images/illustrations/empty-404-320.webp 320w, images/illustrations/empty-404-640.webp 640w, images/illustrations/empty-404-960.webp 960w" sizes="140px">
+          <source type="image/webp" srcset="images/illustrations/empty-404-320.webp 320w, images/illustrations/empty-404-640.webp 640w, images/illustrations/empty-404-960.webp 960w" sizes="120px">
           <img src="images/illustrations/empty-404.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <h3><span class="lang-id">Belum ketemu jawabannya</span><span class="lang-en">No matching answers yet</span></h3>
@@ -1004,17 +479,57 @@
       </div>
     </section>
 
-    <section id="kontributor">
-      <div class="sec-head"><h2 class="sec-title"><span class="lang-id">Kontributor</span><span class="lang-en">Contributors</span></h2></div>
+    <section id="tentang">
+      <div class="sec-head"><h2 class="sec-title"><span class="lang-id">Tentang</span><span class="lang-en">About</span></h2><p class="sec-sub"><span class="lang-id">Dibuat dengan hati di XyVerse</span><span class="lang-en">Crafted with care at XyVerse</span></p></div>
+      <div class="about-card">
+        <div class="xyverse-logo-wrap">
+          <img src="https://www.xyverse.my.id/brand/mark-flat-purple.webp" alt="XyVerse logo" width="64" height="64" loading="lazy">
+        </div>
+        <div class="about-content">
+          <h3>XyVerse by Kall</h3>
+          <p><span class="lang-id">XyVerse adalah ekosistem Cloud PC + pengembangan aplikasi. AppsPerms lahir dari kebutuhan nyata: mengelola izin tersembunyi Android dengan aman, cepat, dan 100% offline.</span><span class="lang-en">XyVerse is a Cloud PC + app development ecosystem. AppsPerms was born from real need: managing hidden Android permissions safely, fast, and 100% offline.</span></p>
+          <div class="about-list">
+            <span class="about-list-item">⚡ <span class="lang-id">Cepat 150ms</span><span class="lang-en">Fast 150ms</span></span>
+            <span class="about-list-item">🔒 <span class="lang-id">0 Internet</span><span class="lang-en">0 Internet</span></span>
+            <span class="about-list-item">📦 2.2 MB</span>
+            <span class="about-list-item">🛡️ Apache 2.0</span>
+            <span class="about-list-item">🎯 19 AppOps</span>
+            <span class="about-list-item">🌏 <span class="lang-id">Offline 100%</span><span class="lang-en">100% Offline</span></span>
+          </div>
+        </div>
+      </div>
       <div class="contrib-grid">
-        <div class="contrib-card"><div class="contrib-name">Kall (@xykal)</div><div class="contrib-role">Founder & Lead Dev</div><div class="contrib-desc"><span class="lang-id">Arsitek XyVerse, 0ms UI, Safe Tuning, Terminal.</span><span class="lang-en">XyVerse architect, 0ms UI, Safe Tuning, Terminal.</span></div></div>
-        <div class="contrib-card"><div class="contrib-name">Rikka</div><div class="contrib-role">Shizuku Creator</div><div class="contrib-desc">Creator of Shizuku framework.</div></div>
+        <div class="contrib-card"><div class="contrib-name">Kall (@xykal)</div><div class="contrib-role">Founder & Lead Dev — XyVerse</div><div class="contrib-desc"><span class="lang-id">Arsitek XyVerse, 0ms UI, Safe Tuning, Terminal. Fokus: cepat, stabil, aman jangka panjang.</span><span class="lang-en">XyVerse architect, 0ms UI, Safe Tuning, Terminal. Focus: fast, stable, secure long-term.</span></div></div>
+        <div class="contrib-card"><div class="contrib-name">Rikka</div><div class="contrib-role">Shizuku Creator</div><div class="contrib-desc">Creator of Shizuku framework — secure system API bridge without root.</div></div>
+        <div class="contrib-card"><div class="contrib-name"><span class="lang-id">Komunitas</span><span class="lang-en">Community</span></div><div class="contrib-role">Testers & Contributors</div><div class="contrib-desc"><span class="lang-id">Laporan bug, ide fitur, dan testing di berbagai ROM (HyperOS, One UI, ColorOS, Pixel).</span><span class="lang-en">Bug reports, feature ideas, and testing across ROMs (HyperOS, One UI, ColorOS, Pixel).</span></div></div>
+      </div>
+    </section>
+
+    <section id="dukung">
+      <div class="sec-head"><h2 class="sec-title"><span class="lang-id">Dukung Kami</span><span class="lang-en">Support Us</span></h2><p class="sec-sub"><span class="lang-id">Bantu AppsPerms tetap gratis, offline, dan tanpa iklan</span><span class="lang-en">Help keep AppsPerms free, offline, and ad-free</span></p></div>
+      <div class="donate-card">
+        <div class="donate-info">
+          <h3><span class="lang-id">Donasi & Dukungan</span><span class="lang-en">Donate & Support</span></h3>
+          <p><span class="lang-id">AppsPerms gratis selamanya. Donasi membantu server, domain, dan waktu pengembangan. Tidak wajib, tapi sangat berarti.</span><span class="lang-en">AppsPerms is free forever. Donations help with servers, domains, and dev time. Optional but meaningful.</span></p>
+        </div>
+        <div class="donate-actions">
+          <a href="https://saweria.co/xykal" target="_blank" class="donate-btn primary">💜 Saweria</a>
+          <a href="https://github.com/sponsors/xykal" target="_blank" class="donate-btn">💖 GitHub Sponsors</a>
+          <a href="https://trakteer.id/xykal" target="_blank" class="donate-btn">☕ Trakteer</a>
+          <a href="https://xyverse.my.id/" target="_blank" class="donate-btn"><span class="lang-id">Lihat XyVerse</span><span class="lang-en">Visit XyVerse</span></a>
+        </div>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="pill">🎯 <span class="lang-id">Tanpa iklan</span><span class="lang-en">No ads</span></span>
+        <span class="pill">🔒 <span class="lang-id">Tanpa tracker</span><span class="lang-en">No trackers</span></span>
+        <span class="pill">📦 <span class="lang-id">Open source</span><span class="lang-en">Open source</span></span>
+        <span class="pill">💜 <span class="lang-id">Dibuat dengan cinta</span><span class="lang-en">Made with love</span></span>
       </div>
     </section>
 
     <footer>
-      <div><strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong></div>
-      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank">GitHub</a><a href="#semua-versi">Versions</a><a href="#keamanan">Security</a><a href="https://xyverse.my.id" target="_blank">XyVerse</a></div>
+      <div><strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong> · v1.7.3</div>
+      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank">GitHub</a><a href="#semua-versi">Versions</a><a href="#keamanan">Security</a><a href="https://xyverse.my.id" target="_blank">XyVerse</a><a href="#dukung"><span class="lang-id">Dukung</span><span class="lang-en">Donate</span></a></div>
     </footer>
   </main>
 
@@ -1135,22 +650,18 @@
       });
     })();
 
-    
     (function () {
       var MIRRORS = {
         release: [
+          'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
           'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk',
-          'https://dl.appsperms.xyverse.my.id/AppsPerms-1.7.3-stable-universal-release.apk',
-          '/apk/AppsPerms-latest.apk',
-          '/apk/AppsPerms-1.7.3-release.apk',
           'https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk',
           'https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk',
           'https://raw.githubusercontent.com/xykal/AppPerms/main/docs/apk/AppsPerms-latest.apk'
         ],
         debug: [
+          'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
           'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk',
-          'https://dl.appsperms.xyverse.my.id/AppsPerms-1.7.3-stable-universal-release.apk',
-          '/apk/AppsPerms-latest.apk',
           'https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk'
         ]
       };
@@ -1174,22 +685,8 @@
           return;
         }
         var url = urls[idx];
-        var isLocal = url.startsWith('/apk/') || url.startsWith('/');
-        if (isLocal) {
-          fetch(url, { method: 'HEAD', cache: 'no-store' }).then(function(r){
-            if (r.ok) {
-              triggerDirectDownload(url);
-            } else {
-              console.log('HEAD failed for', url, r.status, 'trying next mirror');
-              tryDownloadWithFallback(urls, idx+1);
-            }
-          }).catch(function(err){
-            console.log('HEAD error for', url, err, 'trying next mirror');
-            tryDownloadWithFallback(urls, idx+1);
-          });
-        } else {
-          triggerDirectDownload(url);
-        }
+        // Direct download without HEAD check - Pages HEAD returns 404 but GET works
+        triggerDirectDownload(url);
       }
       function triggerDownloadAndThanks(e, variant) {
         if (e) e.preventDefault();
@@ -1197,12 +694,12 @@
         var hint = document.getElementById('dlHint');
         if (hint) {
           hint.classList.add('show');
-          hint.innerHTML = '<span class="lang-id">Memulai download... langsung mengunduh</span><span class="lang-en">Starting download... downloading directly</span>';
+          hint.innerHTML = '<span class="lang-id">Memulai download dari appsperms.xyverse.my.id...</span><span class="lang-en">Starting download from appsperms.xyverse.my.id...</span>';
         }
         tryDownloadWithFallback(urls, 0);
         setTimeout(function () {
           window.location.href = 'thanks.html?v=1.7.3&var=' + encodeURIComponent(variant);
-        }, 1500);
+        }, 1200);
       }
       var btnRel = document.getElementById('btnRelease');
       if (btnRel) btnRel.addEventListener('click', function(e){ triggerDownloadAndThanks(e, 'release'); });
@@ -1221,7 +718,7 @@
           var hr = document.getElementById('hashRelease');
           if (hr) {
             var sha = d.release.sha256;
-            hr.innerHTML = sha + ' <span id=\"hashWhen\">· v' + (d.version || '1.7.3') + '</span><button class=\"copy-btn\" data-copy=\"' + sha + '\">Copy</button>';
+            hr.innerHTML = sha + ' <span id="hashWhen">· v' + (d.version || '1.7.3') + '</span><button class="copy-btn" data-copy="' + sha + '">Copy</button>';
             var btn = hr.querySelector('[data-copy]');
             if (btn) btn.addEventListener('click', function(){
               var txt = this.getAttribute('data-copy');
@@ -1233,15 +730,19 @@
         if (vt.checked) {
           var sc = document.getElementById('vtScore');
           if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
-          var pl = document.getElementById('vtPillText');
-          if (pl) pl.textContent = vt.detected + '/' + vt.total + ' Clean';
           var up = document.getElementById('vtUpdated');
           if (up) up.textContent = 'Updated by CI · v' + (d.version || '1.7.3');
         }
       }).catch(function(){});
     })();
   </script>
-
   <div id="shareToast" class="share-toast"><span id="toastMsg">Copied</span></div>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-35X7GHDVPP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-35X7GHDVPP', { 'anonymize_ip': true, 'allow_google_signals': false });
+  </script>
 </body>
 </html>
