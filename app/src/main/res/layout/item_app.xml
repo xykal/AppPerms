@@ -25,16 +25,40 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/label"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/on_surface"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="Google Maps" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/on_surface"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                tools:text="Google Maps" />
+
+            <TextView
+                android:id="@+id/badgeClone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_chip_small"
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="2dp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#7C3AED"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="Clone"
+                tools:visibility="visible" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/pkg"
@@ -79,6 +103,21 @@
                 android:textColor="@color/on_surface_dim"
                 android:textSize="9sp"
                 tools:text="uid 10123" />
+
+            <TextView
+                android:id="@+id/badgeUserId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/bg_chip_small"
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="2dp"
+                android:textColor="#7C3AED"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="User 10"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/badgeDeclares"
