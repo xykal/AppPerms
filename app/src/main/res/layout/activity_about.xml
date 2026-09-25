@@ -112,7 +112,7 @@
                             android:layout_height="64dp"
                             android:layout_gravity="center"
                             android:contentDescription="XyVerse"
-                            android:src="@drawable/ic_logo_xyverse_placeholder" />
+                            android:src="@drawable/ic_logo_xyverse" />
                     </FrameLayout>
 
                     <LinearLayout

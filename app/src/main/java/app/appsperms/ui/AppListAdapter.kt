@@ -80,6 +80,33 @@ class AppListAdapter(
             badgeUid.text = "uid ${item.uid}"
             badgeSystem.isVisible = item.isSystem && false
             badgeDeclares.isVisible = item.declaresOverlay
+
+            // Clone / Work profile / Multi-user badges
+            val cloneBadge = item.cloneBadge
+            badgeClone.isVisible = cloneBadge != null
+            if (cloneBadge != null) {
+                badgeClone.text = cloneBadge
+                // Color by type
+                when {
+                    item.isClone -> {
+                        badgeClone.setBackgroundResource(R.drawable.bg_chip_small)
+                        badgeClone.backgroundTintList = android.content.res.ColorStateList.valueOf(0xFF7C3AED.toInt())
+                    }
+                    item.isWorkProfile -> {
+                        badgeClone.setBackgroundResource(R.drawable.bg_chip_small)
+                        badgeClone.backgroundTintList = android.content.res.ColorStateList.valueOf(0xFF0EA5E9.toInt())
+                    }
+                    else -> {
+                        badgeClone.setBackgroundResource(R.drawable.bg_chip_small)
+                        badgeClone.backgroundTintList = android.content.res.ColorStateList.valueOf(0xFF6B7280.toInt())
+                    }
+                }
+            }
+            badgeUserId.isVisible = item.userId != 0
+            if (item.userId != 0) {
+                badgeUserId.text = "User ${item.userId}"
+            }
+
             statusChip.bindStatusChip(item.overlayStatus)
 
             statusChip.setOnClickListener { onChangeOverlay(item) }
@@ -112,7 +139,10 @@ class AppListAdapter(
                     return old.entry.overlayStatus == new.entry.overlayStatus &&
                         old.entry.label == new.entry.label &&
                         old.entry.declaresOverlay == new.entry.declaresOverlay &&
-                        old.entry.isSystem == new.entry.isSystem
+                        old.entry.isSystem == new.entry.isSystem &&
+                        old.entry.userId == new.entry.userId &&
+                        old.entry.isClone == new.entry.isClone &&
+                        old.entry.cloneBadge == new.entry.cloneBadge
                 }
                 return old == new
             }
@@ -120,6 +150,7 @@ class AppListAdapter(
             override fun getChangePayload(old: ListItem, new: ListItem): Any? {
                 if (old is ListItem.App && new is ListItem.App) {
                     if (old.entry.packageName == new.entry.packageName &&
+                        old.entry.userId == new.entry.userId &&
                         old.entry.overlayStatus != new.entry.overlayStatus
                     ) {
                         return PAYLOAD_STATUS

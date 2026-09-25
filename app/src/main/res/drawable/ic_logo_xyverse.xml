@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- XyVerse company logo - built-in. Currently uses real mark-flat-purple.webp from xyverse.my.id/brand, will be swapped to final company logo when asset ready -->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/xyverse_logo_real" />

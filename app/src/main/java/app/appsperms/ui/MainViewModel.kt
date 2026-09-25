@@ -139,7 +139,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
         // Optimistic UI update: langsung ubah status di list seketika (0 ms feedback)
         if (def.op == OpCatalog.OVERLAY.op) {
-            patchEntry(entry.packageName) { it.copy(overlayStatus = status) }
+            patchEntry(entry.packageName, entry.userId) { it.copy(overlayStatus = status) }
         }
 
         val preferShell = _state.value.snapshot.preferShell
@@ -150,7 +150,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
             }
             if (error != null && def.op == OpCatalog.OVERLAY.op) {
                 // Eksekusi gagal -> rollback ke status semula
-                patchEntry(entry.packageName) { it.copy(overlayStatus = previous) }
+                patchEntry(entry.packageName, entry.userId) { it.copy(overlayStatus = previous) }
             } else if (error == null) {
                 recordHistory(entry.packageName, def.op, fromStatus ?: previous, status)
             }
@@ -223,13 +223,13 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         val preferShell = _state.value.snapshot.preferShell
         _state.update { it.copy(busy = "$label 0/${plan.size}…") }
 
-        // Optimistic update seketika untuk op overlay (satu-satunya yang tampil di list utama)
+        // Optimistic update seketika untuk op overlay - key includes userId for clone support
         val overlayPatch = plan.filter { it.second.op == OpCatalog.OVERLAY.op }
-            .associate { it.first.packageName to it.third }
+            .associate { "${it.first.packageName}:u${it.first.userId}" to it.third }
         if (overlayPatch.isNotEmpty()) {
             _state.update { s ->
                 s.copy(apps = s.apps.map { entry ->
-                    overlayPatch[entry.packageName]?.let { entry.copy(overlayStatus = it) } ?: entry
+                    overlayPatch["${entry.packageName}:u${entry.userId}"]?.let { entry.copy(overlayStatus = it) } ?: entry
                 }).recompute()
             }
         }
@@ -260,7 +260,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                         // Rollback optimistic entry untuk target yang gagal
                         _state.update { s ->
                             s.copy(apps = s.apps.map {
-                                if (it.packageName == entry.packageName) entry else it
+                                if (it.packageName == entry.packageName && it.userId == entry.userId) entry else it
                             }).recompute()
                         }
                     }
@@ -310,9 +310,12 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     // -------------------------------------------------------------- internal
 
-    private inline fun patchEntry(pkg: String, transform: (AppEntry) -> AppEntry) {
+    private inline fun patchEntry(pkg: String, userId: Int = -1, transform: (AppEntry) -> AppEntry) {
         _state.update { s ->
-            s.copy(apps = s.apps.map { if (it.packageName == pkg) transform(it) else it }).recompute()
+            s.copy(apps = s.apps.map { 
+                val match = if (userId == -1) it.packageName == pkg else it.packageName == pkg && it.userId == userId
+                if (match) transform(it) else it 
+            }).recompute()
         }
     }
 
