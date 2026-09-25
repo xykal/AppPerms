@@ -9,10 +9,10 @@ import app.appsperms.R
 import app.appsperms.databinding.ActivityAboutBinding
 
 /**
- * Tentang AppsPerms - Redesign v4.1
+ * Tentang AppsPerms - Redesign v5.1
  * - Logo Apps di tengah (hero 88dp)
- * - XyVerse bulat 88dp white circle + list ke samping (pills)
- * - Donate / Dukung Kami: Saweria, GitHub Sponsors, Trakteer, XyVerse
+ * - XyVerse bulat 88dp white circle centered + list ke samping (pills)
+ * - Donate / Dukung Kami: Saweria Kallsptra, GitHub Sponsors, XyVerse (Trakteer removed)
  * - Ekosistem list samping horizontal
  */
 class AboutActivity : AppCompatActivity() {
@@ -41,14 +41,13 @@ class AboutActivity : AppCompatActivity() {
         binding.btnAboutUpdate.setOnClickListener { openUrl("https://github.com/xykal/AppPerms/releases/latest") }
         binding.btnAboutFaq.setOnClickListener { openUrl("https://appsperms.xyverse.my.id/#faq") }
 
-        // XyVerse logo click -> xyverse.my.id (will show real logo from brand/mark-flat-purple.webp in web, placeholder in app until company logo asset ready)
+        // XyVerse logo click -> xyverse.my.id
         binding.xyverseLogo.setOnClickListener { openUrl("https://www.xyverse.my.id/") }
         binding.root.findViewById<android.view.View>(R.id.xyverseCompanyBadge)?.setOnClickListener { openUrl("https://www.xyverse.my.id/") }
 
-        // Donate / Dukung Kami
-        binding.btnDonateSaweria.setOnClickListener { openUrl("https://saweria.co/xykal") }
+        // Donate / Dukung Kami - Saweria Kallsptra + Sponsors + XyVerse (Trakteer removed per request)
+        binding.btnDonateSaweria.setOnClickListener { openUrl("https://saweria.co/Kallsptra") }
         binding.btnDonateGithub.setOnClickListener { openUrl("https://github.com/sponsors/xykal") }
-        binding.btnDonateTrakteer.setOnClickListener { openUrl("https://trakteer.id/xykal/tip") }
         binding.btnAboutXyverse.setOnClickListener { openUrl("https://www.xyverse.my.id/") }
 
         // Ecosystem horizontal cards
