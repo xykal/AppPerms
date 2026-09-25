@@ -76,9 +76,9 @@
 
     main { max-width: 1024px; margin: 0 auto; padding: 0 20px 80px; }
 
-    /* Hero - centered logo */
+    /* Hero - centered logo - FIXED v5 */
     .hero { max-width: 720px; margin: 0 auto; padding: 64px 0 48px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
-    .app-icon-hero { width: 88px; height: 88px; border-radius: 22px; background: var(--surface); border: 1px solid var(--outline); display: grid; place-items: center; }
+    .app-icon-hero { width: 88px; height: 88px; border-radius: 22px; background: var(--surface); border: 1px solid var(--outline); display: grid; place-items: center; margin: 0 auto; }
     .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--outline); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; color: var(--text-dim); }
     .hero-title { font-size: clamp(2rem, 5vw, 2.7rem); font-weight: 750; letter-spacing: -0.03em; line-height: 1.12; max-width: 600px; }
     .hero-sub { font-size: 1.02rem; color: var(--text-dim); line-height: 1.6; max-width: 560px; }
@@ -100,7 +100,7 @@
     /* Illustrations - consistent */
     .paper-illustration { display: block; flex: none; }
     .paper-illustration img { display: block; width: 100%; height: auto; object-fit: contain; }
-    .hero-illustration { width: 180px; margin-top: 8px; opacity: 0.92; }
+    .hero-illustration { width: 180px; margin: 8px auto 0; opacity: 0.92; display: block; }
     .section-with-art { display: grid; grid-template-columns: minmax(0,1fr) 120px; gap: 20px; align-items: center; }
     .section-art { width: 120px; opacity: 0.9; }
     .update-note { display: grid; grid-template-columns: 64px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 16px; background: var(--surface); border: 1px solid var(--outline); border-radius: 12px; margin-bottom: 20px; }
@@ -202,13 +202,16 @@
     .faq-empty p { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 12px; }
     .illustration-link { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 16px; border-radius: 8px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 0.85rem; text-decoration: none; border: 1px solid var(--text); }
 
-    /* About - XyVerse bulat + list samping */
-    .about-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 24px; display: grid; grid-template-columns: 88px 1fr; gap: 20px; align-items: start; }
-    .xyverse-logo-wrap { width: 88px; height: 88px; border-radius: 50%; background: #fff; border: 1px solid var(--outline); display: grid; place-items: center; overflow: hidden; flex-shrink: 0; }
-    .xyverse-logo-wrap img { width: 64px; height: 64px; object-fit: contain; }
+    /* About - XyVerse bulat centered - FIXED v5 */
+    .about-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-lg); padding: 32px 24px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+    .xyverse-logo-wrap { width: 88px; height: 88px; border-radius: 50%; background: #fff; border: 1px solid var(--outline); display: grid; place-items: center; overflow: hidden; flex-shrink: 0; margin: 0 auto; }
+    .xyverse-logo-wrap img { width: 64px; height: 64px; object-fit: contain; display: block; margin: 0 auto; }
+    .about-content { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
+    .about-content h3 { text-align: center; }
+    .about-content p { text-align: center; }
     .about-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
     .about-content p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 14px; }
-    .about-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .about-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
     .about-list-item { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--outline); padding: 6px 10px; border-radius: 999px; font-size: 0.82rem; color: var(--text-dim); }
     .contrib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
     .contrib-card { background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); padding: 16px; }
@@ -230,7 +233,7 @@
     .share-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 640px) {
-      .about-card { grid-template-columns: 1fr; gap: 16px; }
+      .about-card { flex-direction: column; gap: 16px; padding: 24px 16px; }
       .xyverse-logo-wrap { width: 72px; height: 72px; }
       .xyverse-logo-wrap img { width: 52px; height: 52px; }
       .donate-card { flex-direction: column; align-items: flex-start; }
@@ -346,7 +349,7 @@
         </picture>
         <div>
           <h3><span class="lang-id">Download langsung, tanpa GitHub suspend</span><span class="lang-en">Direct download, no GitHub suspend</span></h3>
-          <p><span class="lang-id">APK di-host langsung di appsperms.xyverse.my.id/apk/ + dl.appsperms.xyverse.my.id + fallback GitHub.</span><span class="lang-en">APK hosted directly on appsperms.xyverse.my.id/apk/ + dl subdomain + GitHub fallback.</span></p>
+          <p><span class="lang-id">APK di-host langsung di appsperms.xyverse.my.id/apk/ + fallback GitHub.</span><span class="lang-en">APK hosted directly on appsperms.xyverse.my.id/apk/ + GitHub fallback.</span></p>
         </div>
         <a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn" style="margin-left:auto;">Releases →</a>
       </div>
@@ -372,12 +375,11 @@
             <div class="version-title-wrap"><span class="version-tag">v1.7.3</span><a href="#v172" class="version-anchor-link" data-v="v172">#v1.7.3</a><span class="version-badge-status">Latest</span><span class="version-date">2026-09-25</span></div>
             <div class="version-downloads">
               <a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
-              <a href="https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk" class="v-dl-btn"><span class="lang-id">Mirror DL</span><span class="lang-en">DL Mirror</span></a>
               <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" target="_blank" class="v-dl-btn">GitHub</a>
             </div>
           </div>
           <div class="changelog-category"><div class="changelog-category-title">What's New</div><ul class="changelog-list">
-            <li><span class="lang-id"><strong>Download langsung:</strong> APK 2.2MB di <code>appsperms.xyverse.my.id/apk/</code> + <code>dl.appsperms.xyverse.my.id</code> — fix 404 akun suspend.</span><span class="lang-en"><strong>Direct download:</strong> 2.2MB APK at <code>appsperms.xyverse.my.id/apk/</code> + <code>dl</code> subdomain — fix suspend 404.</span></li>
+            <li><span class="lang-id"><strong>Download langsung:</strong> APK 2.2MB di <code>appsperms.xyverse.my.id/apk/</code> — fix 404 akun suspend.</span><span class="lang-en"><strong>Direct download:</strong> 2.2MB APK at <code>appsperms.xyverse.my.id/apk/</code> — fix suspend 404.</span></li>
             <li><span class="lang-id"><strong>RSA 4096:</strong> Keystore overlayops baru, SHA256 c6bff33e...f6e1f52, v2+v3+v4 signing.</span><span class="lang-en"><strong>RSA 4096:</strong> New overlayops keystore, SHA256 c6bff33e...f6e1f52.</span></li>
             <li>Logo di tengah hero 88px, ilustrasi konsisten 120px, no cyber/neon.</li>
           </ul></div>
@@ -654,14 +656,12 @@
       var MIRRORS = {
         release: [
           'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
-          'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk',
           'https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk',
           'https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk',
           'https://raw.githubusercontent.com/xykal/AppPerms/main/docs/apk/AppsPerms-latest.apk'
         ],
         debug: [
           'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
-          'https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk',
           'https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk'
         ]
       };
