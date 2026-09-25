@@ -1,28 +1,28 @@
-# AppsPerms Fixed Redirects v2 - Beautiful & Anti-Suspend
-# Primary hosting: Cloudflare Pages /apk/ folder (anti-suspend)
-# Fallback: GitHub xykal/AppPerms (akun aktif, bukan xykalnotkel yang suspend 404)
+# AppsPerms Fixed Redirects v3 - Beautiful + Anti-Suspend + APK Ready
+# Primary: Cloudflare Pages /apk/ direct hosting (anti-suspend, paling tahan banting)
+# Fallback: GitHub xykal/AppPerms aktif
 
-# === PRIMARY: Root APK URLs -> redirect ke GitHub aktif xykal/AppPerms (sementara sampai APK di-upload ke /apk/) ===
-# Setelah APK ada di docs/apk/, Pages akan serve /apk/ langsung (tanpa redirect), dan JS akan pakai itu sebagai primary
-/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk 302
-/AppsPerms-debug-latest.apk https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-debug-latest.apk 302
+# === PRIMARY: Serve APK langsung dari Cloudflare Pages (200) - ANTI SUSPEND ===
+# File APK ada di docs/apk/ dan sudah ter-deploy
+/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
+/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
+/AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.2-release.apk 200
+/AppsPerms-1.7.2-debug.apk /apk/AppsPerms-1.7.2-debug.apk 200
+/AppsPerms-1.7.1-release.apk /apk/AppsPerms-1.7.1-release.apk 200
+/AppsPerms-1.7.1-debug.apk /apk/AppsPerms-1.7.1-debug.apk 200
+/AppsPerms-1.7.0-release.apk /apk/AppsPerms-1.7.0-release.apk 200
+/apk/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 200
+/apk/AppsPerms-debug-latest.apk /apk/AppsPerms-debug-latest.apk 200
 
-# Versioned - arahkan ke repo aktif
-/AppsPerms-1.7.2-release.apk https://github.com/xykal/AppPerms/releases/download/v1.7.2/AppsPerms-1.7.2-release.apk 302
-/AppsPerms-1.7.2-debug.apk https://github.com/xykal/AppPerms/releases/download/v1.7.2/AppsPerms-1.7.2-debug.apk 302
-/AppsPerms-1.7.1-release.apk https://github.com/xykal/AppPerms/releases/download/v1.7.1/AppsPerms-1.7.1-release.apk 302
-/AppsPerms-1.7.1-debug.apk https://github.com/xykal/AppPerms/releases/download/v1.7.1/AppsPerms-1.7.1-debug.apk 302
-/AppsPerms-1.7.0-release.apk https://github.com/xykal/AppPerms/releases/download/v1.7.0/AppsPerms-1.7.0-release.apk 302
+# === FALLBACK: GitHub aktif xykal/AppPerms (jika file lokal tidak ada, ini akan dipakai via JS multi-mirror) ===
+# Untuk direct access yang tidak lewat JS, kita tetap redirect ke GitHub aktif sebagai cadangan
+# Tapi karena di atas sudah 200, ini hanya akan terpakai jika file di /apk/ tidak ada (Cloudflare akan 404, bukan lanjut ke rule ini)
+# Jadi JS di index.html yang handle fallback: coba /apk/ dulu via HEAD, kalau 404 coba GitHub
 
-# === LEGACY: xykalnotkel/OverlayOps sudah suspend 404, arahkan semua ke repo aktif ===
-# Menangkap request lama yang masih pakai path lama
+# Legacy path yang masih pakai xykalnotkel (suspend) - arahkan ke repo aktif
 /old/* https://github.com/xykal/AppPerms/releases/latest 302
-/dl/* https://github.com/xykal/AppPerms/releases/latest 302
+/dl/* /apk/:splat 302
 
-# === SPA ===
+# SPA
 /thanks /thanks.html 200
 /thanks/ /thanks.html 200
-
-# Note: /apk/* akan di-serve langsung oleh Pages sebagai static files
-# Jika file ada di docs/apk/, maka https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk akan 200 langsung
-# Jika tidak ada, akan 404 dan JS di index.html akan fallback ke GitHub aktif via multi-mirror logic
