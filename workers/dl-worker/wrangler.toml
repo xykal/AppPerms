@@ -13,7 +13,7 @@ compatibility_date = "2024-01-01"
 [vars]
 # Primary GitHub repo yang aktif (bukan yang suspend)
 GITHUB_REPO = "xykal/AppPerms"
-GITHUB_VERSION = "v1.7.2"
+GITHUB_VERSION = "v1.7.3"
 # Fallback CDN
 PRIMARY_ORIGIN = "https://appsperms.xyverse.my.id"
 

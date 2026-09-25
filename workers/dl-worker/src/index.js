@@ -15,7 +15,7 @@
 
 const GITHUB_REPO = "xykal/AppPerms"; // AKUN AKTIF, bukan xykalnotkel yang suspend
 const PRIMARY_ORIGIN = "https://appsperms.xyverse.my.id";
-const VERSION = "v1.7.2";
+const VERSION = "v1.7.3";
 
 // Mapping file requests
 const FILE_MAP = {
