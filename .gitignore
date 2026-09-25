@@ -3,6 +3,8 @@ app/build/
 build/
 out/
 *.apk
+!docs/apk/*.apk
+!docs/apk/**/*.apk
 *.aab
 *.zip
 

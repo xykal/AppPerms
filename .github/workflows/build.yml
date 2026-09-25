@@ -350,7 +350,8 @@ jobs:
           } >> out/release-notes.md
 
           # Push balik data ke main (hanya jika bukan tag? Tag juga push data)
-          git add docs/data/virustotal.json docs/apk/ || true
+          git add docs/data/virustotal.json || true
+          git add -f docs/apk/ || true
           [ -f docs/images/virustotal-report.png ] && git add docs/images/virustotal-report.png || true
           if ! git diff --cached --quiet; then
             git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykal.local" commit -q -m "docs: build $FULL ($CHANNEL) + APK splits + VT"
