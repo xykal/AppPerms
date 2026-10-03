@@ -14,7 +14,7 @@ AppsPerms membuka akses ke 19 AppOps krusial ini via Shizuku (UID 2000 shell) at
 
 ## Kenapa AppsPerms?
 
-- **Ringan**: 1.9MB release, R8 minified
+- **Ringan**: 2.2MB release, R8 minified
 - **Cepat**: ~150ms scan, 0ms Optimistic UI, lazy icon loading
 - **Privat**: 0 izin internet di AndroidManifest.xml — mustahil kirim data keluar
 - **Aman**: Safe Tuning dengan auto-revert 15 detik, backup/restore via clipboard

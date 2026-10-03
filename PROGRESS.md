@@ -289,3 +289,50 @@
 - docs/thanks.html -> referensi v1.7.2
 - README.md -> badge v1.7.2
 - PROGRESS.md -> catatan kemajuan v1.7.2
+
+### 2026-10-03 - Follow-up: Sinkronisasi README/ABOUT vs Rilis Aktual v1.8.0
+**Status:** Done
+**Dikerjain oleh:** AI Agent (Arena)
+
+**Yang dikerjain:**
+- Menuntaskan item "Next" yang tercatat di entri 2026-09-22 ("konsistensi versi README/web vs Gradle/data scan"): website (`docs/index.html`) ternyata sudah sinkron ke v1.8.0, tapi `README.md` dan `ABOUT.md` masih menampilkan data basi dari v1.7.2.
+- Badge versi README diperbarui dari 1.7.2 -> 1.8.0 (sesuai `versionNameFinal` default di `app/build.gradle.kts` dan tag `v1.8.0` yang sudah dirilis).
+- Badge & teks VirusTotal README diperbarui dari 0/72 -> 0/67 Clean, menyamakan dengan angka resmi v1.8.0 yang sudah tercatat di `docs/index.html` dan riwayat commit (`87ab279 fix(web): update virustotal.json to v1.8.0`).
+- Ukuran APK di README (ID & EN) dan ABOUT.md diperbarui dari klaim lama ~1.9 MB/1.98 MB ke ~2.2 MB (dihitung langsung dari byte asli `docs/apk/AppsPerms-1.8.0-stable-universal-release.apk` = 2.314.608 bytes).
+- Ukuran APK debug README diperbarui dari ~6.0 MB ke ~7.2 MB (dari `docs/apk/AppsPerms-1.8.0-stable-universal-debug.apk` = 7.554.032 bytes).
+- Tidak mengubah signing cert fingerprint (SHA-256/SHA-1/MD5) di README karena itu identitas keystore jangka panjang, bukan hash per-APK, dan tetap valid.
+
+**File yang diubah:**
+- `README.md` -> badge versi 1.8.0, badge & teks VirusTotal 0/67, ukuran APK ~2.2 MB / ~7.2 MB (ID & EN)
+- `ABOUT.md` -> ukuran rilis 2.2MB
+- `PROGRESS.md` -> catatan tugas ini
+
+**Kendala & Solusi:**
+- Sandbox tidak punya JDK/Android SDK maupun akses internet umum (hanya proxy git/gh ke GitHub), jadi tidak bisa menjalankan `./gradlew assembleDebug` atau unit test untuk memverifikasi build end-to-end pada sesi ini. Perubahan dibatasi pada dokumentasi yang bisa diverifikasi langsung dari byte APK asli dan riwayat commit yang sudah ter-fetch dari GitHub, bukan klaim yang ditebak.
+
+**Next Step:**
+- Jalankan `./gradlew :app:testDebugUnitTest` dan `:app:assembleDebug` di mesin dengan Android SDK untuk memastikan tidak ada regresi (sesi ini murni dokumentasi, tidak menyentuh kode Kotlin).
+- Pertimbangkan otomatisasi: generate badge versi/ukuran README dari `app/build.gradle.kts` + file APK saat CI rilis, supaya drift versi seperti ini tidak terulang.
+
+### 2026-10-03 - Guard CI Drift Versi & Security/Code Review Core Bridge
+**Status:** Done
+**Dikerjain oleh:** AI Agent (Arena)
+
+**Yang dikerjain:**
+- Menindaklanjuti "Next Step" di atas: menambahkan `scripts/check-version-sync.sh` (murni bash/grep, tanpa JDK/Android SDK) yang membandingkan badge versi `README.md` terhadap `versionNameFinal` default di `app/build.gradle.kts`, plus cek non-fatal terhadap tag git terbaru.
+- Menambahkan workflow `.github/workflows/version-sync.yml` yang menjalankan script tersebut di setiap push/PR — sengaja dipisah dari `build.yml` karena `build.yml` meng-ignore perubahan `**.md` (jadi drift README tidak akan pernah tertangkap di sana).
+- Menguji manual: script lulus pada kondisi sekarang (README sudah 1.8.0), dan sengaja disimulasikan gagal dengan badge dipalsukan ke 1.7.2 untuk memastikan exit code 1 + pesan error jelas sebelum dikembalikan ke kondisi benar.
+- Melakukan code review manual (statis, tanpa compile) terhadap seluruh bridge sensitif: `ShizukuBridge`, `AppOpsBridge`, `TerminalBridge`, `TweaksBridge`, `GhostGuard*`, serta parser murni (`AppOpsParser`, `WmParser`, `HistoryCodec`). Hasil didokumentasikan di `SECURITY-REVIEW.md`: tidak ada temuan kritis; yang tadinya terlihat seperti "dead code" (GhostGuard*) ternyata shim migrasi upgrade yang disengaja dan sebaiknya tidak dihapus dulu.
+
+**File yang diubah/dibuat:**
+- `scripts/check-version-sync.sh` -> script baru cek sinkronisasi versi
+- `.github/workflows/version-sync.yml` -> workflow CI baru menjalankan script di atas
+- `SECURITY-REVIEW.md` -> dokumen review keamanan/kode core bridge
+- `PROGRESS.md` -> catatan tugas ini
+
+**Kendala & Solusi:**
+- Sandbox tetap tidak punya JDK/Android SDK/akses internet umum, jadi review kode Kotlin murni pembacaan statis + pencocokan dengan unit test yang sudah ada, bukan hasil compile/run nyata. Workflow CI baru belum pernah benar-benar dijalankan di GitHub Actions pada sesi ini (baru di-push, belum ada run tercatat) — perlu dipantau run pertamanya.
+
+**Next Step:**
+- Pantau run pertama workflow `Version Sync Check` di GitHub Actions setelah push, pastikan tidak ada masalah environment (mis. `grep -P` yang butuh GNU grep — sudah tersedia default di `ubuntu-latest`).
+- Kalau suatu saat GhostGuard* benar-benar mau dihapus, lakukan sekaligus sesuai daftar di `SECURITY-REVIEW.md` bagian 5 (jangan setengah-setengah).

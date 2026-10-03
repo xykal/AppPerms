@@ -1,0 +1,30 @@
+name: Version Sync Check
+
+# Mencegah drift seperti yang terjadi sebelum 2026-10-03: app/build.gradle.kts
+# sudah naik ke v1.8.0, tapi README.md/ABOUT.md masih menampilkan badge & klaim
+# v1.7.2 karena tidak ada yang mengecek otomatis.
+#
+# Sengaja dipisah dari build.yml: murni teks (grep/sed), tanpa JDK/Android SDK,
+# jadi tetap jalan cepat walau perubahan cuma di *.md (yang di-skip build.yml).
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Cek sinkronisasi versi README/ABOUT vs build.gradle.kts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Jalankan scripts/check-version-sync.sh
+        run: bash ./scripts/check-version-sync.sh
