@@ -1,8 +1,8 @@
 # AppsPerms
 
-[![Version](https://img.shields.io/badge/version-1.7.2-orange.svg?style=flat-square)](https://github.com/xykal/AppPerms/releases)
+[![Version](https://img.shields.io/badge/version-1.8.0-orange.svg?style=flat-square)](https://github.com/xykal/AppPerms/releases)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
-[![VirusTotal](https://img.shields.io/badge/virustotal-0%2F72%20clean-brightgreen.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
+[![VirusTotal](https://img.shields.io/badge/virustotal-0%2F67%20clean-brightgreen.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
 [![Platform](https://img.shields.io/badge/platform-Shizuku%20%7C%20Root-informational.svg?style=flat-square)](https://shizuku.rikka.app/)
 [![Privacy](https://img.shields.io/badge/privacy-0%20internet%20permission-success.svg?style=flat-square)](https://appsperms.xyverse.my.id/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/xykal/AppPerms/build.yml?branch=main&style=flat-square)](https://github.com/xykal/AppPerms/actions)
@@ -15,7 +15,7 @@ Built-in XyVerse by Kall (@xykal)
 
 ## Ringkasan (Bahasa Indonesia)
 
-AppsPerms adalah aplikasi Android modern, super cepat, dan ringan (~1.9 MB) untuk mengelola izin sistem tersembunyi (**AppOps**) tanpa memerlukan root permanen, memanfaatkan hak akses shell Shizuku atau akses root langsung.
+AppsPerms adalah aplikasi Android modern, super cepat, dan ringan (~2.2 MB) untuk mengelola izin sistem tersembunyi (**AppOps**) tanpa memerlukan root permanen, memanfaatkan hak akses shell Shizuku atau akses root langsung.
 
 Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other apps* / Menampilkan di atas aplikasi lain) serta 18 AppOps krusial lainnya (akses clipboard, kamera, mikrofon, lokasi latar belakang, wake lock, instalasi paket, dan lain-lain).
 
@@ -33,14 +33,14 @@ Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other ap
 
 | Varian | Link Unduh Langsung | Mirror Cadangan | Catatan |
 |---|---|---|---|
-| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~1.98 MB) |
-| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Logging logcat aktif, unstripped (~6.0 MB) |
+| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~2.2 MB) |
+| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Logging logcat aktif, unstripped (~7.2 MB) |
 
 ### Website Resmi & Keamanan
 
 Website Resmi: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.id/)
 
-- Scan Antivirus VirusTotal: 0/72 Clean (100% Undetected).
+- Scan Antivirus VirusTotal: 0/67 Clean (100% Undetected).
 - Audit Keamanan: 0 permission internet di AndroidManifest.xml.
 - Keystore Resmi: Ditandatangani RSA 4096-bit resmi XyVerse.
 
@@ -55,7 +55,7 @@ Alias   : overlayops (CN=OverlayOps, OU=Release, O=xykal, C=ID)
 
 ## English Summary
 
-AppsPerms is a lightweight (~1.9 MB), high-performance Android utility to manage hidden system operations (**AppOps**) without requiring permanent root access, leveraging Shizuku's privileged shell (UID 2000) or direct root (UID 0).
+AppsPerms is a lightweight (~2.2 MB), high-performance Android utility to manage hidden system operations (**AppOps**) without requiring permanent root access, leveraging Shizuku's privileged shell (UID 2000) or direct root (UID 0).
 
 It focuses on controlling `SYSTEM_ALERT_WINDOW` (*Display over other apps*) alongside 18 other critical AppOps (clipboard access, camera, microphone, background location, wake lock, package installation, etc.).
 
