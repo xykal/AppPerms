@@ -313,3 +313,26 @@
 **Next Step:**
 - Jalankan `./gradlew :app:testDebugUnitTest` dan `:app:assembleDebug` di mesin dengan Android SDK untuk memastikan tidak ada regresi (sesi ini murni dokumentasi, tidak menyentuh kode Kotlin).
 - Pertimbangkan otomatisasi: generate badge versi/ukuran README dari `app/build.gradle.kts` + file APK saat CI rilis, supaya drift versi seperti ini tidak terulang.
+
+### 2026-10-03 - Guard CI Drift Versi & Security/Code Review Core Bridge
+**Status:** Done
+**Dikerjain oleh:** AI Agent (Arena)
+
+**Yang dikerjain:**
+- Menindaklanjuti "Next Step" di atas: menambahkan `scripts/check-version-sync.sh` (murni bash/grep, tanpa JDK/Android SDK) yang membandingkan badge versi `README.md` terhadap `versionNameFinal` default di `app/build.gradle.kts`, plus cek non-fatal terhadap tag git terbaru.
+- Menambahkan workflow `.github/workflows/version-sync.yml` yang menjalankan script tersebut di setiap push/PR — sengaja dipisah dari `build.yml` karena `build.yml` meng-ignore perubahan `**.md` (jadi drift README tidak akan pernah tertangkap di sana).
+- Menguji manual: script lulus pada kondisi sekarang (README sudah 1.8.0), dan sengaja disimulasikan gagal dengan badge dipalsukan ke 1.7.2 untuk memastikan exit code 1 + pesan error jelas sebelum dikembalikan ke kondisi benar.
+- Melakukan code review manual (statis, tanpa compile) terhadap seluruh bridge sensitif: `ShizukuBridge`, `AppOpsBridge`, `TerminalBridge`, `TweaksBridge`, `GhostGuard*`, serta parser murni (`AppOpsParser`, `WmParser`, `HistoryCodec`). Hasil didokumentasikan di `SECURITY-REVIEW.md`: tidak ada temuan kritis; yang tadinya terlihat seperti "dead code" (GhostGuard*) ternyata shim migrasi upgrade yang disengaja dan sebaiknya tidak dihapus dulu.
+
+**File yang diubah/dibuat:**
+- `scripts/check-version-sync.sh` -> script baru cek sinkronisasi versi
+- `.github/workflows/version-sync.yml` -> workflow CI baru menjalankan script di atas
+- `SECURITY-REVIEW.md` -> dokumen review keamanan/kode core bridge
+- `PROGRESS.md` -> catatan tugas ini
+
+**Kendala & Solusi:**
+- Sandbox tetap tidak punya JDK/Android SDK/akses internet umum, jadi review kode Kotlin murni pembacaan statis + pencocokan dengan unit test yang sudah ada, bukan hasil compile/run nyata. Workflow CI baru belum pernah benar-benar dijalankan di GitHub Actions pada sesi ini (baru di-push, belum ada run tercatat) — perlu dipantau run pertamanya.
+
+**Next Step:**
+- Pantau run pertama workflow `Version Sync Check` di GitHub Actions setelah push, pastikan tidak ada masalah environment (mis. `grep -P` yang butuh GNU grep — sudah tersedia default di `ubuntu-latest`).
+- Kalau suatu saat GhostGuard* benar-benar mau dihapus, lakukan sekaligus sesuai daftar di `SECURITY-REVIEW.md` bagian 5 (jangan setengah-setengah).
