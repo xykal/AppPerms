@@ -109,12 +109,10 @@ jobs:
           echo "Version: $VERSION Channel: $CHANNEL Full: $FULL"
 
       - name: Unit test
-        continue-on-error: true
-        run: bash ./gradlew :app:testDebugUnitTest --no-daemon --console=plain --stacktrace || echo "Unit test failed, continuing..."
+        run: bash ./gradlew :app:testDebugUnitTest --no-daemon --console=plain --stacktrace
 
       - name: Build debug (all ABIs + universal)
-        continue-on-error: true
-        run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain || echo "Debug build failed, continuing..."
+        run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain
 
       - name: Build release (signed + minified + splits)
         if: steps.keystore.outputs.have == 'yes'

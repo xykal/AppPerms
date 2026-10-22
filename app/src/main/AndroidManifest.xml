@@ -6,15 +6,9 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
-    <!-- OPTIMIZED v1.5: SYSTEM_ALERT_WINDOW tetap perlu untuk KELOLA overlay app lain,
-         tapi TIDAK PERNAH dipakai untuk memasang overlay sendiri lagi (GhostGuard dimatikan).
-         Tetap TANPA izin internet seperti sebelumnya. -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
-    <!-- v1.5: FOREGROUND_SERVICE dihapus karena GhostGuard dimatikan permanen.
-         Tidak ada lagi service yang bikin panas/boros baterai. -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"
-        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+    <!-- Tidak ada INTERNET, SYSTEM_ALERT_WINDOW, atau POST_NOTIFICATIONS.
+         Mengelola AppOps aplikasi lain dilakukan melalui binder/shell Shizuku; AppsPerms sendiri
+         tidak perlu meminta izin overlay maupun notifikasi. -->
 
     <application
         android:name=".AppsPermsApp"
@@ -49,6 +43,11 @@
             android:name=".ui.TweaksActivity"
             android:exported="false"
             android:label="@string/nav_tweaks" />
+
+        <activity
+            android:name=".ui.DeviceCareActivity"
+            android:exported="false"
+            android:label="@string/nav_device_care" />
 
         <activity
             android:name=".ui.SettingsActivity"
