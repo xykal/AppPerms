@@ -6,20 +6,27 @@ plugins {
 val keystorePath: String? = System.getenv("KEYSTORE_PATH")
 val hasReleaseKeystore: Boolean = !keystorePath.isNullOrBlank() && File(keystorePath).exists()
 
-// Simple version handling - no complex Pair/when that triggers Kotlin DSL bug
-val versionNameFinal = System.getenv("GITHUB_REF")?.let { ref ->
-    if (ref.startsWith("refs/tags/")) {
-        ref.removePrefix("refs/tags/").removePrefix("v").replace("-stable", "")
-    } else null
-} ?: "1.8.0"
+// One source of truth for every local/CI build. Tag builds must match these values;
+// scripts/check-version-sync.sh validates the tag before a release is signed.
+val baseVersionName = providers.gradleProperty("APP_VERSION_NAME").get()
+val baseVersionCode = providers.gradleProperty("APP_VERSION_CODE").get().toInt()
+val releaseTag = System.getenv("GITHUB_REF")
+    ?.takeIf { it.startsWith("refs/tags/v") }
+    ?.removePrefix("refs/tags/v")
+val tagVersionName = releaseTag?.substringBefore('-')
+val versionNameFinal = tagVersionName ?: baseVersionName
+val versionChannel = System.getenv("VERSION_CHANNEL")
+    ?.takeIf { it.isNotBlank() }
+    ?: releaseTag?.substringAfter('-', "stable")
+    ?: "stable"
+val versionCodeFinal = baseVersionCode
 
-val versionChannel = when {
-    System.getenv("GITHUB_REF")?.contains("-beta") == true -> "beta"
-    System.getenv("VERSION_CHANNEL") == "beta" -> "beta"
-    else -> "stable"
+require(versionNameFinal == baseVersionName) {
+    "Release tag version $versionNameFinal does not match APP_VERSION_NAME=$baseVersionName"
 }
-
-val versionCodeFinal = 10800
+require(versionChannel.matches(Regex("[a-z][a-z0-9.-]*"))) {
+    "Invalid VERSION_CHANNEL: $versionChannel"
+}
 
 println(">> AppsPerms Build: versionName=$versionNameFinal channel=$versionChannel versionCode=$versionCodeFinal hasKeystore=$hasReleaseKeystore")
 
@@ -36,7 +43,6 @@ android {
         vectorDrawables.useSupportLibrary = true
         buildConfigField("String", "VERSION_CHANNEL", "\"$versionChannel\"")
         buildConfigField("String", "VERSION_FULL", "\"$versionNameFinal ($versionChannel)\"")
-        buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
     }
 
     signingConfigs {
@@ -72,14 +78,8 @@ android {
         }
     }
 
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-            isUniversalApk = true
-        }
-    }
+    // AppsPerms has no native libraries. ABI splits would be byte-identical copies,
+    // so every build intentionally produces one universal APK per build type.
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

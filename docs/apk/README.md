@@ -1,51 +1,16 @@
-# APK Hosting - Fixed System (Anti-Suspend)
+# APK storage policy
 
-Folder ini adalah **primary hosting** untuk APK AppsPerms, tidak lagi bergantung ke GitHub Releases dari akun yang ke-suspend.
+APK binaries are intentionally not stored in Git or deployed with Cloudflare Pages.
 
-## Kenapa perlu fix?
+- The canonical stable artifact is identified by `docs/data/release.json`.
+- Historical binaries remain immutable GitHub Release assets.
+- New signed releases are uploaded once to an immutable R2 key and the matching GitHub Release.
+- `AppsPerms-latest.apk` is a short-lived redirect in `docs/_redirects`, not a mutable binary.
+- Debug builds are CI-only. They are not public release artifacts and never substitute for release APKs.
+- The release workflow generates `SHA256SUMS`, an SPDX SBOM, and provenance for the exact signed APK.
 
-Sebelumnya:
-- `_redirects` mengarah ke `https://github.com/xykalnotkel/OverlayOps/releases/...`
-- Akun `xykalnotkel` ke-suspend / 404
-- Hasil: `dl.appsperms.xyverse.my.id/AppsPerms-latest.apk` -> 404
-
-Sekarang:
-- APK ditaruh langsung di `docs/apk/` 
-- Cloudflare Pages akan serve file ini secara langsung dari edge (global CDN)
-- GitHub Releases di `xykal/AppPerms` jadi **mirror cadangan**, bukan primary
-
-## Cara pakai
-
-1. Setelah build APK (via GitHub Actions), copy APK ke folder ini:
+Verify checked-in metadata with:
 
 ```bash
-cp out/AppsPerms-1.7.2-release.apk docs/apk/
-cp out/AppsPerms-1.7.2-debug.apk docs/apk/
-cp out/AppsPerms-1.7.2-release.apk docs/apk/AppsPerms-latest.apk
-cp out/AppsPerms-1.7.2-debug.apk docs/apk/AppsPerms-debug-latest.apk
+bash scripts/check-version-sync.sh
 ```
-
-2. Commit & push ke `main` -> otomatis deploy ke Cloudflare Pages
-
-3. File akan tersedia di:
-- `https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk`
-- `https://appsperms.xyverse.my.id/apk/AppsPerms-1.7.2-release.apk`
-- `https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk` (via _redirects 200, bukan 302 ke GitHub)
-
-## Keuntungan
-
-- **Tidak bergantung GitHub**: Kalau GitHub suspend lagi, download tetap jalan dari Cloudflare edge
-- **Lebih cepat**: Cloudflare Pages punya cache global, user Indonesia dapat edge Singapura
-- **Fallback otomatis**: JS di index.html coba mirror lokal dulu, kalau gagal baru ke GitHub
-- **R2 Ready**: Bisa juga upload ke R2 bucket untuk file >25MB (kalau nanti ada expansion files)
-
-## Ukuran limit
-
-Cloudflare Pages: max 25MB per file, APK AppsPerms ~2MB jadi aman.
-
-Kalau mau pakai R2 untuk unlimited:
-- Buat R2 bucket `appsperms-apk`
-- Upload via `wrangler r2 object put`
-- Set custom domain `dl.appsperms.xyverse.my.id` ke R2 bucket
-
-Lihat `workers/dl-worker/` untuk Worker yang serve dari R2 + fallback.

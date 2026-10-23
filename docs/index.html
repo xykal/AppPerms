@@ -8,7 +8,7 @@
   <meta name="google-site-verification" content="googleb2a7847179613098" />
   <meta name="color-scheme" content="dark">
   <title>AppsPerms — Android AppOps & Permissions Manager | XyVerse</title>
-  <meta name="description" content="AppsPerms: Kelola 19 izin tersembunyi AppOps via Shizuku tanpa root. 2.2 MB, 0 izin internet, 100% offline.">
+  <meta name="description" content="AppsPerms: Kelola 19 izin tersembunyi AppOps via Shizuku tanpa root. Tanpa izin internet; pemrosesan lokal.">
   <link rel="canonical" href="https://appsperms.xyverse.my.id/">
   <meta name="keywords" content="AppsPerms, AppOps, Android permissions, Shizuku, overlay permission, SYSTEM_ALERT_WINDOW, privacy, no root, XyVerse">
   <meta name="author" content="Kall (@xykal) - XyVerse">
@@ -25,7 +25,7 @@
   <meta property="og:site_name" content="AppsPerms · XyVerse">
   <meta property="og:url" content="https://appsperms.xyverse.my.id/">
   <meta property="og:title" content="AppsPerms — Android AppOps & Permissions Manager">
-  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. 2.2 MB, 0 izin internet, 100% offline.">
+  <meta property="og:description" content="Kelola 19 AppOps tersembunyi via Shizuku tanpa root. Tanpa izin internet; pemrosesan lokal.">
   <meta property="og:image" content="https://appsperms.xyverse.my.id/images/og-cover.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='28' fill='%23161616' stroke='%232A2A2A' stroke-width='1.5'/%3E%3Cpath d='M38,24h32a8,8 0 0 1 8,8v44a8,8 0 0 1 -8,8h-32a8,8 0 0 1 -8,-8v-44a8,8 0 0 1 8,-8z' fill='none' stroke='%23E8E8E8' stroke-width='3.5'/%3E%3Crect x='46' y='44' width='36' height='26' rx='6' fill='%23E8E8E8'/%3E%3C/svg%3E">
@@ -40,7 +40,7 @@
       --outline-light: #2E2E2E;
       --text: #EDEDED;
       --text-dim: #9A9A9A;
-      --text-muted: #6E6E6E;
+      --text-muted: #8A8A8A;
       --brand: #EDEDED;
       --ok: #4ADE80;
       --radius: 12px;
@@ -52,11 +52,13 @@
     html[lang="id"] .lang-en { display: none !important; }
     html[lang="en"] .lang-id { display: none !important; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
     html { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-font-smoothing: antialiased; }
     body { min-height: 100vh; background: var(--bg); overflow-x: hidden; }
     a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--outline-light); }
     a:hover { text-decoration-color: var(--text-dim); }
-    code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-2); border: 1px solid var(--outline); padding: 2px 6px; border-radius: 6px; color: var(--text-dim); }
+    a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid #EDEDED; outline-offset: 3px; }
+    code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-2); border: 1px solid var(--outline); padding: 2px 6px; border-radius: 6px; color: var(--text-dim); overflow-wrap: anywhere; word-break: break-word; }
 
     /* Nav - simple */
     nav { position: sticky; top: 0; z-index: 100; height: var(--nav-h); background: var(--bg); border-bottom: 1px solid var(--outline); }
@@ -178,7 +180,7 @@
     .hash-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius); overflow: hidden; }
     .hash-table td { padding: 12px 14px; border-bottom: 1px solid var(--outline); font-size: 0.88rem; }
     .hash-table td.label { color: var(--text-muted); font-weight: 500; width: 140px; }
-    .hash-table td.code { font-family: var(--mono); word-break: break-all; color: var(--text-dim); }
+    .hash-table td.code { font-family: var(--mono); word-break: break-all; overflow-wrap: anywhere; color: var(--text-dim); }
     .copy-btn { margin-left: 8px; background: var(--surface-2); border: 1px solid var(--outline-light); color: var(--text-dim); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
 
     /* Steps */
@@ -239,7 +241,6 @@
       .donate-card { flex-direction: column; align-items: flex-start; }
     }
   </style>
-  <link rel="stylesheet" href="assets/illustrations.css">
 </head>
 <body>
   <nav>
@@ -259,17 +260,18 @@
         <a href="#keamanan" class="nav-link"><span class="lang-id">Keamanan</span><span class="lang-en">Security</span></a>
         <a href="#tentang" class="nav-link"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a>
         <a href="#dukung" class="nav-link"><span class="lang-id">Dukung</span><span class="lang-en">Support</span></a>
-        <button id="langToggle" class="lang-toggle"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
+        <button id="langToggle" class="lang-toggle" type="button" aria-label="Change language"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
       </div>
-      <button id="navToggle" class="nav-toggle-mobile" aria-label="Menu">☰</button>
+      <button id="navToggle" class="nav-toggle-mobile" type="button" aria-label="Menu" aria-controls="navMenu" aria-expanded="false">☰</button>
     </div>
     <div id="navMenu" class="nav-menu-mobile">
       <a href="#fitur" class="nav-link"><span class="lang-id">Fitur</span><span class="lang-en">Features</span></a>
       <a href="#semua-versi" class="nav-link"><span class="lang-id">Versi</span><span class="lang-en">Versions</span></a>
       <a href="#keamanan" class="nav-link"><span class="lang-id">Keamanan</span><span class="lang-en">Security</span></a>
+      <a href="#faq" class="nav-link">FAQ</a>
       <a href="#tentang" class="nav-link"><span class="lang-id">Tentang</span><span class="lang-en">About</span></a>
       <a href="#dukung" class="nav-link"><span class="lang-id">Dukung Kami</span><span class="lang-en">Support Us</span></a>
-      <button id="langToggleMobile" class="lang-toggle"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
+      <button id="langToggleMobile" class="lang-toggle" type="button" aria-label="Change language"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
     </div>
   </nav>
 
@@ -291,15 +293,15 @@
         <div class="hero-stat"><b>2.2</b><span>MB</span></div>
         <div class="hero-stat"><b>19</b><span>AppOps</span></div>
         <div class="hero-stat"><b>0</b><span>internet</span></div>
-        <div class="hero-stat"><b>100%</b><span>offline</span></div>
+        <div class="hero-stat"><b>Local</b><span>data</span></div>
       </div>
       <div class="btn-group">
-        <a id="btnRelease" class="btn-primary" href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" data-variant="release"><span class="lang-id">Download APK</span><span class="lang-en">Download APK</span></a>
-        <a id="btnDebug" class="btn-secondary" href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" data-variant="release"><span class="lang-id">Mirror</span><span class="lang-en">Mirror</span></a>
+        <a id="btnRelease" class="btn-primary" href="https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk" download><span class="lang-id">Download APK</span><span class="lang-en">Download APK</span></a>
+        <a id="btnMirror" class="btn-secondary" href="https://github.com/xykal/AppPerms/releases/tag/v1.8.0" target="_blank" rel="noopener"><span class="lang-id">Catatan rilis</span><span class="lang-en">Release notes</span></a>
       </div>
-      <div id="dlHint" class="dl-hint"><span class="lang-id">Memulai download...</span><span class="lang-en">Starting download...</span></div>
+      <div id="dlHint" class="dl-hint" role="status" aria-live="polite"><span class="lang-id">Memulai download...</span><span class="lang-en">Starting download...</span></div>
       <div class="pills-row">
-        <div class="pill"><span class="lang-id">Android 8.0+</span><span class="lang-en">Android 8.0+</span></div>
+        <div class="pill"><span class="lang-id">Android 7.0+</span><span class="lang-en">Android 7.0+</span></div>
         <div class="pill"><span class="lang-id">Shizuku / Root</span><span class="lang-en">Shizuku / Root</span></div>
         <div class="pill"><span class="lang-id">0 Izin Internet</span><span class="lang-en">0 Internet Permission</span></div>
         <div class="pill">Apache 2.0</div>
@@ -324,10 +326,10 @@
       <div class="features-grid">
         <div class="feat-card"><div class="feat-card-icon">◧</div><div class="feat-card-title"><span class="lang-id">19 AppOps Tersembunyi</span><span class="lang-en">19 Hidden AppOps</span></div><p class="feat-card-desc"><span class="lang-id">Kontrol overlay, clipboard, kamera latar, lokasi, wake lock tanpa batasan sistem.</span><span class="lang-en">Control overlay, clipboard, background camera, location, wake locks without OS limits.</span></p></div>
         <div class="feat-card"><div class="feat-card-icon">›_</div><div class="feat-card-title"><span class="lang-id">Terminal Shizuku</span><span class="lang-en">Shizuku Terminal</span></div><p class="feat-card-desc"><span class="lang-id">Shell langsung dari HP dengan UID 2000 / root, tanpa PC.</span><span class="lang-en">Direct shell from phone with UID 2000 / root, no PC needed.</span></p></div>
-        <div class="feat-card"><div class="feat-card-icon">◫</div><div class="feat-card-title"><span class="lang-id">Safe Screen Tuning</span><span class="lang-en">Safe Screen Tuning</span></div><p class="feat-card-desc"><span class="lang-id">Ubah resolusi & DPI dengan auto-revert 15 detik anti-brick.</span><span class="lang-en">Tweak resolution & DPI with 15s auto-revert anti-brick.</span></p></div>
-        <div class="feat-card"><div class="feat-card-icon">⚡</div><div class="feat-card-title"><span class="lang-id">Pemindaian Kilat</span><span class="lang-en">Fast Scan</span></div><p class="feat-card-desc"><span class="lang-id">~150ms scan, hemat RAM, counter realtime.</span><span class="lang-en">~150ms scan, RAM efficient, live counter.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">◫</div><div class="feat-card-title"><span class="lang-id">Safe Screen Tuning</span><span class="lang-en">Safe Screen Tuning</span></div><p class="feat-card-desc"><span class="lang-id">Ubah resolusi & DPI dengan jendela auto-revert 15 detik.</span><span class="lang-en">Tweak resolution & DPI with a 15-second auto-revert window.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">⚡</div><div class="feat-card-title"><span class="lang-id">Pemindaian Kilat</span><span class="lang-en">Fast Scan</span></div><p class="feat-card-desc"><span class="lang-id">Pemindaian lokal hemat RAM dengan counter realtime.</span><span class="lang-en">RAM-efficient local scan with a live counter.</span></p></div>
         <div class="feat-card"><div class="feat-card-icon">⎙</div><div class="feat-card-title"><span class="lang-id">Batch & Backup</span><span class="lang-en">Batch & Backup</span></div><p class="feat-card-desc"><span class="lang-id">Ubah izin banyak app sekaligus, backup ke clipboard.</span><span class="lang-en">Bulk permission changes, backup to clipboard.</span></p></div>
-        <div class="feat-card"><div class="feat-card-icon">◍</div><div class="feat-card-title"><span class="lang-id">100% Offline</span><span class="lang-en">100% Offline</span></div><p class="feat-card-desc"><span class="lang-id">0 izin internet di Manifest. Tanpa iklan/tracker.</span><span class="lang-en">0 internet permission. No ads/trackers.</span></p></div>
+        <div class="feat-card"><div class="feat-card-icon">◍</div><div class="feat-card-title"><span class="lang-id">Lokal secara default</span><span class="lang-en">Local by default</span></div><p class="feat-card-desc"><span class="lang-id">0 izin internet di Manifest. Tanpa iklan/tracker.</span><span class="lang-en">0 internet permission. No ads/trackers.</span></p></div>
       </div>
     </section>
 
@@ -335,7 +337,7 @@
       <div class="sec-head section-with-art">
         <div class="section-heading">
           <h2 class="sec-title"><span class="lang-id">Semua versi</span><span class="lang-en">All versions</span></h2>
-          <p class="sec-sub"><span class="lang-id">Pilih versi untuk lihat changelog dan download langsung dari appsperms.xyverse.my.id</span><span class="lang-en">Select version to see changelog and download directly from appsperms.xyverse.my.id</span></p>
+          <p class="sec-sub"><span class="lang-id">Pilih versi untuk melihat changelog dan unduhan rilis terverifikasi</span><span class="lang-en">Select a version to see its changelog and verified release download</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="versions" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/versions-320.webp 320w, images/illustrations/versions-640.webp 640w, images/illustrations/versions-960.webp 960w" sizes="120px">
@@ -348,10 +350,10 @@
           <img src="images/illustrations/update.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
         <div>
-          <h3><span class="lang-id">Download langsung, tanpa GitHub suspend</span><span class="lang-en">Direct download, no GitHub suspend</span></h3>
-          <p><span class="lang-id">APK di-host langsung di appsperms.xyverse.my.id/apk/ + fallback GitHub.</span><span class="lang-en">APK hosted directly on appsperms.xyverse.my.id/apk/ + GitHub fallback.</span></p>
+          <h3><span class="lang-id">Unduhan rilis terverifikasi</span><span class="lang-en">Verified release downloads</span></h3>
+          <p><span class="lang-id">APK versi lama tersedia sebagai aset GitHub Release yang immutable; rilis berikutnya juga dipromosikan ke R2.</span><span class="lang-en">Older APKs are immutable GitHub Release assets; future releases are also promoted to R2.</span></p>
         </div>
-        <a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn" style="margin-left:auto;">Releases →</a>
+        <a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener" class="v-dl-btn" style="margin-left:auto;">Releases →</a>
       </div>
       <div class="version-directory">
         <div class="version-dir-card latest">
@@ -368,21 +370,21 @@
         <div class="version-dir-card"><div class="version-dir-head"><span class="version-dir-num">v1.7.0</span><span class="version-dir-date">18 Sep 2026</span></div><p class="version-dir-summary">Navigation Drawer, live counter, lazy icons.</p><div class="version-dir-actions"><button type="button" class="version-dir-btn primary" data-jump="v170">Changelog</button><button type="button" class="version-dir-btn version-dir-share" data-share="v170">Share</button></div></div>
       </div>
             <div class="versions-container">
-        <div class="version-nav" id="versionNav">
-          <button class="version-tab-btn active" data-target="v180">v1.8.0</button>
-          <button class="version-tab-btn" data-target="v173">v1.7.3</button>
-          <button class="version-tab-btn" data-target="v171">v1.7.1</button>
-          <button class="version-tab-btn" data-target="v170">v1.7.0</button>
-          <button class="version-tab-btn" data-target="v160">v1.6.0</button>
-          <button class="version-tab-btn" data-target="v150">v1.5.0</button>
+        <div class="version-nav" id="versionNav" role="tablist" aria-label="Release versions">
+          <button type="button" class="version-tab-btn active" id="tab-v180" data-target="v180" role="tab" aria-controls="pane-v180" aria-selected="true">v1.8.0</button>
+          <button type="button" class="version-tab-btn" id="tab-v173" data-target="v173" role="tab" aria-controls="pane-v173" aria-selected="false">v1.7.3</button>
+          <button type="button" class="version-tab-btn" id="tab-v171" data-target="v171" role="tab" aria-controls="pane-v171" aria-selected="false">v1.7.1</button>
+          <button type="button" class="version-tab-btn" id="tab-v170" data-target="v170" role="tab" aria-controls="pane-v170" aria-selected="false">v1.7.0</button>
+          <button type="button" class="version-tab-btn" id="tab-v160" data-target="v160" role="tab" aria-controls="pane-v160" aria-selected="false">v1.6.0</button>
+          <button type="button" class="version-tab-btn" id="tab-v150" data-target="v150" role="tab" aria-controls="pane-v150" aria-selected="false">v1.5.0</button>
         </div>
-        <div class="version-pane active" id="pane-v180">
+        <div class="version-pane active" id="pane-v180" role="tabpanel" aria-labelledby="tab-v180">
           <div class="version-header">
             <div class="version-title-wrap"><span class="version-tag">v1.8.0</span><a href="#v180" class="version-anchor-link" data-v="v180">#v1.8.0</a><span class="version-badge-status">Latest</span><span class="version-date">2026-09-25</span></div>
             <div class="version-downloads">
-              <a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
-              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.8.0" target="_blank" class="v-dl-btn">GitHub</a>
-              <a href="https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk" target="_blank" class="v-dl-btn">APK 2.3MB</a>
+              <a href="https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
+              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.8.0" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a>
+
             </div>
           </div>
           <div class="changelog-category"><div class="changelog-category-title">🎉 What's New - Major Update</div><ul class="changelog-list">
@@ -396,16 +398,16 @@
             <li>Fix <code>ic_arrow_back</code> missing drawable - build failure di GitHub Actions</li>
             <li>Fix <code>item_app.xml</code> badgeClone/badgeUserId restore - clone/work badges muncul lagi</li>
             <li>Fix <code>parseBackup</code> support <code>:userX</code> suffix untuk multi-user backup</li>
-            <li>Web v5: hapus dl.appsperms.xyverse.my.id, logo hero & XyVerse brand bulat di tengah (flex column center)</li>
+            <li>Web v5: hapus hostname unduhan lama, logo hero & XyVerse brand bulat di tengah (flex column center)</li>
           </ul></div>
-          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Version</span><span class="v">v1.8.0 (10800)</span></div><div class="version-spec-card"><span class="k">Size</span><span class="v">2.21MB universal</span></div><div class="version-spec-card"><span class="k">Target OS</span><span class="v">Android 8.0+ - 16</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">0/67 Clean</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - Offline</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">a5e96d639be84535d4f7e03b852447b8a34dc67041293c49c267b28217b10c89</span></div></div></div>
+          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Version</span><span class="v">v1.8.0 (10800)</span></div><div class="version-spec-card"><span class="k">Size</span><span class="v">2.21MB universal</span></div><div class="version-spec-card"><span class="k">Minimum OS</span><span class="v">Android 7.0 (API 24)</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">Not scanned</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - No permission</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80</span></div></div></div>
         </div>
-        <div class="version-pane" id="pane-v173">
+        <div class="version-pane" id="pane-v173" role="tabpanel" aria-labelledby="tab-v173" hidden>
           <div class="version-header">
             <div class="version-title-wrap"><span class="version-tag">v1.7.3</span><a href="#v173" class="version-anchor-link" data-v="v173">#v1.7.3</a><span class="version-date">2026-09-25</span></div>
             <div class="version-downloads">
-              <a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
-              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" target="_blank" class="v-dl-btn">GitHub</a>
+              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" class="v-dl-btn primary"><span class="lang-id">Download langsung</span><span class="lang-en">Direct download</span></a>
+              <a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.3" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a>
             </div>
           </div>
           <div class="changelog-category"><div class="changelog-category-title">What's New</div><ul class="changelog-list">
@@ -418,12 +420,12 @@
             <li>Download: iframe → direct anchor, HEAD 404 fallback ke next mirror</li>
             <li>Hosting: <code>.gitignore *.apk</code> block docs/apk → <code>!docs/apk/*.apk</code> + <code>git add -f</code></li>
           </ul></div>
-          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Target OS</span><span class="v">Android 8.0+ - 16</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">0/67 Clean</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - Offline</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">c6bff33e9eefaf1bba7e5e093c2d0ce0560f253c4a21645516fa52919f6e1f52</span></div></div></div>
+          <div class="changelog-category"><div class="changelog-category-title">Technical</div><div class="version-specs-grid"><div class="version-spec-card"><span class="k">Minimum OS</span><span class="v">Android 7.0 (API 24)</span></div><div class="version-spec-card"><span class="k">VirusTotal</span><span class="v">Not scanned</span></div><div class="version-spec-card"><span class="k">Internet</span><span class="v">0 - No permission</span></div><div class="version-spec-card"><span class="k">SHA-256</span><span class="v mono">c6bff33e9eefaf1bba7e5e093c2d0ce0560f253c4a21645516fa52919f6e1f52</span></div></div></div>
         </div>
-        <div class="version-pane" id="pane-v171"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.1</span><a href="#v171" class="version-anchor-link" data-v="v171">#v1.7.1</a><span class="version-date">2026-09-22</span></div><div class="version-downloads"><a href="https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk" class="v-dl-btn primary">Direct</a><a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.1" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list"><li>Material colors & localization parity.</li></ul></div></div>
-        <div class="version-pane" id="pane-v170"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.0</span><a href="#v170" class="version-anchor-link" data-v="v170">#v1.7.0</a><span class="version-date">2026-09-18</span></div><div class="version-downloads"><a href="https://appsperms.xyverse.my.id/apk/AppsPerms-1.7.0-release.apk" class="v-dl-btn primary">Direct</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Navigation Drawer, live counter, lazy icons.</li></ul></div></div>
-        <div class="version-pane" id="pane-v160"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.6.0</span><a href="#v160" class="version-anchor-link" data-v="v160">#v1.6.0</a><span class="version-date">2026-09-10</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Interactive Shizuku terminal, dual UID modes.</li></ul></div></div>
-        <div class="version-pane" id="pane-v150"><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.5.0</span><a href="#v150" class="version-anchor-link" data-v="v150">#v1.5.0</a><span class="version-date">2026-08-28</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Safe Display Tuning 15s auto-revert.</li></ul></div></div>
+        <div class="version-pane" id="pane-v171" role="tabpanel" aria-labelledby="tab-v171" hidden><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.1</span><a href="#v171" class="version-anchor-link" data-v="v171">#v1.7.1</a><span class="version-date">2026-09-22</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.1" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">Fixed</div><ul class="changelog-list"><li>Material colors & localization parity.</li></ul></div></div>
+        <div class="version-pane" id="pane-v170" role="tabpanel" aria-labelledby="tab-v170" hidden><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.7.0</span><a href="#v170" class="version-anchor-link" data-v="v170">#v1.7.0</a><span class="version-date">2026-09-18</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases/tag/v1.7.0" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Navigation Drawer, live counter, lazy icons.</li></ul></div></div>
+        <div class="version-pane" id="pane-v160" role="tabpanel" aria-labelledby="tab-v160" hidden><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.6.0</span><a href="#v160" class="version-anchor-link" data-v="v160">#v1.6.0</a><span class="version-date">2026-09-10</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Interactive Shizuku terminal, dual UID modes.</li></ul></div></div>
+        <div class="version-pane" id="pane-v150" role="tabpanel" aria-labelledby="tab-v150" hidden><div class="version-header"><div class="version-title-wrap"><span class="version-tag">v1.5.0</span><a href="#v150" class="version-anchor-link" data-v="v150">#v1.5.0</a><span class="version-date">2026-08-28</span></div><div class="version-downloads"><a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener" class="v-dl-btn">GitHub</a></div></div><div class="changelog-category"><div class="changelog-category-title">New</div><ul class="changelog-list"><li>Safe Display Tuning 15s auto-revert.</li></ul></div></div>
       </div>
     </section>
 
@@ -431,7 +433,7 @@
       <div class="sec-head section-with-art">
         <div class="section-heading">
           <h2 class="sec-title"><span class="lang-id">Keamanan</span><span class="lang-en">Security</span></h2>
-          <p class="sec-sub"><span class="lang-id">100% transparan, bisa diverifikasi.</span><span class="lang-en">100% transparent, verifiable.</span></p>
+          <p class="sec-sub"><span class="lang-id">Metadata rilis dan SHA-256 dipublikasikan untuk verifikasi.</span><span class="lang-en">Release metadata and SHA-256 are published for verification.</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="security-report" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/security-report-320.webp 320w, images/illustrations/security-report-640.webp 640w, images/illustrations/security-report-960.webp 960w" sizes="120px">
@@ -439,14 +441,15 @@
         </picture>
       </div>
       <div class="vt-banner">
-        <div class="vt-score-wrap"><div class="vt-score" id="vtScore">0 / 67</div><div><div class="vt-verdict-title" id="vtVerdict"><span class="lang-id">100% Bersih</span><span class="lang-en">100% Clean</span></div><div class="vt-verdict-desc" id="vtUpdated"><span class="lang-id">Diperbarui otomatis oleh CI</span><span class="lang-en">Auto-updated by CI</span></div></div></div>
-        <div><a id="vtLink" href="https://www.virustotal.com/gui/home/upload" target="_blank" class="v-dl-btn">VirusTotal →</a></div>
+        <div class="vt-score-wrap"><div class="vt-score" id="vtScore">—</div><div><div class="vt-verdict-title" id="vtVerdict"><span class="lang-id">Belum dipindai</span><span class="lang-en">Not scanned</span></div><div class="vt-verdict-desc" id="vtUpdated"><span class="lang-id">Belum ada hasil lengkap untuk SHA-256 ini</span><span class="lang-en">No completed result for this SHA-256</span></div></div></div>
+        <div><a id="vtLink" href="https://www.virustotal.com/gui/file/c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80" target="_blank" rel="noopener" class="v-dl-btn">VirusTotal →</a></div>
       </div>
       <table class="hash-table">
         <tbody>
-          <tr><td class="label">SHA-256</td><td class="code" id="hashRelease">a5e96d639be84535d4f7e03b852447b8a34dc67041293c49c267b28217b10c89 <span id="hashWhen">· v1.8.0</span><button class="copy-btn" data-copy="a5e96d639be84535d4f7e03b852447b8a34dc67041293c49c267b28217b10c89">Copy</button></td></tr>
-          <tr><td class="label"><span class="lang-id">Izin Internet</span><span class="lang-en">Internet</span></td><td class="code"><span class="lang-id">0 - Offline</span><span class="lang-en">0 - Offline</span></td></tr>
-          <tr><td class="label">License</td><td class="code"><a href="https://github.com/xykal/AppPerms/blob/main/LICENSE" target="_blank">Apache 2.0</a></td></tr>
+          <tr><td class="label">APK SHA-256</td><td class="code" id="hashRelease">c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80 <span id="hashWhen">· v1.8.0</span><button type="button" class="copy-btn" data-copy="c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80">Copy</button></td></tr>
+          <tr><td class="label"><span class="lang-id">Sertifikat penandatangan</span><span class="lang-en">Signing certificate</span></td><td class="code" id="certRelease">76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05<button type="button" class="copy-btn" data-copy="76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05">Copy</button></td></tr>
+          <tr><td class="label"><span class="lang-id">Izin Internet</span><span class="lang-en">Internet</span></td><td class="code"><span class="lang-id">0 - Tanpa izin</span><span class="lang-en">0 - No permission</span></td></tr>
+          <tr><td class="label">License</td><td class="code"><a href="https://github.com/xykal/AppPerms/blob/main/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></td></tr>
         </tbody>
       </table>
     </section>
@@ -473,7 +476,7 @@
     <section id="faq">
       <div class="sec-head section-with-art">
         <div class="section-heading">
-          <h2 class="sec-title"><span class="lang-id">FAQ</span><span class="lang-en">FAQ</span></h2>
+          <h2 class="sec-title" id="faq-title"><span class="lang-id">FAQ</span><span class="lang-en">FAQ</span></h2>
           <p class="sec-sub"><span class="lang-id">Jawaban cepat.</span><span class="lang-en">Quick answers.</span></p>
         </div>
         <picture class="paper-illustration section-art" data-illustration="faq" aria-hidden="true">
@@ -481,7 +484,7 @@
           <img src="images/illustrations/faq.png" width="640" height="640" alt="" loading="lazy" decoding="async">
         </picture>
       </div>
-      <div class="faq-tools" id="faq-tools">
+      <div class="faq-tools" id="faq-tools" hidden>
         <picture class="paper-illustration search-art" data-illustration="search" aria-hidden="true">
           <source type="image/webp" srcset="images/illustrations/search-320.webp 320w, images/illustrations/search-640.webp 640w, images/illustrations/search-960.webp 960w" sizes="64px">
           <img src="images/illustrations/search.png" width="640" height="640" alt="" loading="lazy" decoding="async">
@@ -495,7 +498,7 @@
       <div id="faq-list">
         <details class="faq-item"><summary><span class="lang-id">Butuh root?</span><span class="lang-en">Need root?</span></summary><p class="faq-answer"><span class="lang-id">Tidak. Pakai Shizuku via Wireless Debugging di Android 11+.</span><span class="lang-en">No. Use Shizuku via Wireless Debugging on Android 11+.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Kenapa butuh Shizuku?</span><span class="lang-en">Why Shizuku?</span></summary><p class="faq-answer"><span class="lang-id">AppOps butuh hak sistem. Shizuku jembatan aman tanpa rusak Android.</span><span class="lang-en">AppOps needs system permission. Shizuku is secure bridge.</span></p></details>
-        <details class="faq-item"><summary><span class="lang-id">Data aman & offline?</span><span class="lang-en">Safe & offline?</span></summary><p class="faq-answer"><span class="lang-id">0 izin internet di Manifest. Mustahil kirim data keluar.</span><span class="lang-en">Zero internet permission. Impossible to exfiltrate.</span></p></details>
+        <details class="faq-item"><summary><span class="lang-id">Data lokal & privat?</span><span class="lang-en">Local & private data?</span></summary><p class="faq-answer"><span class="lang-id">Aplikasi tidak meminta izin internet dan memproses data secara lokal.</span><span class="lang-en">The app requests no internet permission and processes data locally.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Verifikasi APK?</span><span class="lang-en">Verify APK?</span></summary><p class="faq-answer"><span class="lang-id">Cocokkan SHA-256 di tabel Keamanan atau upload ke VirusTotal.</span><span class="lang-en">Match SHA-256 in Security table or upload to VirusTotal.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Apakah ada versi beta?</span><span class="lang-en">Is there a beta version?</span></summary><p class="faq-answer"><span class="lang-id">Ya, channel beta tersedia di GitHub Releases dengan fitur eksperimen.</span><span class="lang-en">Yes, beta channel is available on GitHub Releases with experimental features.</span></p></details>
         <details class="faq-item"><summary><span class="lang-id">Kenapa ukuran APK sangat kecil?</span><span class="lang-en">Why is APK size so small?</span></summary><p class="faq-answer"><span class="lang-id">Karena minified dengan R8, 0 library native, dan 0 izin internet. Hanya 2.2MB.</span><span class="lang-en">Because minified with R8, 0 native libs, and 0 internet permission. Only 2.2MB.</span></p></details>
@@ -519,40 +522,40 @@
         </div>
         <div class="about-content">
           <h3>XyVerse by Kall</h3>
-          <p><span class="lang-id">XyVerse adalah ekosistem Cloud PC + pengembangan aplikasi. AppsPerms lahir dari kebutuhan nyata: mengelola izin tersembunyi Android dengan aman, cepat, dan 100% offline.</span><span class="lang-en">XyVerse is a Cloud PC + app development ecosystem. AppsPerms was born from real need: managing hidden Android permissions safely, fast, and 100% offline.</span></p>
+          <p><span class="lang-id">XyVerse adalah ekosistem Cloud PC + pengembangan aplikasi. AppsPerms lahir dari kebutuhan nyata: mengelola izin tersembunyi Android dengan aman, cepat, dan secara lokal.</span><span class="lang-en">XyVerse is a Cloud PC + app development ecosystem. AppsPerms was born from a real need: managing hidden Android permissions safely, quickly, and locally.</span></p>
           <div class="about-list">
-            <span class="about-list-item">⚡ <span class="lang-id">Cepat 150ms</span><span class="lang-en">Fast 150ms</span></span>
+            <span class="about-list-item">⚡ <span class="lang-id">Pemindaian lokal</span><span class="lang-en">Local scanning</span></span>
             <span class="about-list-item">🔒 <span class="lang-id">0 Internet</span><span class="lang-en">0 Internet</span></span>
             <span class="about-list-item">📦 2.2 MB</span>
             <span class="about-list-item">🛡️ Apache 2.0</span>
             <span class="about-list-item">🎯 19 AppOps</span>
-            <span class="about-list-item">🌏 <span class="lang-id">Offline 100%</span><span class="lang-en">100% Offline</span></span>
+            <span class="about-list-item">🌏 <span class="lang-id">Lokal</span><span class="lang-en">Local processing</span></span>
           </div>
         </div>
       </div>
       <div class="contrib-grid">
-        <div class="contrib-card"><div class="contrib-name">Kall (@xykal)</div><div class="contrib-role">Founder & Lead Dev — XyVerse</div><div class="contrib-desc"><span class="lang-id">Arsitek XyVerse, 0ms UI, Safe Tuning, Terminal. Fokus: cepat, stabil, aman jangka panjang.</span><span class="lang-en">XyVerse architect, 0ms UI, Safe Tuning, Terminal. Focus: fast, stable, secure long-term.</span></div></div>
+        <div class="contrib-card"><div class="contrib-name">Kall (@xykal)</div><div class="contrib-role">Founder & Lead Dev — XyVerse</div><div class="contrib-desc"><span class="lang-id">Arsitek XyVerse, Safe Tuning, dan Terminal. Fokus: cepat, stabil, dan aman jangka panjang.</span><span class="lang-en">XyVerse architect, Safe Tuning, and Terminal. Focus: fast, stable, and secure long-term.</span></div></div>
         <div class="contrib-card"><div class="contrib-name">Rikka</div><div class="contrib-role">Shizuku Creator</div><div class="contrib-desc">Creator of Shizuku framework — secure system API bridge without root.</div></div>
         <div class="contrib-card"><div class="contrib-name"><span class="lang-id">Komunitas</span><span class="lang-en">Community</span></div><div class="contrib-role">Testers & Contributors</div><div class="contrib-desc"><span class="lang-id">Laporan bug, ide fitur, dan testing di berbagai ROM (HyperOS, One UI, ColorOS, Pixel).</span><span class="lang-en">Bug reports, feature ideas, and testing across ROMs (HyperOS, One UI, ColorOS, Pixel).</span></div></div>
       </div>
     </section>
 
     <section id="dukung">
-      <div class="sec-head"><h2 class="sec-title"><span class="lang-id">Dukung Kami</span><span class="lang-en">Support Us</span></h2><p class="sec-sub"><span class="lang-id">Bantu AppsPerms tetap gratis, offline, dan tanpa iklan</span><span class="lang-en">Help keep AppsPerms free, offline, and ad-free</span></p></div>
+      <div class="sec-head"><h2 class="sec-title"><span class="lang-id">Dukung Kami</span><span class="lang-en">Support Us</span></h2><p class="sec-sub"><span class="lang-id">Bantu AppsPerms tetap gratis, tanpa izin internet, dan tanpa iklan</span><span class="lang-en">Help keep AppsPerms free, without an internet permission, and ad-free</span></p></div>
       <div class="donate-card">
         <div class="donate-info">
           <h3><span class="lang-id">Donasi & Dukungan</span><span class="lang-en">Donate & Support</span></h3>
           <p><span class="lang-id">AppsPerms gratis selamanya. Donasi membantu server, domain, dan waktu pengembangan. Tidak wajib, tapi sangat berarti.</span><span class="lang-en">AppsPerms is free forever. Donations help with servers, domains, and dev time. Optional but meaningful.</span></p>
         </div>
         <div class="donate-actions">
-          <a href="https://saweria.co/Kallsptra" target="_blank" class="donate-btn primary">💜 Saweria</a>
-          <a href="https://github.com/sponsors/xykal" target="_blank" class="donate-btn">💖 GitHub Sponsors</a>
-          <a href="https://xyverse.my.id/" target="_blank" class="donate-btn"><span class="lang-id">Lihat XyVerse</span><span class="lang-en">Visit XyVerse</span></a>
+          <a href="https://saweria.co/Kallsptra" target="_blank" rel="noopener" class="donate-btn primary">💜 Saweria</a>
+          <a href="https://github.com/sponsors/xykal" target="_blank" rel="noopener" class="donate-btn">💖 GitHub Sponsors</a>
+          <a href="https://xyverse.my.id/" target="_blank" rel="noopener" class="donate-btn"><span class="lang-id">Lihat XyVerse</span><span class="lang-en">Visit XyVerse</span></a>
         </div>
       </div>
       <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
         <span class="pill">🎯 <span class="lang-id">Tanpa iklan</span><span class="lang-en">No ads</span></span>
-        <span class="pill">🔒 <span class="lang-id">Tanpa tracker</span><span class="lang-en">No trackers</span></span>
+        <span class="pill">🔒 <span class="lang-id">App & situs tanpa tracker</span><span class="lang-en">Tracker-free app & site</span></span>
         <span class="pill">📦 <span class="lang-id">Open source</span><span class="lang-en">Open source</span></span>
         <span class="pill">💜 <span class="lang-id">Dibuat dengan cinta</span><span class="lang-en">Made with love</span></span>
       </div>
@@ -560,7 +563,7 @@
 
     <footer>
       <div><strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong> · v1.8.0</div>
-      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank">GitHub</a><a href="#semua-versi">Versions</a><a href="#keamanan">Security</a><a href="https://xyverse.my.id" target="_blank">XyVerse</a><a href="#dukung"><span class="lang-id">Dukung</span><span class="lang-en">Donate</span></a></div>
+      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank" rel="noopener">GitHub</a><a href="#semua-versi">Versions</a><a href="#keamanan">Security</a><a href="https://xyverse.my.id" target="_blank" rel="noopener">XyVerse</a><a href="#dukung"><span class="lang-id">Dukung</span><span class="lang-en">Donate</span></a><a href="/privacy"><span class="lang-id">Privasi</span><span class="lang-en">Privacy</span></a></div>
     </footer>
   </main>
 
@@ -620,12 +623,14 @@
         if (!nav || !target) return;
         var btn = nav.querySelector('.version-tab-btn[data-target=\"' + target + '\"]');
         if (!btn) return;
-        nav.querySelectorAll('.version-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+        nav.querySelectorAll('.version-tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
         btn.classList.add('active');
-        document.querySelectorAll('.version-pane').forEach(function(p){ p.classList.remove('active'); });
+        btn.setAttribute('aria-selected', 'true');
+        document.querySelectorAll('.version-pane').forEach(function(p){ p.classList.remove('active'); p.hidden = true; });
         var pane = document.getElementById('pane-' + target);
         if (pane) {
           pane.classList.add('active');
+          pane.hidden = false;
           if (scroll) pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
@@ -682,96 +687,96 @@
     })();
 
     (function () {
-      var MIRRORS = {
-        release: [
-          'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
-          'https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk',
-          'https://github.com/xykal/AppPerms/releases/latest/download/AppsPerms-latest.apk',
-          'https://raw.githubusercontent.com/xykal/AppPerms/main/docs/apk/AppsPerms-latest.apk'
-        ],
-        debug: [
-          'https://appsperms.xyverse.my.id/apk/AppsPerms-latest.apk',
-          'https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk'
-        ]
-      };
-      function triggerDirectDownload(url) {
-        try {
-          var a = document.createElement('a');
-          a.href = url;
-          a.setAttribute('download', '');
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(function(){ try { document.body.removeChild(a); } catch(e){} }, 1500);
-        } catch(e) {
-          window.location.href = url;
-        }
-      }
-      function tryDownloadWithFallback(urls, idx) {
-        idx = idx || 0;
-        if (idx >= urls.length) {
-          window.open('https://github.com/xykal/AppPerms/releases', '_blank');
-          return;
-        }
-        var url = urls[idx];
-        // Direct download without HEAD check - Pages HEAD returns 404 but GET works
-        triggerDirectDownload(url);
-      }
-      function triggerDownloadAndThanks(e, variant) {
-        if (e) e.preventDefault();
-        var urls = (variant === 'debug') ? MIRRORS.debug : MIRRORS.release;
-        var hint = document.getElementById('dlHint');
-        if (hint) {
-          hint.classList.add('show');
-          hint.innerHTML = '<span class="lang-id">Memulai download dari appsperms.xyverse.my.id...</span><span class="lang-en">Starting download from appsperms.xyverse.my.id...</span>';
-        }
-        tryDownloadWithFallback(urls, 0);
-        setTimeout(function () {
-          window.location.href = 'thanks.html?v=1.7.3&var=' + encodeURIComponent(variant);
-        }, 1200);
-      }
-      var btnRel = document.getElementById('btnRelease');
-      if (btnRel) btnRel.addEventListener('click', function(e){ triggerDownloadAndThanks(e, 'release'); });
-      var btnDbg = document.getElementById('btnDebug');
-      if (btnDbg) btnDbg.addEventListener('click', function(e){ triggerDownloadAndThanks(e, 'debug'); });
-
-      fetch('data/virustotal.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-        if (!d) return;
-        if (d.version) {
-          var hb = document.getElementById('heroVerBadge');
-          if (hb) hb.textContent = 'v' + d.version;
-          var hs = document.getElementById('hashWhen');
-          if (hs) hs.textContent = '· v' + d.version;
-        }
-        if (d.release && d.release.sha256) {
-          var hr = document.getElementById('hashRelease');
-          if (hr) {
-            var sha = d.release.sha256;
-            hr.innerHTML = sha + ' <span id="hashWhen">· v' + (d.version || '1.7.3') + '</span><button class="copy-btn" data-copy="' + sha + '">Copy</button>';
-            var btn = hr.querySelector('[data-copy]');
-            if (btn) btn.addEventListener('click', function(){
-              var txt = this.getAttribute('data-copy');
-              if (navigator.clipboard) navigator.clipboard.writeText(txt);
-            });
+      var btn = document.getElementById('btnRelease');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var hint = document.getElementById('dlHint');
+          if (hint) {
+            hint.classList.add('show');
+            hint.innerHTML = '<span class="lang-id">Download dimulai…</span><span class="lang-en">Download started…</span>';
           }
-        }
-        var vt = d.virustotal || {};
-        if (vt.checked) {
-          var sc = document.getElementById('vtScore');
-          if (sc) sc.textContent = vt.detected + ' / ' + vt.total;
-          var up = document.getElementById('vtUpdated');
-          if (up) up.textContent = 'Updated by CI · v' + (d.version || '1.7.3');
-        }
-      }).catch(function(){});
+          // Do not prevent the native download. The guide opens only after the
+          // browser has had time to accept the immutable APK request.
+          window.setTimeout(function () { window.location.href = '/thanks?var=release'; }, 1200);
+        });
+      }
+
+      function bilingual(element, idText, enText) {
+        if (!element) return;
+        element.textContent = '';
+        var id = document.createElement('span');
+        id.className = 'lang-id';
+        id.textContent = idText;
+        var en = document.createElement('span');
+        en.className = 'lang-en';
+        en.textContent = enText;
+        element.appendChild(id);
+        element.appendChild(en);
+      }
+
+      fetch('data/release.json', { cache: 'no-store' })
+        .then(function (response) { if (!response.ok) throw new Error('release metadata unavailable'); return response.json(); })
+        .then(function (release) {
+          var artifact = release.artifacts && release.artifacts.release;
+          var version = release.version;
+          var expectedCert = '76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05';
+          var expectedFile = 'AppsPerms-' + version + '-stable-universal-release.apk';
+          var expectedUrl = 'https://github.com/xykal/AppPerms/releases/download/v' + version + '/' + expectedFile;
+          if (!/^\d+\.\d+\.\d+$/.test(version || '') || release.channel !== 'stable' ||
+              !artifact || artifact.public !== true || artifact.package_id !== 'app.appsperms' ||
+              artifact.filename !== expectedFile || artifact.signing_certificate_sha256 !== expectedCert ||
+              !/^[a-f0-9]{64}$/.test(artifact.sha256 || '') || !Array.isArray(artifact.urls) ||
+              artifact.urls.length !== 1 || artifact.urls[0] !== expectedUrl) {
+            throw new Error('invalid release metadata');
+          }
+
+          var hero = document.getElementById('heroVerBadge');
+          if (hero) hero.textContent = 'v' + version;
+          var hashWhen = document.getElementById('hashWhen');
+          if (hashWhen) hashWhen.textContent = '· v' + version;
+          var hash = document.getElementById('hashRelease');
+          if (hash && hash.firstChild) hash.firstChild.nodeValue = artifact.sha256 + ' ';
+          var copy = hash && hash.querySelector('[data-copy]');
+          if (copy) copy.setAttribute('data-copy', artifact.sha256);
+          var certificate = artifact.signing_certificate_sha256;
+          if (certificate && /^[a-f0-9]{64}$/.test(certificate)) {
+            var cert = document.getElementById('certRelease');
+            if (cert && cert.firstChild) cert.firstChild.nodeValue = certificate;
+            var certCopy = cert && cert.querySelector('[data-copy]');
+            if (certCopy) certCopy.setAttribute('data-copy', certificate);
+          }
+          if (btn && artifact.urls && artifact.urls[0]) btn.href = artifact.urls[0];
+
+          var vt = release.virustotal || {};
+          var score = document.getElementById('vtScore');
+          var verdict = document.getElementById('vtVerdict');
+          var updated = document.getElementById('vtUpdated');
+          var completed = vt.status === 'complete' && vt.checked === true &&
+            vt.sha256 === artifact.sha256 && Number.isInteger(vt.detected) && Number.isInteger(vt.total) && vt.total > 0;
+          if (completed) {
+            if (score) score.textContent = vt.detected + ' / ' + vt.total;
+            if (vt.detected === 0) {
+              bilingual(verdict, 'Tidak terdeteksi oleh mesin pemindai', 'No engines flagged this file');
+            } else {
+              bilingual(verdict, vt.detected + ' mesin memberi tanda', vt.detected + ' engines flagged this file');
+            }
+            bilingual(updated, 'Hasil untuk SHA-256 rilis ini', 'Result matches this release SHA-256');
+          } else {
+            if (score) score.textContent = '—';
+            bilingual(verdict, 'Belum dipindai', 'Not scanned');
+            bilingual(updated, 'Belum ada hasil lengkap untuk SHA-256 ini', 'No completed result for this SHA-256');
+          }
+          var link = document.getElementById('vtLink');
+          var expectedVtUrl = 'https://www.virustotal.com/gui/file/' + artifact.sha256;
+          if (link && vt.permalink === expectedVtUrl) link.href = expectedVtUrl;
+        })
+        .catch(function () {
+          bilingual(document.getElementById('vtVerdict'), 'Status tidak tersedia', 'Status unavailable');
+          bilingual(document.getElementById('vtUpdated'), 'Cocokkan SHA-256 sebelum memasang', 'Verify SHA-256 before installing');
+        });
     })();
   </script>
-  <div id="shareToast" class="share-toast"><span id="toastMsg">Copied</span></div>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-35X7GHDVPP"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-35X7GHDVPP', { 'anonymize_ip': true, 'allow_google_signals': false });
-  </script>
+  <div id="shareToast" class="share-toast" role="status" aria-live="polite"><span id="toastMsg">Copied</span></div>
+  <script src="assets/illustrations.js" defer></script>
 </body>
 </html>

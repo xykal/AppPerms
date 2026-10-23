@@ -41,6 +41,7 @@
     html[lang="id"] .lang-en { display: none !important; }
     html[lang="en"] .lang-id { display: none !important; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
     html { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
     body { min-height: 100vh; background: var(--bg); display: flex; flex-direction: column; }
     a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--outline-light); }
@@ -231,13 +232,6 @@
     .footer-links a:hover { color: var(--text); }
   </style>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-35X7GHDVPP"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-35X7GHDVPP', { 'anonymize_ip': true, 'allow_google_signals': false });
-  </script>
 </head>
 <body>
   <div class="container">
@@ -248,7 +242,7 @@
       </a>
       <div class="topbar-actions">
         <a href="index.html" class="topbar-link"><span class="lang-id">← Beranda</span><span class="lang-en">← Home</span></a>
-        <button class="lang-toggle-btn" id="langToggle" aria-label="Toggle language"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
+        <button type="button" class="lang-toggle-btn" id="langToggle" aria-label="Toggle language"><span class="opt-id">ID</span><span class="opt-en">EN</span></button>
       </div>
     </header>
 
@@ -259,7 +253,7 @@
 
       <div class="hero-text">
         <h1><span class="lang-id">Unduhan siap dipasang</span><span class="lang-en">Download ready to install</span></h1>
-        <p><span class="lang-id">Berkas <strong>AppsPerms <span id="verText">v1.7.2</span></strong> telah dikirim ke browser. 1.9 MB, 0 izin internet, 100% offline.</span><span class="lang-en"><strong>AppsPerms <span id="verTextEn">v1.7.2</span></strong> has been sent to your browser. 1.9 MB, 0 internet, 100% offline.</span></p>
+        <p><span class="lang-id">Download <strong>AppsPerms <span id="verText">v1.8.0</span></strong> seharusnya sudah dimulai. 2.21 MB, tanpa izin internet, pemrosesan lokal.</span><span class="lang-en">The <strong>AppsPerms <span id="verTextEn">v1.8.0</span></strong> download should have started. 2.21 MB, no internet permission, local processing.</span></p>
       </div>
 
       <div class="dl-card">
@@ -267,12 +261,12 @@
           <span class="dl-title"><span class="lang-id">Status Berkas</span><span class="lang-en">File Status</span></span>
           <span class="variant-tag" id="varTag">Release</span>
         </div>
-        <p class="dl-desc"><span id="fileText" style="font-family:var(--mono); font-size:0.84rem; color:var(--text-dim);">AppsPerms-latest.apk</span></p>
+        <p class="dl-desc"><span id="fileText" style="font-family:var(--mono); font-size:0.84rem; color:var(--text-dim);">AppsPerms-1.8.0-stable-universal-release.apk</span></p>
         <p class="dl-desc"><span class="lang-id">Jika download tidak otomatis, pakai tombol Manual di bawah.</span><span class="lang-en">If download didn't start automatically, use Manual button below.</span></p>
       </div>
 
       <div class="btn-row">
-        <a id="btnManualDl" class="btn-primary" href="/apk/AppsPerms-latest.apk">
+        <a id="btnManualDl" class="btn-primary" href="https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           <span class="lang-id">Unduh Manual</span><span class="lang-en">Manual Download</span>
         </a>
@@ -294,15 +288,15 @@
 
       <div class="card">
         <h2><span class="lang-id">Verifikasi SHA-256</span><span class="lang-en">SHA-256 Verification</span></h2>
-        <span style="font-size:0.8rem; color:var(--text-muted);"><span class="lang-id">Checksum resmi v1.7.2:</span><span class="lang-en">Official checksum v1.7.2:</span></span>
-        <div class="hash-display" id="hashContainer"><span id="hashText">60763bc1f8c686edf0248ab602281990aa6f097a50ee5a9ad036b23634388f8a</span><button class="copy-btn" id="copyHash">Copy</button></div>
-        <div class="pills-row"><span class="pill"><span id="vtThanksPill">0/67 Clean</span></span><span class="pill"><span class="lang-id">0 Izin Internet</span><span class="lang-en">0 Internet</span></span><span class="pill">RSA 4096-bit</span></div>
+        <span style="font-size:0.8rem; color:var(--text-muted);"><span class="lang-id">Checksum resmi v1.8.0:</span><span class="lang-en">Official checksum v1.8.0:</span></span>
+        <div class="hash-display" id="hashContainer"><span id="hashText">c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80</span><button type="button" class="copy-btn" id="copyHash">Copy</button></div>
+        <div class="pills-row"><span class="pill"><span id="vtThanksPill">Not scanned</span></span><span class="pill"><span class="lang-id">0 Izin Internet</span><span class="lang-en">0 Internet</span></span><span class="pill">SHA-256 published</span></div>
       </div>
     </main>
 
     <footer>
       <div><strong>AppsPerms</strong> · Built-in <strong>XyVerse</strong> by <strong>Kall</strong></div>
-      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank">GitHub</a><a href="https://github.com/xykal/AppPerms/releases" target="_blank"><span class="lang-id">Rilis</span><span class="lang-en">Releases</span></a><a href="index.html">Home</a></div>
+      <div class="footer-links"><a href="https://github.com/xykal/AppPerms" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/xykal/AppPerms/releases" target="_blank" rel="noopener"><span class="lang-id">Rilis</span><span class="lang-en">Releases</span></a><a href="index.html">Home</a><a href="/privacy"><span class="lang-id">Privasi</span><span class="lang-en">Privacy</span></a></div>
     </footer>
   </div>
 
@@ -326,90 +320,63 @@
 
     (function () {
       var params = new URLSearchParams(window.location.search);
-      var variant = params.get('var') === 'debug' ? 'debug' : 'release';
-      var version = params.get('v') || '1.7.2';
-      var vtTag = document.getElementById('varTag');
-      if (vtTag) vtTag.textContent = variant === 'debug' ? 'Debug' : 'Release';
-      var vtText = document.getElementById('verText');
-      if (vtText) vtText.textContent = 'v' + version;
-      var vtTextEn = document.getElementById('verTextEn');
-      if (vtTextEn) vtTextEn.textContent = 'v' + version;
-      var MIRRORS = {
-        release: ['https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk','https://dl.appsperms.xyverse.my.id/AppsPerms-1.7.3-stable-universal-release.apk','/apk/AppsPerms-latest.apk','https://github.com/xykal/AppPerms/releases/download/v1.7.3/AppsPerms-1.7.3-stable-universal-release.apk'],
-        debug: ['https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk','https://dl.appsperms.xyverse.my.id/AppsPerms-1.7.3-stable-universal-release.apk','/apk/AppsPerms-latest.apk']
-      };
-      var urls = (variant === 'debug') ? MIRRORS.debug : MIRRORS.release;
-      var filename = (variant === 'debug') ? 'AppsPerms-debug-latest.apk' : 'AppsPerms-latest.apk';
-      var fileEl = document.getElementById('fileText');
-      if (fileEl) fileEl.textContent = filename;
-      var manualBtn = document.getElementById('btnManualDl');
-      if (manualBtn) manualBtn.href = urls[0];
+      var debugRequested = params.get('var') === 'debug';
+      var tag = document.getElementById('varTag');
+      var versionId = document.getElementById('verText');
+      var versionEn = document.getElementById('verTextEn');
+      var file = document.getElementById('fileText');
+      var button = document.getElementById('btnManualDl');
+      var hash = document.getElementById('hashText');
+      var copy = document.getElementById('copyHash');
+      var scan = document.getElementById('vtThanksPill');
 
-      function triggerDirectDownload(url) {
-        try {
-          var a = document.createElement('a');
-          a.href = url;
-          a.setAttribute('download', '');
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(function(){ try { document.body.removeChild(a); } catch(e){} }, 1500);
-        } catch(e) {
-          window.location.href = url;
-        }
+      if (tag) tag.textContent = debugRequested ? 'Debug unavailable' : 'Release';
+      if (debugRequested) {
+        if (file) file.textContent = 'Debug builds are CI-only and are not public release artifacts.';
+        if (button) button.hidden = true;
+        if (document.getElementById('hashContainer')) document.getElementById('hashContainer').hidden = true;
+        if (scan) scan.textContent = 'Not published';
+        return;
       }
-      function tryMirror(urls, idx){
-        idx = idx || 0;
-        if (idx >= urls.length) {
-          if (manualBtn) {
-            manualBtn.textContent = (document.documentElement.lang === 'en' ? 'Open GitHub Releases' : 'Buka GitHub Releases');
-            manualBtn.href = 'https://github.com/xykal/AppPerms/releases';
+
+      fetch('data/release.json', { cache: 'no-store' })
+        .then(function (response) { if (!response.ok) throw new Error('metadata unavailable'); return response.json(); })
+        .then(function (release) {
+          var artifact = release.artifacts && release.artifacts.release;
+          var expectedCert = '76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05';
+          var expectedFile = 'AppsPerms-' + release.version + '-stable-universal-release.apk';
+          var expectedUrl = 'https://github.com/xykal/AppPerms/releases/download/v' + release.version + '/' + expectedFile;
+          if (!/^\d+\.\d+\.\d+$/.test(release.version || '') || release.channel !== 'stable' ||
+              !artifact || artifact.public !== true || artifact.package_id !== 'app.appsperms' ||
+              artifact.filename !== expectedFile || artifact.signing_certificate_sha256 !== expectedCert ||
+              !/^[a-f0-9]{64}$/.test(artifact.sha256 || '') || !Array.isArray(artifact.urls) ||
+              artifact.urls.length !== 1 || artifact.urls[0] !== expectedUrl) {
+            throw new Error('invalid metadata');
           }
-          return;
-        }
-        var url = urls[idx];
-        fetch(url, {method:'HEAD', cache:'no-store'}).then(function(r){
-          if (r.ok) {
-            triggerDirectDownload(url);
-            if (manualBtn) manualBtn.href = url;
-          } else {
-            console.log('HEAD failed', url, r.status, 'trying next');
-            tryMirror(urls, idx+1);
-          }
-        }).catch(function(err){
-          console.log('HEAD error', url, err, 'trying next');
-          tryMirror(urls, idx+1);
+          if (versionId) versionId.textContent = 'v' + release.version;
+          if (versionEn) versionEn.textContent = 'v' + release.version;
+          if (file) file.textContent = artifact.filename;
+          if (hash) hash.textContent = artifact.sha256;
+          if (copy) copy.setAttribute('data-copy', artifact.sha256);
+          if (button && artifact.urls && artifact.urls[0]) button.href = artifact.urls[0];
+
+          var vt = release.virustotal || {};
+          var completed = vt.status === 'complete' && vt.checked === true &&
+            vt.sha256 === artifact.sha256 && Number.isInteger(vt.detected) && Number.isInteger(vt.total) && vt.total > 0;
+          if (scan) scan.textContent = completed ? (vt.detected + '/' + vt.total + ' detected') : 'Not scanned';
+        })
+        .catch(function () {
+          if (scan) scan.textContent = 'Status unavailable';
         });
-      }
-      if (!sessionStorage.getItem('dl_triggered_' + version + '_' + variant)) {
-        sessionStorage.setItem('dl_triggered_' + version + '_' + variant, '1');
-        tryMirror(urls, 0);
-      }
-      fetch('data/virustotal.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-        if (!d) return;
-        var info = (variant === 'debug' && d.debug && d.debug.sha256) ? d.debug : d.release;
-        if (info && info.sha256) {
-          var ht = document.getElementById('hashText');
-          if (ht) ht.textContent = info.sha256;
-          var copyBtn = document.getElementById('copyHash');
-          if (copyBtn) copyBtn.setAttribute('data-copy', info.sha256);
-        }
-        var vt = d.virustotal || {};
-        if (vt.checked) {
-          var pill = document.getElementById('vtThanksPill');
-          if (pill) pill.textContent = vt.detected + '/' + vt.total + ' Clean';
-        }
-      }).catch(function(){});
-      var copyHashBtn = document.getElementById('copyHash');
-      if (copyHashBtn) {
-        copyHashBtn.addEventListener('click', function(){
-          var txt = document.getElementById('hashText').textContent;
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(txt).then(function(){
-              copyHashBtn.textContent = 'Copied!';
-              setTimeout(function(){ copyHashBtn.textContent = 'Copy'; }, 2000);
-            });
-          }
+
+      if (copy) {
+        copy.addEventListener('click', function () {
+          var value = hash ? hash.textContent : '';
+          if (!navigator.clipboard || !value) return;
+          navigator.clipboard.writeText(value).then(function () {
+            copy.textContent = 'Copied!';
+            window.setTimeout(function () { copy.textContent = 'Copy'; }, 2000);
+          });
         });
       }
     })();

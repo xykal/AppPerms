@@ -1,432 +1,94 @@
-name: Build APK - Universal + ABI Splits + Beautiful Web
+name: Android CI
 
 on:
-  push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
-    paths-ignore:
-      - 'docs/**'
-      - '.github/workflows/pages.yml'
-      - '**.md'
-      - 'LICENSE'
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      channel:
-        description: 'Release channel'
-        required: false
-        default: 'stable'
-        type: choice
-        options:
-          - stable
-          - beta
-          - pre
-          - rc
-          - dev
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: build-${{ github.ref }}-${{ github.event.inputs.channel || 'stable' }}
+  group: android-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build APK (Universal + arm64 + armv7 + x86_64)
+  test-build:
+    name: Unit tests, lint and unsigned builds
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-
+    timeout-minutes: 35
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
         with:
-          packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'
+          packages: "platforms;android-34 build-tools;34.0.0 platform-tools"
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
 
-      - name: Siapkan keystore release (baru RSA 4096)
-        id: keystore
+      - name: Validate release metadata
+        run: bash scripts/check-version-sync.sh
+
+      - name: Unit tests
+        run: bash ./gradlew :app:testDebugUnitTest --no-daemon --console=plain --stacktrace
+
+      - name: Android lint
+        run: bash ./gradlew :app:lintDebug --no-daemon --console=plain
+
+      - name: Build debug and unsigned release APKs
+        run: bash ./gradlew :app:assembleDebug :app:assembleRelease --no-daemon --console=plain
+
+      - name: Inspect APK identities and permissions
         run: |
           set -euo pipefail
-          if [ -n "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
-            echo "have=yes" >> "$GITHUB_OUTPUT"
-            echo "keystore release tersedia ✓ (RSA 4096 baru)"
-            keytool -list -v -keystore "$RUNNER_TEMP/release.jks" -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -alias "${{ secrets.KEY_ALIAS }}" 2>&1 | grep -E "SHA1|SHA256|Valid from" || true
-          else
-            echo "have=no" >> "$GITHUB_OUTPUT"
-            echo "::warning::Secret KEYSTORE_BASE64 belum ada — build release unsigned"
-          fi
-
-      - name: Tentukan channel & version
-        id: version
-        run: |
-          set -euo pipefail
-          # Ambil channel dari input workflow_dispatch atau dari tag
-          CHANNEL="${{ github.event.inputs.channel || '' }}"
-          REF="${{ github.ref }}"
-          if [[ "$REF" == refs/tags/v* ]]; then
-            TAG="${REF#refs/tags/v}"
-            # Extract channel dari tag: 1.7.2, 1.7.2-stable, 1.7.2-beta, 1.7.2-pre
-            if [[ "$TAG" == *"-beta"* ]]; then CHANNEL="beta"
-            elif [[ "$TAG" == *"-pre"* ]]; then CHANNEL="pre"
-            elif [[ "$TAG" == *"-rc"* ]]; then CHANNEL="rc"
-            elif [[ "$TAG" == *"-alpha"* ]]; then CHANNEL="alpha"
-            elif [[ "$TAG" == *"-stable"* ]]; then CHANNEL="stable"
-            else CHANNEL="stable"
-            fi
-            VERSION="${TAG%-stable}"
-            VERSION="${VERSION%-beta}"
-            VERSION="${VERSION%-pre}"
-            VERSION="${VERSION%-rc*}"
-            VERSION="${VERSION%-alpha*}"
-          else
-            VERSION=$(grep -oP 'baseVersionName\s*=\s*"\K[^"]+' app/build.gradle.kts || grep -oP 'val versionNameFinal = System.getenv.*?\?: "\K[^"]+' app/build.gradle.kts || echo "1.7.3")
-            if [ -z "$VERSION" ]; then VERSION="1.7.3"; fi
-          fi
-          if [ -z "$CHANNEL" ]; then CHANNEL="stable"; fi
-          if [ "$CHANNEL" = "stable" ]; then
-            FULL="$VERSION"
-          else
-            FULL="$VERSION-$CHANNEL"
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "channel=$CHANNEL" >> "$GITHUB_OUTPUT"
-          echo "full=$FULL" >> "$GITHUB_OUTPUT"
-          echo "Version: $VERSION Channel: $CHANNEL Full: $FULL"
-
-      - name: Unit test
-        continue-on-error: true
-        run: bash ./gradlew :app:testDebugUnitTest --no-daemon --console=plain --stacktrace || echo "Unit test failed, continuing..."
-
-      - name: Build debug (all ABIs + universal)
-        continue-on-error: true
-        run: bash ./gradlew :app:assembleDebug --no-daemon --console=plain || echo "Debug build failed, continuing..."
-
-      - name: Build release (signed + minified + splits)
-        if: steps.keystore.outputs.have == 'yes'
-        env:
-          KEYSTORE_PATH: ${{ runner.temp }}/release.jks
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          VERSION_CHANNEL: ${{ steps.version.outputs.channel }}
-        run: bash ./gradlew :app:assembleRelease --no-daemon --console=plain
-
-      - name: Build release unsigned (jika keystore tidak ada, tetap build untuk testing)
-        if: steps.keystore.outputs.have != 'yes'
-        env:
-          VERSION_CHANNEL: ${{ steps.version.outputs.channel }}
-        run: bash ./gradlew :app:assembleRelease --no-daemon --console=plain
-
-      - name: Kumpulkan artefak + rename + copy ke docs/apk
-        id: artifact
-        run: |
-          set -euo pipefail
-          VERSION="${{ steps.version.outputs.version }}"
-          CHANNEL="${{ steps.version.outputs.channel }}"
-          FULL="${{ steps.version.outputs.full }}"
-          mkdir -p out
-          mkdir -p docs/apk
-
-          echo "=== Build outputs ==="
-          find app/build/outputs/apk -type f -name "*.apk" | sort
-
-          # Fungsi untuk copy dan rename
-          # Format baru: AppsPerms-1.7.2-stable-universal-release.apk
-          #              AppsPerms-1.7.2-stable-arm64-v8a-release.apk
-          #              AppsPerms-1.7.2-stable-armeabi-v7a-release.apk
-          #              AppsPerms-1.7.2-stable-x86_64-release.apk
-          # Plus alias: AppsPerms-latest.apk -> universal stable
-          #             AppsPerms-arm64-latest.apk -> arm64 stable
-
-          shopt -s nullglob
-          for apk in app/build/outputs/apk/*/*.apk; do
-            base=$(basename "$apk")
-            # Contoh base: app-arm64-v8a-release.apk, app-universal-release.apk, app-debug.apk
-            # Kita sudah set outputFileName di build.gradle.kts jadi formatnya sudah AppsPerms-...
-            # Tapi untuk debug yang tidak pakai splits, handle manual
-            if [[ "$base" == AppsPerms-* ]]; then
-              # Sudah sesuai format baru
-              cp "$apk" out/
-              cp "$apk" docs/apk/
-              echo "Copied $base (already named)"
-            else
-              # Format lama app-xxx-release.apk, rename manual
-              # Extract abi
-              if [[ "$base" == *"universal"* ]]; then ABI="universal"
-              elif [[ "$base" == *"arm64"* ]]; then ABI="arm64-v8a"
-              elif [[ "$base" == *"armeabi"* ]]; then ABI="armeabi-v7a"
-              elif [[ "$base" == *"x86_64"* ]]; then ABI="x86_64"
-              elif [[ "$base" == *"x86"* ]]; then ABI="x86"
-              else ABI="universal"
-              fi
-              TYPE=$(echo "$base" | grep -q "debug" && echo "debug" || echo "release")
-              NEWNAME="AppsPerms-${FULL}-${ABI}-${TYPE}.apk"
-              cp "$apk" "out/$NEWNAME"
-              cp "$apk" "docs/apk/$NEWNAME"
-              echo "Renamed $base -> $NEWNAME"
+          AAPT="$ANDROID_HOME/build-tools/34.0.0/aapt"
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          VERSION=$(sed -n 's/^APP_VERSION_NAME=//p' gradle.properties)
+          CODE=$(sed -n 's/^APP_VERSION_CODE=//p' gradle.properties)
+          mapfile -t DEBUGS < <(find app/build/outputs/apk/debug -type f -name '*-debug.apk' | sort)
+          mapfile -t RELEASES < <(find app/build/outputs/apk/release -type f -name '*-release.apk' | sort)
+          test "${#DEBUGS[@]}" -eq 1
+          test "${#RELEASES[@]}" -eq 1
+          DEBUG=${DEBUGS[0]}
+          RELEASE=${RELEASES[0]}
+          "$AAPT" dump badging "$DEBUG" | tee /tmp/debug-badging.txt
+          "$AAPT" dump badging "$RELEASE" | tee /tmp/release-badging.txt
+          grep -Fq "package: name='app.appsperms.debug' versionCode='$CODE' versionName='$VERSION'" /tmp/debug-badging.txt
+          grep -Fq "package: name='app.appsperms' versionCode='$CODE' versionName='$VERSION'" /tmp/release-badging.txt
+          for apk in "$DEBUG" "$RELEASE"; do
+            permissions="/tmp/$(basename "$apk").permissions"
+            "$AAPT" dump permissions "$apk" > "$permissions"
+            if grep -Fq android.permission.INTERNET "$permissions"; then
+              echo "::error::$apk unexpectedly requests android.permission.INTERNET"
+              exit 1
             fi
           done
-
-          # Buat alias latest yang nyaman untuk website
-          # Primary: universal stable adalah yang direkomendasikan
-          # Fix: support both naming with channel (AppsPerms-1.8.0-stable-universal-release.apk) and without
-          UNIVERSAL_RELEASE=""
-          for cand in "out/AppsPerms-${FULL}-${CHANNEL}-universal-release.apk" "out/AppsPerms-${FULL}-universal-release.apk" "out/AppsPerms-${VERSION}-${CHANNEL}-universal-release.apk"; do
-            if [ -f "$cand" ]; then UNIVERSAL_RELEASE="$cand"; break; fi
-          done
-          if [ -n "$UNIVERSAL_RELEASE" ]; then
-            cp "$UNIVERSAL_RELEASE" out/AppsPerms-latest.apk
-            cp "$UNIVERSAL_RELEASE" docs/apk/AppsPerms-latest.apk
-            cp "$UNIVERSAL_RELEASE" "docs/apk/AppsPerms-${VERSION}-release.apk"
-            echo "Latest alias from $UNIVERSAL_RELEASE"
-          else
-            # fallback: any universal release
-            FALLBACK=$(ls out/*universal-release.apk 2>/dev/null | head -n1 || true)
-            if [ -n "$FALLBACK" ]; then
-              cp "$FALLBACK" out/AppsPerms-latest.apk
-              cp "$FALLBACK" docs/apk/AppsPerms-latest.apk
-              cp "$FALLBACK" "docs/apk/AppsPerms-${VERSION}-release.apk"
-              echo "Latest alias fallback from $FALLBACK"
-            fi
-          fi
-          UNIVERSAL_DEBUG=""
-          for cand in "out/AppsPerms-${FULL}-${CHANNEL}-universal-debug.apk" "out/AppsPerms-${FULL}-universal-debug.apk"; do
-            if [ -f "$cand" ]; then UNIVERSAL_DEBUG="$cand"; break; fi
-          done
-          if [ -z "$UNIVERSAL_RELEASE" ] && [ -n "$UNIVERSAL_DEBUG" ]; then
-            cp "$UNIVERSAL_DEBUG" out/AppsPerms-latest.apk
-            cp "$UNIVERSAL_DEBUG" docs/apk/AppsPerms-latest.apk
+          "$APKSIGNER" verify "$DEBUG"
+          if "$APKSIGNER" verify "$RELEASE"; then
+            echo "::error::Untrusted CI unexpectedly produced a signed release APK"
+            exit 1
           fi
 
-          # Alias per ABI - support both naming conventions
-          for abi in arm64-v8a armeabi-v7a x86_64 x86 universal; do
-            ABI_SRC=""
-            for cand in "out/AppsPerms-${FULL}-${CHANNEL}-${abi}-release.apk" "out/AppsPerms-${FULL}-${abi}-release.apk" "out/AppsPerms-${VERSION}-${CHANNEL}-${abi}-release.apk"; do
-              if [ -f "$cand" ]; then ABI_SRC="$cand"; break; fi
-            done
-            if [ -n "$ABI_SRC" ]; then
-              cp "$ABI_SRC" "docs/apk/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
-              cp "$ABI_SRC" "out/AppsPerms-${abi}-latest.apk" 2>/dev/null || true
-              echo "ABI $abi alias from $ABI_SRC"
-            fi
-          done
-
-          # Debug alias
-          if [ -n "$UNIVERSAL_DEBUG" ]; then
-            cp "$UNIVERSAL_DEBUG" out/AppsPerms-debug-latest.apk
-            cp "$UNIVERSAL_DEBUG" docs/apk/AppsPerms-debug-latest.apk
-          else
-            FALLBACK_DBG=$(ls out/*universal-debug.apk 2>/dev/null | head -n1 || true)
-            if [ -n "$FALLBACK_DBG" ]; then
-              cp "$FALLBACK_DBG" out/AppsPerms-debug-latest.apk
-              cp "$FALLBACK_DBG" docs/apk/AppsPerms-debug-latest.apk
-            fi
-          fi
-
-          # SHA256SUMS
-          (cd out && sha256sum *.apk > SHA256SUMS)
-          (cd docs/apk && sha256sum *.apk > SHA256SUMS)
-          cat out/SHA256SUMS
-          echo ""
-          ls -lh out/
-          echo ""
-          ls -lh docs/apk/
-
-          # Release notes dengan channel
-          {
-            echo "## AppsPerms $FULL - $CHANNEL"
-            echo ""
-            echo "APK **AppsPerms** — pengelola AppOps + Tuning via Shizuku."
-            echo ""
-            echo "### 📦 Varian APK (split per ABI)"
-            echo "Aplikasi ini **tidak punya native lib**, jadi **universal APK jalan di semua device** (recommended, paling kecil)."
-            echo "Split per ABI disediakan untuk kompatibilitas masa depan dan feed yang lebih menarik."
-            echo ""
-            echo "| Varian | File | Ukuran | Untuk |"
-            echo "|---|---|---|---|"
-            for f in out/AppsPerms-${FULL}-*-release.apk; do
-              [ -f "$f" ] || continue
-              b=$(basename "$f")
-              # Extract abi dari nama
-              abi=$(echo "$b" | sed -E "s/.*-${FULL}-([a-z0-9_-]+)-release\.apk/\1/")
-              size=$(du -h "$f" | cut -f1)
-              desc=""
-              case "$abi" in
-                universal) desc="Semua device (Recommended)" ;;
-                arm64-v8a) desc="64-bit ARM (kebanyakan HP baru)" ;;
-                armeabi-v7a) desc="32-bit ARM (HP lama)" ;;
-                x86_64) desc="64-bit x86 (emulator)" ;;
-                x86) desc="32-bit x86 (emulator lama)" ;;
-                *) desc="$abi" ;;
-              esac
-              sha=$(sha256sum "$f" | cut -d' ' -f1 | cut -c1-16)
-              echo "| $abi | \`$b\` | $size | $desc |"
-            done
-            echo ""
-            echo "### 🚀 Download Cepat"
-            echo "- **Universal (Recommended)**: \`AppsPerms-${FULL}-universal-release.apk\` → ~1.9MB, jalan di semua ABI"
-            echo "- **Latest alias**: \`AppsPerms-latest.apk\` → sama dengan universal stable"
-            echo "- **Debug**: \`AppsPerms-debug-latest.apk\` → untuk troubleshooting"
-            echo ""
-            echo "### 🔐 Verifikasi"
-            echo "| File | SHA256 |"
-            echo "|---|---|"
-            for f in out/*.apk; do
-              [ -f "$f" ] || continue
-              printf '| `%s` | `%s` |\n' "$(basename "$f")" "$(sha256sum "$f" | cut -d' ' -f1)"
-            done
-            echo ""
-            echo "> ⚠️ Mulai v1.3.0 paket berubah \`app.overlayops\` → \`app.appsperms\`. Uninstall lama dulu."
-            echo ""
-            echo "Situs: https://appsperms.xyverse.my.id/ · Direct: /apk/AppsPerms-latest.apk"
-            echo ""
-            echo "Channel: **$CHANNEL** · Version: **$VERSION** · Full: **$FULL**"
-          } > out/release-notes.md
-
-          cat out/release-notes.md
-
-      - name: Scan VirusTotal & update data situs (hanya tag v*)
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          VT_API_KEY: ${{ secrets.VT_API_KEY }}
-        run: |
-          set -uo pipefail
-          VERSION="${{ steps.version.outputs.version }}"
-          CHANNEL="${{ steps.version.outputs.channel }}"
-          FULL="${{ steps.version.outputs.full }}"
-          # Cari universal release APK untuk scan
-          REL_APK=$(ls out/AppsPerms-${FULL}-universal-release.apk 2>/dev/null || ls out/AppsPerms-${FULL}-*-release.apk 2>/dev/null | head -n1 || ls out/*release.apk 2>/dev/null | head -n1)
-          if [ -z "$REL_APK" ] || [ ! -f "$REL_APK" ]; then
-            echo "::warning::Tidak ada APK release untuk scan VT"
-            exit 0
-          fi
-          REL_SHA=$(sha256sum "$REL_APK" | cut -d' ' -f1)
-          REL_MB=$(python3 -c "import os;print(round(os.path.getsize('$REL_APK')/1048576,2))")
-          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          V3=https://www.virustotal.com/api/v3
-          PERMA="https://www.virustotal.com/gui/file/$REL_SHA"
-          CHECKED=false; DET=0; TOT=0
-
-          if [ -z "${VT_API_KEY:-}" ]; then
-            echo "::warning::VT_API_KEY belum diset — skip scan"
-          else
-            H="X-Apikey: $VT_API_KEY"
-            J=$(curl -sL -H "$H" "$V3/files/$REL_SHA" || true)
-            AID=""
-            if echo "$J" | jq -e '.data.attributes.last_analysis_stats' >/dev/null 2>&1; then
-              echo "file sudah dikenal VT"
-            else
-              POST=$(curl -sL -H "$H" -F file=@$REL_APK "$V3/files" || true)
-              AID=$(echo "$POST" | jq -r '.data.id // empty')
-            fi
-            if [ -n "$AID" ]; then
-              for i in $(seq 1 20); do
-                ST=$(curl -sL -H "$H" "$V3/analyses/$AID" | jq -r '.data.attributes.status // "?"')
-                echo "analisis: $ST ($i/20)"
-                [ "$ST" = "completed" ] && break
-                sleep 15
-              done
-              AN=$(curl -sL -H "$H" "$V3/analyses/$AID" || true)
-              DET=$(echo "$AN" | jq -r '[(.data.attributes.stats.malicious // 0), (.data.attributes.stats.suspicious // 0)] | add')
-              TOT=$(echo "$AN" | jq -r '[.data.attributes.stats | (.malicious // 0) + (.suspicious // 0) + (.undetected // 0) + (.harmless // 0)] | add')
-              if [ "${TOT:-0}" -gt 0 ]; then CHECKED=true; else J=$(curl -sL -H "$H" "$V3/files/$REL_SHA" || true); fi
-            fi
-            if [ "$CHECKED" != "true" ] && echo "$J" | jq -e '.data.attributes.last_analysis_stats' >/dev/null 2>&1; then
-              DET=$(echo "$J" | jq -r '[(.data.attributes.last_analysis_stats.malicious // 0), (.data.attributes.last_analysis_stats.suspicious // 0)] | add')
-              TOT=$(echo "$J" | jq -r '[.data.attributes.last_analysis_stats | (.malicious // 0) + (.suspicious // 0) + (.undetected // 0) + (.harmless // 0)] | add')
-              CHECKED=true
-            fi
-          fi
-
-          # Update virustotal.json dengan channel
-          jq -n --arg v "$VERSION" --arg ch "$CHANNEL" --arg full "$FULL" --arg now "$NOW" \
-             --arg rfile "$(basename "$REL_APK")" --arg rsha "$REL_SHA" --argjson rmb "$REL_MB" \
-             --argjson checked "$CHECKED" --argjson det "$DET" --argjson tot "$TOT" --arg perma "$PERMA" \
-             '{updated_utc:$now, version:$v, channel:$ch, full:$full, generated_by:"GitHub Actions build.yml",
-               release:{file:$rfile, sha256:$rsha, size_mb:$rmb, direct_url:"/apk/AppsPerms-latest.apk", channel:$ch},
-               virustotal:{checked:$checked, detected:$det, total:$tot, permalink:$perma, checked_utc:$now}}' \
-             > docs/data/virustotal.json
-          cp docs/data/virustotal.json out/virustotal.json
-
-          if [ "$CHECKED" = "true" ]; then
-            if python3 -c "import PIL" 2>/dev/null || pip install --quiet pillow; then
-              python3 docs/tools/make-vt-card.py --data docs/data/virustotal.json --out docs/images/virustotal-report.png \
-                && cp docs/images/virustotal-report.png out/virustotal-report.png || true
-            fi
-          fi
-
-          {
-            echo
-            echo "### 🔐 VirusTotal"
-            if [ "$CHECKED" = "true" ]; then
-              echo "- **$DET / $TOT**$( [ "$DET" -eq 0 ] && echo ' — CLEAN ✅')"
-              echo "- Detail: $PERMA"
-            else
-              echo "- Scan dilewati (VT_API_KEY belum diset). Manual: $PERMA"
-            fi
-            echo "- SHA-256: \`$REL_SHA\`"
-          } >> out/release-notes.md
-
-          # Push balik data ke main (hanya jika bukan tag? Tag juga push data)
-          git add docs/data/virustotal.json || true
-          git add -f docs/apk/ || true
-          [ -f docs/images/virustotal-report.png ] && git add docs/images/virustotal-report.png || true
-          if ! git diff --cached --quiet; then
-            git -c user.name="AppsPerms CI" -c user.email="appsperms-ci@xykal.local" commit -q -m "docs: build $FULL ($CHANNEL) + APK splits + VT"
-            git push "https://github.com/$GITHUB_REPOSITORY" HEAD:refs/heads/main || echo "::warning::push docs gagal"
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload CI APKs and reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
-          name: AppsPerms-${{ steps.version.outputs.full }}-${{ github.run_number }}
+          name: android-ci-${{ github.sha }}
           path: |
-            out/*
-            docs/apk/*
+            app/build/outputs/apk/**/*.apk
+            app/build/reports/tests/
+            app/build/reports/lint-results-debug.html
           if-no-files-found: error
-          retention-days: 30
-
-      - name: Release (jika tag v*)
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            out/*.apk
-            out/SHA256SUMS
-            out/virustotal-report.png
-            out/virustotal.json
-          generate_release_notes: false
-          body_path: out/release-notes.md
-          prerelease: ${{ steps.version.outputs.channel != 'stable' }}
-          # stable -> release biasa, beta/pre/rc/alpha -> prerelease
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Deploy ke Cloudflare Pages
-        if: always() && !cancelled()
-        continue-on-error: true
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_PAGES_PROJECT: appsperms
-        run: |
-          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ] || [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
-            echo "::notice::No Cloudflare token, skip"
-            exit 0
-          fi
-          npx --yes wrangler@3 pages deploy docs --project-name="$CLOUDFLARE_PAGES_PROJECT" --branch=main --commit-dirty=true
+          retention-days: 14

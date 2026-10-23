@@ -1,0 +1,336 @@
+name: Publish signed release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: appsperms-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build once, verify, publish and promote
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: production
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
+        with:
+          packages: "platforms;android-34 build-tools;34.0.0 platform-tools"
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "22"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+
+      - name: Validate tag and determine channel
+        id: version
+        run: |
+          set -euo pipefail
+          bash scripts/check-version-sync.sh
+          bash scripts/validate-release-tag.sh
+          RAW="${GITHUB_REF_NAME#v}"
+          VERSION="${RAW%%-*}"
+          if [[ "$RAW" == "$VERSION" ]]; then CHANNEL=stable; else CHANNEL="${RAW#*-}"; fi
+          [[ "$GITHUB_REF_NAME" == "v$VERSION" || "$GITHUB_REF_NAME" == "v$VERSION-$CHANNEL" ]]
+          [[ "$CHANNEL" =~ ^[a-z][a-z0-9.-]*$ ]]
+          CODE=$(sed -n 's/^APP_VERSION_CODE=//p' gradle.properties)
+          RELEASE_ID="$VERSION"
+          if [[ "$CHANNEL" != stable ]]; then RELEASE_ID="$VERSION-$CHANNEL"; fi
+          {
+            echo "version=$VERSION"
+            echo "version_code=$CODE"
+            echo "channel=$CHANNEL"
+            echo "release_id=$RELEASE_ID"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Restore release signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_BASE64"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          chmod 600 "$RUNNER_TEMP/release.jks"
+
+      - name: Test, lint and build signed bytes once
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          VERSION_CHANNEL: ${{ steps.version.outputs.channel }}
+        run: |
+          set -euo pipefail
+          bash ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleRelease \
+            --no-daemon --console=plain --stacktrace
+
+      - name: Verify and package exact release artifact
+        id: artifact
+        env:
+          EXPECTED_VERSION: ${{ steps.version.outputs.version }}
+          EXPECTED_VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          mapfile -t RELEASES < <(find app/build/outputs/apk/release -type f -name '*-release.apk' | sort)
+          test "${#RELEASES[@]}" -eq 1
+          cp "${RELEASES[0]}" out/
+          RELEASE="out/$(basename "${RELEASES[0]}")"
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          AAPT="$ANDROID_HOME/build-tools/34.0.0/aapt"
+
+          "$APKSIGNER" verify --verbose --print-certs "$RELEASE" | tee out/signing-certificate.txt
+          grep -Fq 'Verified using v2 scheme (APK Signature Scheme v2): true' out/signing-certificate.txt
+          grep -Fq 'Verified using v3 scheme (APK Signature Scheme v3): true' out/signing-certificate.txt
+          CERT_SHA=$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' out/signing-certificate.txt | head -n1)
+          EXPECTED_CERT=$(tr -d '[:space:]' < app/signing-certificate.sha256)
+          [[ "$EXPECTED_CERT" =~ ^[a-f0-9]{64}$ ]]
+          if [[ "${CERT_SHA,,}" != "$EXPECTED_CERT" ]]; then
+            echo "::error::Signing certificate does not match the pinned release identity"
+            exit 1
+          fi
+
+          "$AAPT" dump badging "$RELEASE" | tee out/apk-badging.txt
+          grep -Fq "package: name='app.appsperms' versionCode='$EXPECTED_VERSION_CODE' versionName='$EXPECTED_VERSION'" out/apk-badging.txt
+          grep -Fq "sdkVersion:'24'" out/apk-badging.txt
+          grep -Fq "targetSdkVersion:'34'" out/apk-badging.txt
+          "$AAPT" dump permissions "$RELEASE" | tee out/apk-permissions.txt
+          if grep -Fq android.permission.INTERNET out/apk-permissions.txt; then
+            echo "::error::Release APK unexpectedly requests INTERNET"
+            exit 1
+          fi
+          "$AAPT" dump xmltree "$RELEASE" AndroidManifest.xml | tee out/apk-manifest.txt
+          grep -Eq 'android:allowBackup.*0x0$' out/apk-manifest.txt
+          grep -Eq 'android:fullBackupContent.*0x0$' out/apk-manifest.txt
+          grep -Eq 'android:dataExtractionRules.*@0x' out/apk-manifest.txt
+          if unzip -Z1 "$RELEASE" | grep '^lib/' > out/native-libs.txt; then
+            echo "::error::Universal release unexpectedly contains native ABI libraries"
+            exit 1
+          fi
+          rm -f out/native-libs.txt
+
+          (
+            cd out
+            sha256sum -- "$(basename "$RELEASE")" > SHA256SUMS
+          )
+          {
+            echo "release=$RELEASE"
+            echo "filename=$(basename "$RELEASE")"
+            echo "cert_sha=${CERT_SHA,,}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Generate release manifest and notes
+        env:
+          CERT_SHA: ${{ steps.artifact.outputs.cert_sha }}
+        run: |
+          set -euo pipefail
+          TAG_CREATED_AT=$(git for-each-ref --format='%(creatordate:iso-strict)' "refs/tags/$GITHUB_REF_NAME")
+          test -n "$TAG_CREATED_AT"
+          python3 scripts/generate-release-manifest.py \
+            --release-apk "${{ steps.artifact.outputs.release }}" \
+            --channel "${{ steps.version.outputs.channel }}" \
+            --tag "$GITHUB_REF_NAME" \
+            --source-commit "$GITHUB_SHA" \
+            --published-utc "$TAG_CREATED_AT" \
+            --signing-certificate-sha256 "${CERT_SHA,,}" \
+            --output out/release.json
+          cat > out/release-notes.md <<EOF
+          ## AppsPerms ${{ steps.version.outputs.version }} (${{ steps.version.outputs.channel }})
+
+          This release contains one universal, R8-minified APK. Debug builds remain CI-only artifacts.
+
+          - Source commit: \`$GITHUB_SHA\`
+          - Release SHA-256: \`$(sha256sum "${{ steps.artifact.outputs.release }}" | cut -d' ' -f1)\`
+          - Signing certificate SHA-256: \`${CERT_SHA,,}\`
+          - VirusTotal: pending unless \`release.json\` reports a completed scan for the same SHA-256
+
+          Verify the download with the attached \`SHA256SUMS\`, \`release.json\`, SPDX SBOM, and GitHub attestations.
+          EOF
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0
+        with:
+          file: ${{ steps.artifact.outputs.release }}
+          format: spdx-json
+          output-file: out/sbom.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Normalize immutable SBOM metadata
+        run: |
+          set -euo pipefail
+          APK_SHA=$(sha256sum "${{ steps.artifact.outputs.release }}" | cut -d' ' -f1)
+          PUBLISHED_UTC=$(python3 -c 'import json; print(json.load(open("out/release.json"))["published_utc"])')
+          python3 scripts/normalize-spdx.py \
+            --sbom out/sbom.spdx.json \
+            --subject-sha256 "$APK_SHA" \
+            --published-utc "$PUBLISHED_UTC"
+
+      - name: Attest release provenance
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3
+        with:
+          subject-path: ${{ steps.artifact.outputs.release }}
+
+      - name: Attest release SBOM
+        uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34 # v3
+        with:
+          subject-path: ${{ steps.artifact.outputs.release }}
+          sbom-path: out/sbom.spdx.json
+
+      - name: Upload immutable release objects to R2 and verify
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET || 'appsperms-apk' }}
+        run: |
+          set -euo pipefail
+          node scripts/upload-to-r2.js \
+            --file "${{ steps.artifact.outputs.release }}" \
+            --key "releases/${{ steps.version.outputs.release_id }}/${{ steps.artifact.outputs.filename }}" \
+            --bucket "$R2_BUCKET"
+
+          MANIFEST_KEY="$R2_BUCKET/releases/${{ steps.version.outputs.release_id }}/release.json"
+          if npx --yes wrangler@4.152.0 r2 object get "$MANIFEST_KEY" \
+            --file="$RUNNER_TEMP/existing-release.json" 2> "$RUNNER_TEMP/manifest-probe.err"; then
+            cmp out/release.json "$RUNNER_TEMP/existing-release.json" || {
+              echo "::error::Refusing to overwrite a different immutable release manifest"
+              exit 1
+            }
+          elif grep -Eqi 'not found|does not exist|NoSuchKey|10007' "$RUNNER_TEMP/manifest-probe.err"; then
+            npx --yes wrangler@4.152.0 r2 object put "$MANIFEST_KEY" \
+              --file=out/release.json --content-type=application/json
+          else
+            cat "$RUNNER_TEMP/manifest-probe.err" >&2
+            echo "::error::Could not determine whether immutable release manifest already exists"
+            exit 1
+          fi
+          npx --yes wrangler@4.152.0 r2 object get "$MANIFEST_KEY" \
+            --file="$RUNNER_TEMP/verified-release.json"
+          cmp out/release.json "$RUNNER_TEMP/verified-release.json"
+
+      - name: Publish immutable GitHub Release assets using the same bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          CHANNEL="${{ steps.version.outputs.channel }}"
+          EXPECTED_PRERELEASE=false
+          if [[ "$CHANNEL" != stable ]]; then EXPECTED_PRERELEASE=true; fi
+
+          if ACTUAL_PRERELEASE=$(gh release view "$TAG" --json isPrerelease --jq '.isPrerelease' 2> "$RUNNER_TEMP/release-probe.err"); then
+            if [[ "$ACTUAL_PRERELEASE" != "$EXPECTED_PRERELEASE" ]]; then
+              echo "::error::Existing release prerelease state does not match protected tag channel"
+              exit 1
+            fi
+          else
+            create_args=("$TAG" --verify-tag --draft --title "$TAG" --notes-file out/release-notes.md)
+            if [[ "$EXPECTED_PRERELEASE" == true ]]; then create_args+=(--prerelease); fi
+            gh release create "${create_args[@]}"
+          fi
+
+          mapfile -t EXISTING_ASSETS < <(gh release view "$TAG" --json assets --jq '.assets[].name')
+          ALLOWED_ASSETS=(
+            "${{ steps.artifact.outputs.filename }}"
+            SHA256SUMS
+            release.json
+            sbom.spdx.json
+            signing-certificate.txt
+            apk-badging.txt
+            apk-permissions.txt
+          )
+          for name in "${EXISTING_ASSETS[@]}"; do
+            if ! printf '%s\n' "${ALLOWED_ASSETS[@]}" | grep -Fxq "$name"; then
+              echo "::error::Existing release contains an unexpected asset: $name"
+              exit 1
+            fi
+          done
+
+          VERIFY_DIR="$RUNNER_TEMP/github-release"
+          mkdir -p "$VERIFY_DIR"
+          publish_immutable_asset() {
+            local file=$1 name
+            name=$(basename "$file")
+            if printf '%s\n' "${EXISTING_ASSETS[@]}" | grep -Fxq "$name"; then
+              echo "GitHub asset already exists; verifying immutable bytes: $name"
+            else
+              gh release upload "$TAG" "$file"
+            fi
+            rm -f "$VERIFY_DIR/$name"
+            gh release download "$TAG" --pattern "$name" --dir "$VERIFY_DIR"
+            if ! cmp "$file" "$VERIFY_DIR/$name"; then
+              echo "::error::Refusing to replace mismatched immutable GitHub asset: $name"
+              exit 1
+            fi
+          }
+
+          publish_immutable_asset "${{ steps.artifact.outputs.release }}"
+          publish_immutable_asset out/SHA256SUMS
+          publish_immutable_asset out/release.json
+          publish_immutable_asset out/sbom.spdx.json
+          publish_immutable_asset out/signing-certificate.txt
+          publish_immutable_asset out/apk-badging.txt
+          publish_immutable_asset out/apk-permissions.txt
+
+          mapfile -t FINAL_ASSETS < <(gh release view "$TAG" --json assets --jq '.assets[].name')
+          [[ "${#FINAL_ASSETS[@]}" -eq "${#ALLOWED_ASSETS[@]}" ]]
+          for name in "${ALLOWED_ASSETS[@]}"; do
+            printf '%s\n' "${FINAL_ASSETS[@]}" | grep -Fxq "$name"
+          done
+
+          edit_args=("$TAG" --draft=false --latest=false)
+          if [[ "$EXPECTED_PRERELEASE" == true ]]; then
+            edit_args+=(--prerelease)
+          else
+            edit_args+=(--prerelease=false --latest=true)
+          fi
+          gh release edit "${edit_args[@]}"
+
+          FINAL_DRAFT=$(gh release view "$TAG" --json isDraft --jq '.isDraft')
+          [[ "$FINAL_DRAFT" == false ]]
+
+      - name: Promote stable manifest in R2 after all publications verify
+        if: steps.version.outputs.channel == 'stable'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_BUCKET: ${{ vars.R2_BUCKET || 'appsperms-apk' }}
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@4.152.0 r2 object put "$R2_BUCKET/channels/stable.json" \
+            --file=out/release.json --content-type=application/json
+          npx --yes wrangler@4.152.0 r2 object get "$R2_BUCKET/channels/stable.json" \
+            --file="$RUNNER_TEMP/stable.json"
+          cmp out/release.json "$RUNNER_TEMP/stable.json"
+
+      - name: Retain verified release bundle
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: release-${{ github.ref_name }}-${{ github.sha }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 90

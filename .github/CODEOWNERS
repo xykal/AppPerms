@@ -1,0 +1,14 @@
+# Security-sensitive release and distribution paths
+/.github/ @xykal
+/.github/workflows/ @xykal
+/app/ @xykal
+/gradle.properties @xykal
+/gradle/wrapper/ @xykal
+/scripts/ @xykal
+/workers/ @xykal
+/docs/data/ @xykal
+/docs/apk/ @xykal
+/docs/_headers @xykal
+/docs/_redirects @xykal
+/docs/RELEASE_PROCESS.md @xykal
+/SECURITY.md @xykal
