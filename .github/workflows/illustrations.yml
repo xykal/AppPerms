@@ -1,18 +1,9 @@
 name: Web, release and Worker checks
 
 on:
+  # This workflow supplies a required status check, so it must run for every PR.
+  # Path filters would leave dependency-only PRs permanently blocked.
   pull_request:
-    paths:
-      - "docs/**"
-      - "design/illustrations/**"
-      - "app/src/main/**"
-      - "tests/**"
-      - "tools/**"
-      - "scripts/**"
-      - "workers/**"
-      - "gradle.properties"
-      - "README.md"
-      - ".github/workflows/**"
   push:
     branches: [main]
     paths:
