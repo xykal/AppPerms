@@ -7,6 +7,7 @@ from pathlib import Path
 import stat
 import subprocess
 import tempfile
+import tomllib
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -100,6 +101,29 @@ class ReleaseTools(unittest.TestCase):
                 document["documentNamespace"],
                 "https://spdx.org/spdxdocs/appsperms-" + "b" * 64,
             )
+
+    def test_worker_has_explicit_fallback_and_opt_in_r2_modes(self):
+        config = tomllib.loads(
+            (ROOT / "workers/dl-worker/wrangler.toml").read_text(encoding="utf-8")
+        )
+        self.assertNotIn("r2_buckets", config)
+        fallback = config["env"]["production"]
+        r2 = config["env"]["production_r2"]
+        self.assertNotIn("r2_buckets", fallback)
+        self.assertEqual(r2["r2_buckets"][0]["binding"], "APK_BUCKET")
+        self.assertEqual(fallback["name"], r2["name"])
+        self.assertEqual(fallback["routes"], r2["routes"])
+
+        worker_workflow = (ROOT / ".github/workflows/worker.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("default: github-fallback", worker_workflow)
+        self.assertIn("r2) WRANGLER_ENV=production_r2", worker_workflow)
+
+        release_workflow = (ROOT / ".github/workflows/release.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertEqual(release_workflow.count("vars.R2_ENABLED == 'true'"), 2)
 
     def test_r2_uploader_is_idempotent_and_refuses_overwrite(self):
         with tempfile.TemporaryDirectory() as directory:

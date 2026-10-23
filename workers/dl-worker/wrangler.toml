@@ -3,8 +3,8 @@ main = "src/index.js"
 compatibility_date = "2026-10-22"
 workers_dev = false
 
-# `wrangler deploy --env production` provisions the custom hostname through
-# Workers Custom Domains instead of relying on a standalone proxied DNS record.
+# `production` is the no-R2, digest-verified GitHub fallback. `production_r2`
+# binds the optional R2 primary. Both provision the same Workers Custom Domain.
 [env.production]
 name = "appsperms-dl"
 routes = [
@@ -21,12 +21,18 @@ MAIN_SITE_URL = "https://appsperms.xyverse.my.id/"
 RELEASE_MANIFEST_URL = "https://appsperms.xyverse.my.id/data/release.json"
 MIRROR_TIMEOUT_MS = "8000"
 
-[[r2_buckets]]
-binding = "APK_BUCKET"
-bucket_name = "appsperms-apk"
-preview_bucket_name = "appsperms-apk-preview"
+[env.production_r2]
+name = "appsperms-dl"
+routes = [
+  { pattern = "dl.appsperms.xyverse.my.id", custom_domain = true }
+]
 
-[[env.production.r2_buckets]]
+[env.production_r2.vars]
+MAIN_SITE_URL = "https://appsperms.xyverse.my.id/"
+RELEASE_MANIFEST_URL = "https://appsperms.xyverse.my.id/data/release.json"
+MIRROR_TIMEOUT_MS = "8000"
+
+[[env.production_r2.r2_buckets]]
 binding = "APK_BUCKET"
 bucket_name = "appsperms-apk"
 preview_bucket_name = "appsperms-apk-preview"

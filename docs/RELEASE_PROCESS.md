@@ -12,7 +12,7 @@ Configure these controls before the first hardened release:
 
 - protect `main` with required Android, web/browser, metadata, and Worker checks;
 - use a tag ruleset for `v*` that restricts creation and blocks updates/deletions;
-- restrict the `production` Environment to protected tags and require an independent reviewer;
+- restrict the `production` Environment to `main` and protected `v*` tags and require a reviewer; use an independent reviewer when a second trusted collaborator is available;
 - store signing and Cloudflare credentials only as `production` Environment secrets;
 - enable GitHub immutable releases so assets cannot be changed after a draft is published.
 
@@ -41,18 +41,18 @@ Configure these controls before the first hardened release:
 3. builds one universal release APK (debug builds remain CI-only);
 4. verifies package identity, version code/name, permissions, backup flags, v2/v3 signatures, and the pinned certificate digest in `app/signing-certificate.sha256`;
 5. generates checksums, `release.json`, and an SPDX SBOM from the exact signed bytes;
-6. uploads and downloads the immutable APK and release manifest from R2 to verify them;
+6. when repository variable `R2_ENABLED=true`, uploads and downloads the immutable APK and release manifest from R2 to verify them;
 7. creates or resumes a draft GitHub Release, refuses to replace any mismatched asset, and downloads every asset again to compare bytes;
 8. records GitHub artifact/SBOM attestations and publishes the draft only after all assets verify;
-9. promotes `channels/stable.json` only after the complete GitHub Release is public.
+9. when R2 is enabled, promotes `channels/stable.json` only after the complete GitHub Release is public.
 
 The job never writes directly to `main` and never deploys the Pages site.
 It fails closed if the signing certificate changes. Planned key rotation requires a reviewed update to the pinned fingerprint and explicit migration communication before tagging.
 
 ## Website metadata
 
-The checked-in `docs/data/release.json` is a safe static fallback. The stable R2
-manifest is the promoted channel record used by the Worker. After publication,
+The checked-in `docs/data/release.json` is the safe static Worker manifest. When
+R2 is enabled, `channels/stable.json` is the promoted primary channel record. After publication,
 download `release.json` from the retained workflow bundle, verify it against the
 GitHub asset, and use it in a reviewed PR that updates the static download links,
 release notes, and compatibility metadata. Never invent or edit hashes by hand.

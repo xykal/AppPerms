@@ -202,6 +202,7 @@ jobs:
           sbom-path: out/sbom.spdx.json
 
       - name: Upload immutable release objects to R2 and verify
+        if: vars.R2_ENABLED == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -314,7 +315,7 @@ jobs:
           [[ "$FINAL_DRAFT" == false ]]
 
       - name: Promote stable manifest in R2 after all publications verify
-        if: steps.version.outputs.channel == 'stable'
+        if: vars.R2_ENABLED == 'true' && steps.version.outputs.channel == 'stable'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
