@@ -1,23 +1,27 @@
 # AppsPerms download Worker
 
 The Worker is an integrity-aware gateway for the generated `release.json` manifest.
-It serves R2 first and only falls back to HTTPS URLs listed in that manifest.
-Unknown filenames are rejected, so it is not an open proxy or arbitrary R2 browser.
+It serves R2 first when that optional backend is enabled. Without R2, it fetches
+only the HTTPS URL allowlisted by the manifest, buffers the complete APK, and
+verifies its SHA-256 before responding. Unknown filenames are rejected, so it is
+not an open proxy or arbitrary storage browser.
 
-## Prerequisites
+## Deployment modes
 
-1. Create R2 buckets:
-   - `appsperms-apk`
-   - `appsperms-apk-preview`
-2. Give the production GitHub Environment a Cloudflare token scoped to:
-   - Account → Workers Scripts → Edit
-   - Account → Workers R2 Storage → Edit
-   - Zone → Workers Routes → Edit for `xyverse.my.id`
-3. Add the repository variable `R2_BUCKET=appsperms-apk`.
-4. Run the **Deploy download Worker** workflow manually. Wrangler provisions
-   `dl.appsperms.xyverse.my.id` as a Workers Custom Domain.
-5. Confirm `/health`, `/release.json`, GET, HEAD, and Range requests before adding
-   the Worker URL to public copy.
+The **Deploy download Worker** workflow provisions `dl.appsperms.xyverse.my.id`
+as a Workers Custom Domain and requires a Cloudflare token with Workers Scripts
+and Workers Routes edit access.
+
+- `github-fallback` (default): no R2 account or billing setup is required. Full GET
+  and HEAD requests work; byte-range requests fail closed with HTTP 503 because a
+  partial mirror response cannot be verified against the full-file digest.
+- `r2`: requires `appsperms-apk` and `appsperms-apk-preview`, plus Account →
+  Workers R2 Storage → Edit. R2 becomes primary and supports verified byte ranges.
+
+Set repository variable `R2_ENABLED=true` only after those buckets exist and the
+production token can read/write them. Keep it unset or `false` otherwise. Confirm
+`/health`, `/release.json`, GET, HEAD, conditional requests, and the expected
+Range behavior after every deployment.
 
 ## Local checks
 
