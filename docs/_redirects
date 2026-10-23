@@ -1,19 +1,13 @@
-# AppsPerms Redirects v5 - Direct APK hosting anti-suspend
-# APKs are hosted directly in /apk/ folder, served statically by Cloudflare Pages
-# No self-referential 200 needed for APKs
+# Mutable discovery paths redirect to the canonical immutable GitHub asset.
+# No debug alias is published: debug builds are CI-only and never substitute for release.
+/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk 302
+/apk/AppsPerms-latest.apk https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk 302
 
-# Legacy download paths -> new direct paths
-/AppsPerms-latest.apk /apk/AppsPerms-latest.apk 302
-/AppsPerms-debug-latest.apk /apk/AppsPerms-latest.apk 302
-/AppsPerms-1.7.2-release.apk /apk/AppsPerms-1.7.3-release.apk 302
-/AppsPerms-1.7.2-debug.apk /apk/AppsPerms-latest.apk 302
-/AppsPerms-1.7.1-release.apk /apk/AppsPerms-1.7.3-release.apk 302
-/AppsPerms-1.7.0-release.apk /apk/AppsPerms-1.7.3-release.apk 302
+# Canonical extensionless pages.
+/index.html / 308
+/privacy.html /privacy 308
+/thanks.html /thanks 308
 
-# dl subdomain legacy (dl.appsperms.xyverse.my.id/* -> /apk/*)
-# This is handled via Cloudflare DNS + Pages, but keep fallback
-/dl/* /apk/:splat 302
-
-# GSC verification - serve directly to prevent 308 loop
+# Search Console verification files are served directly.
 /googleb2a7847179613098.html /googleb2a7847179613098.html 200
 /googleb2a7847179613098 /googleb2a7847179613098 200

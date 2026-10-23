@@ -3,8 +3,6 @@ app/build/
 build/
 out/
 *.apk
-!docs/apk/*.apk
-!docs/apk/**/*.apk
 *.aab
 *.zip
 
@@ -32,3 +30,7 @@ app-signing/
 __pycache__/
 *.py[cod]
 .venv/
+node_modules/
+
+# Cloudflare Wrangler local state
+.wrangler/

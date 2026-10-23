@@ -1,109 +1,131 @@
+#!/usr/bin/env node
 /**
- * Upload APK ke Cloudflare R2 - Anti Suspend Solution
- * 
- * Penggunaan:
- * node scripts/upload-to-r2.js --file out/AppsPerms-1.7.2-release.apk
- * 
- * Env vars (dari ini-buat-kerja.json):
- * CLOUDFLARE_API_TOKEN=cfut_...
- * CLOUDFLARE_ACCOUNT_ID=...
- * R2_BUCKET=appsperms-apk
- * 
- * Buat bucket dulu: wrangler r2 bucket create appsperms-apk
+ * Upload one immutable release artifact to Cloudflare R2 and verify it by
+ * downloading it again. Credentials are read by Wrangler from the environment;
+ * this program never prints or interpolates a bearer token.
+ *
+ * Usage:
+ *   CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... \
+ *   node scripts/upload-to-r2.js \
+ *     --file out/AppsPerms-1.8.1-stable-universal-release.apk \
+ *     --key releases/1.8.1/AppsPerms-1.8.1-stable-universal-release.apk
  */
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
+const crypto = require("node:crypto");
+const { spawnSync } = require("node:child_process");
 
-const fs = require('fs');
-const path = require('path');
+const WRANGLER_VERSION = "4.152.0";
+const MAX_BYTES = 100 * 1024 * 1024;
 
-// Config dari ini-buat-kerja.json (jangan commit file asli!)
-const CONFIG_PATH = process.env.CONFIG_JSON || '/home/user/uploads/ini-buat-kerja.json';
-
-async function main() {
+function argument(name) {
   const args = process.argv.slice(2);
-  const fileArg = args.find(a => a.startsWith('--file='))?.split('=')[1] || args[args.indexOf('--file') + 1];
-  const bucket = process.env.R2_BUCKET || 'appsperms-apk';
-
-  if (!fileArg) {
-    console.error('Usage: node upload-to-r2.js --file <path-to-apk>');
-    process.exit(1);
-  }
-
-  // Load token dari ini-buat-kerja.json kalau ada
-  let cfToken = process.env.CLOUDFLARE_API_TOKEN;
-  let accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-
-  try {
-    if (fs.existsSync(CONFIG_PATH)) {
-      const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-      if (cfg.cloudflare?.api_token) {
-        cfToken = cfToken || cfg.cloudflare.api_token;
-        console.log('✓ Loaded Cloudflare token from ini-buat-kerja.json');
-      }
-    }
-  } catch (e) {
-    console.warn('Could not load config json:', e.message);
-  }
-
-  if (!cfToken) {
-    console.error('❌ CLOUDFLARE_API_TOKEN not set. Set env var or ensure ini-buat-kerja.json exists');
-    process.exit(1);
-  }
-
-  if (!accountId) {
-    // Try to get account ID via API
-    console.log('Fetching account ID...');
-    const res = await fetch('https://api.cloudflare.com/client/v4/accounts', {
-      headers: { 'Authorization': `Bearer ${cfToken}` }
-    });
-    const data = await res.json();
-    if (data.success && data.result.length > 0) {
-      accountId = data.result[0].id;
-      console.log(`✓ Account ID: ${accountId}`);
-    } else {
-      console.error('Failed to get account ID:', data);
-      process.exit(1);
-    }
-  }
-
-  const filePath = path.resolve(fileArg);
-  if (!fs.existsSync(filePath)) {
-    console.error(`File not found: ${filePath}`);
-    process.exit(1);
-  }
-
-  const fileName = path.basename(filePath);
-  const fileBuffer = fs.readFileSync(filePath);
-
-  console.log(`\n📦 Uploading ${fileName} (${(fileBuffer.length/1024/1024).toFixed(2)} MB) to R2 bucket ${bucket}...`);
-
-  // S3-compatible API via Cloudflare R2
-  // Using wrangler-style upload via API
-  const uploadUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/r2/buckets/${bucket}/objects/${fileName}`;
-
-  // For simplicity, use wrangler if available, else direct S3 API would need more config
-  console.log(`\nCoba upload via wrangler (lebih mudah):`);
-  console.log(`  npx wrangler r2 object put ${bucket}/${fileName} --file=${filePath} --content-type=application/vnd.android.package-archive`);
-  console.log(`\nAtau via API:`);
-  console.log(`  curl -X PUT "${uploadUrl}" \\`);
-  console.log(`    -H "Authorization: Bearer ${cfToken}" \\`);
-  console.log(`    -H "Content-Type: application/vnd.android.package-archive" \\`);
-  console.log(`    --data-binary "@${filePath}"`);
-
-  // Also upload as latest alias
-  if (fileName.includes('release')) {
-    console.log(`\n  # Alias latest:`);
-    console.log(`  npx wrangler r2 object put ${bucket}/AppsPerms-latest.apk --file=${filePath} --content-type=application/vnd.android.package-archive`);
-  }
-  if (fileName.includes('debug')) {
-    console.log(`  npx wrangler r2 object put ${bucket}/AppsPerms-debug-latest.apk --file=${filePath} --content-type=application/vnd.android.package-archive`);
-  }
-
-  console.log(`\n✅ Setelah upload, file akan tersedia di:`);
-  console.log(`  https://dl.appsperms.xyverse.my.id/${fileName} (via Worker)`);
-  console.log(`  https://appsperms.xyverse.my.id/apk/${fileName} (via Pages, kalau juga di-copy ke docs/apk/)`);
+  const equals = args.find((value) => value.startsWith(`${name}=`));
+  if (equals) return equals.slice(name.length + 1);
+  const index = args.indexOf(name);
+  return index >= 0 ? args[index + 1] : undefined;
 }
 
-main().catch(e => {
-  console.error(e);
+function digest(file) {
+  return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+}
+
+function wranglerCommand(args, stdio = "inherit") {
+  const result = spawnSync(
+    "npx",
+    ["--yes", `wrangler@${WRANGLER_VERSION}`, ...args],
+    {
+      stdio,
+      encoding: stdio === "pipe" ? "utf8" : undefined,
+      env: process.env,
+      shell: false,
+    },
+  );
+  if (result.error) throw result.error;
+  return result;
+}
+
+function runWrangler(args) {
+  const result = wranglerCommand(args);
+  if (result.status !== 0) throw new Error(`Wrangler exited with status ${result.status}`);
+}
+
+function main() {
+  const source = path.resolve(argument("--file") || "");
+  const key = argument("--key");
+  const bucket = argument("--bucket") || process.env.R2_BUCKET || "appsperms-apk";
+
+  if (!argument("--file") || !key) {
+    throw new Error("Usage: upload-to-r2.js --file <apk> --key releases/<version>/<filename> [--bucket <name>]");
+  }
+  if (!process.env.CLOUDFLARE_API_TOKEN || !process.env.CLOUDFLARE_ACCOUNT_ID) {
+    throw new Error("CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are required");
+  }
+  if (!fs.existsSync(source) || !fs.statSync(source).isFile()) throw new Error("APK file not found");
+  if (path.extname(source).toLowerCase() !== ".apk") throw new Error("Only .apk files are accepted");
+  const keyMatch = key.match(
+    /^releases\/(\d+\.\d+\.\d+(?:-[a-z][a-z0-9.-]*)?)\/(AppsPerms-(\d+\.\d+\.\d+)-([a-z][a-z0-9.-]*)-universal-release\.apk)$/,
+  );
+  if (!keyMatch) {
+    throw new Error("R2 key must identify one immutable universal release APK");
+  }
+  const [, releaseId, filename, version, channel] = keyMatch;
+  const expectedReleaseId = channel === "stable" ? version : `${version}-${channel}`;
+  if (releaseId !== expectedReleaseId || path.basename(source) !== filename) {
+    throw new Error("R2 key version, channel, and filename must match the local release APK");
+  }
+  if (!/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/.test(bucket)) {
+    throw new Error("invalid R2 bucket name");
+  }
+
+  const size = fs.statSync(source).size;
+  if (size < 4 || size > MAX_BYTES) throw new Error("APK size is outside the allowed range");
+  const prefix = fs.readFileSync(source).subarray(0, 2).toString("binary");
+  if (prefix !== "PK") throw new Error("APK does not have a ZIP signature");
+  const expected = digest(source);
+  const objectPath = `${bucket}/${key}`;
+  const tempDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "appsperms-r2-"));
+  const downloaded = path.join(tempDirectory, path.basename(source));
+  try {
+    // Versioned release keys are immutable. Permit an idempotent retry only when
+    // the already-published bytes have the exact same digest.
+    const probe = wranglerCommand(
+      ["r2", "object", "get", objectPath, `--file=${downloaded}`],
+      "pipe",
+    );
+    if (probe.status === 0) {
+      const existing = digest(downloaded);
+      if (existing !== expected) {
+        throw new Error(`immutable R2 key already exists with SHA-256 ${existing}`);
+      }
+      console.log(`Immutable R2 object already matches SHA-256: ${existing}`);
+      return;
+    }
+    const probeMessage = `${probe.stdout || ""}\n${probe.stderr || ""}`;
+    if (!/(not found|does not exist|NoSuchKey|10007)/i.test(probeMessage)) {
+      throw new Error(`could not determine whether immutable R2 key exists (Wrangler status ${probe.status})`);
+    }
+    fs.rmSync(downloaded, { force: true });
+
+    console.log(`Uploading ${path.basename(source)} (${size} bytes, SHA-256 ${expected}) to ${objectPath}`);
+    runWrangler([
+      "r2", "object", "put", objectPath,
+      `--file=${source}`,
+      "--content-type=application/vnd.android.package-archive",
+    ]);
+    runWrangler(["r2", "object", "get", objectPath, `--file=${downloaded}`]);
+    const actual = digest(downloaded);
+    if (actual !== expected) throw new Error(`R2 verification failed: expected ${expected}, received ${actual}`);
+    console.log(`Verified R2 object SHA-256: ${actual}`);
+  } finally {
+    fs.rmSync(tempDirectory, { recursive: true, force: true });
+  }
+}
+
+try {
+  main();
+} catch (error) {
+  console.error(`R2 upload failed: ${error instanceof Error ? error.message : String(error)}`);
   process.exit(1);
-});
+}
