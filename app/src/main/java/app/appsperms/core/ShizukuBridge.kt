@@ -9,6 +9,7 @@ import java.lang.reflect.Method
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Helper Shizuku: probe status akses, minta izin, dan jalankan perintah `appops`
@@ -127,26 +128,82 @@ object ShizukuBridge {
         val message: String get() = stderr.ifBlank { stdout }.trim().ifBlank { "exit $code" }
     }
 
-    /** Jalankan perintah dengan hak akses Shizuku. Panggil dari thread IO. */
-    fun shell(command: String): ShellResult? {
+    /**
+     * Jalankan perintah dengan hak akses Shizuku. Panggil dari thread IO.
+     * Output dibatasi dan proses diberi timeout supaya command ROM yang macet tidak menahan
+     * executor selamanya. Isi command sengaja tidak ditulis ke logcat karena terminal dapat
+     * memuat data sensitif.
+     */
+    fun shell(command: String, timeoutMs: Long = 60_000L): ShellResult? {
         val method = newProcessMethod ?: return null
+        if (command.isBlank() || timeoutMs !in 1_000L..300_000L) return null
         return try {
             val process = method.invoke(null, arrayOf("sh", "-c", command), null, null) as Process
+            val outBuffer = StringBuilder()
             val errBuffer = StringBuilder()
-            val errThread = Thread {
-                runCatching {
-                    process.errorStream.bufferedReader().forEachLine { errBuffer.append(it).append('\n') }
-                }
-            }.apply { isDaemon = true; start() }
-            val stdout = process.inputStream.bufferedReader().readText()
-            val code = process.waitFor()
-            runCatching { errThread.join(1_000) }
-            ShellResult(code, stdout, errBuffer.toString())
+            val outThread = streamCollector(process.inputStream.bufferedReader(), outBuffer)
+            val errThread = streamCollector(process.errorStream.bufferedReader(), errBuffer)
+            val exitCode = AtomicInteger(Int.MIN_VALUE)
+            val waiter = Thread {
+                exitCode.set(runCatching { process.waitFor() }.getOrDefault(-1))
+            }.apply { isDaemon = true; name = "appsperms-shell-wait"; start() }
+
+            waiter.join(timeoutMs)
+            val timedOut = waiter.isAlive
+            if (timedOut) {
+                runCatching { process.destroy() }
+                runCatching { process.inputStream.close() }
+                runCatching { process.errorStream.close() }
+                waiter.join(1_000L)
+            }
+            runCatching { outThread.join(2_000L) }
+            runCatching { errThread.join(2_000L) }
+
+            if (timedOut) {
+                ShellResult(124, bufferText(outBuffer), appendLine(errBuffer, "Command timed out"))
+            } else {
+                ShellResult(exitCode.get(), bufferText(outBuffer), bufferText(errBuffer))
+            }
         } catch (t: Throwable) {
-            Log.w(TAG, "shell gagal: $command", t)
+            Log.w(TAG, "shell gagal (${command.length} chars)", t)
             null
         }
     }
+
+    private fun streamCollector(reader: java.io.BufferedReader, target: StringBuilder): Thread =
+        Thread {
+            runCatching {
+                reader.use { input ->
+                    val buffer = CharArray(4_096)
+                    var stored = 0
+                    var truncated = false
+                    while (true) {
+                        val read = input.read(buffer)
+                        if (read < 0) break
+                        if (stored < MAX_SHELL_OUTPUT_CHARS) {
+                            val keep = minOf(read, MAX_SHELL_OUTPUT_CHARS - stored)
+                            synchronized(target) { target.append(buffer, 0, keep) }
+                            stored += keep
+                            if (keep < read) truncated = true
+                        } else {
+                            // Continue draining so a chatty child process cannot block on a full pipe.
+                            truncated = true
+                        }
+                    }
+                    if (truncated) synchronized(target) { target.append("\n[output truncated]") }
+                }
+            }
+        }.apply { isDaemon = true; name = "appsperms-shell-stream"; start() }
+
+    private fun bufferText(buffer: StringBuilder): String = synchronized(buffer) { buffer.toString() }
+
+    private fun appendLine(buffer: StringBuilder, line: String): String = synchronized(buffer) {
+        if (buffer.isNotEmpty() && buffer.last() != '\n') buffer.append('\n')
+        buffer.append(line)
+        buffer.toString()
+    }
+
+    private const val MAX_SHELL_OUTPUT_CHARS = 2 * 1024 * 1024
 
     // ------------------------------------------------------- perintah appops
 
@@ -208,6 +265,7 @@ object ShizukuBridge {
 
     /** Semua op milik satu paket dalam SATU perintah: `appops get <pkg>`. */
     fun shellReadOps(pkg: String): Map<String, OpStatus>? {
+        if (!ShellSafety.isValidPackageName(pkg)) return null
         val result = shell("appops get $pkg") ?: return null
         if (!result.ok) return null
         val parsed = parseAppOpsGet(result.stdout)
@@ -217,6 +275,7 @@ object ShizukuBridge {
 
     /** Baca ops untuk user tertentu */
     fun shellReadOpsForUser(pkg: String, userId: Int): Map<String, OpStatus>? {
+        if (!ShellSafety.isValidPackageName(pkg) || !ShellSafety.isValidUserId(userId)) return null
         val result = shell("appops get --user $userId $pkg") ?: shell("appops get $pkg")
         if (result?.ok != true) return null
         return parseAppOpsGet(result.stdout).ifEmpty { null }
@@ -227,6 +286,9 @@ object ShizukuBridge {
 
     /** Tulis satu op: `appops set --uid <pkg> <OP> <mode>` dengan support multi-user */
     fun shellSetOp(pkg: String, shellOp: String, status: OpStatus): String? {
+        if (!ShellSafety.isValidPackageName(pkg) || !ShellSafety.isValidAppOp(shellOp)) {
+            return "target AppOps tidak valid"
+        }
         // Try with --uid first (sets for all UIDs, handles clones)
         val resultUid = shell("appops set --uid $pkg $shellOp ${OpStatus.shellName(status)}")
         if (resultUid?.ok == true) return null
@@ -247,6 +309,9 @@ object ShizukuBridge {
 
     /** Set op untuk semua user sekaligus */
     fun shellSetOpAllUsers(pkg: String, shellOp: String, status: OpStatus): String? {
+        if (!ShellSafety.isValidPackageName(pkg) || !ShellSafety.isValidAppOp(shellOp)) {
+            return "target AppOps tidak valid"
+        }
         val users = listUsers()
         var firstError: String? = null
         var anySuccess = false
@@ -263,6 +328,7 @@ object ShizukuBridge {
 
     /** Baca satu op (fallback kalau `appops get <pkg>` tidak bisa diparse). */
     fun shellGetOp(pkg: String, shellOp: String): OpStatus {
+        if (!ShellSafety.isValidPackageName(pkg) || !ShellSafety.isValidAppOp(shellOp)) return OpStatus.UNKNOWN
         val result = shell("appops get $pkg $shellOp") ?: return OpStatus.UNKNOWN
         val text = result.stdout.ifBlank { result.stderr }
         if (text.isBlank() || text.contains("No operations", ignoreCase = true)) return OpStatus.DEFAULT
