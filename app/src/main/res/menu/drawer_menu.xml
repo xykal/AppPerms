@@ -7,6 +7,7 @@
         <item android:id="@+id/nav_batch" android:icon="@drawable/ic_batch" android:title="@string/nav_batch" />
         <item android:id="@+id/nav_terminal" android:icon="@drawable/ic_terminal" android:title="@string/nav_terminal" />
         <item android:id="@+id/nav_tweaks" android:icon="@drawable/ic_tune" android:title="@string/nav_tweaks" />
+        <item android:id="@+id/nav_device_care" android:icon="@drawable/ic_device_care" android:title="@string/nav_device_care" />
         <item android:id="@+id/nav_backup" android:icon="@drawable/ic_backup" android:title="@string/nav_backup" />
         <item android:id="@+id/nav_restore" android:icon="@drawable/ic_restore" android:title="@string/nav_restore" />
     </group>

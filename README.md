@@ -27,6 +27,7 @@ Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other ap
 - **Safe Tuning Layar & Animasi**: Pengaturan resolusi dan DPI (`wm size` dan `wm density`) yang dilengkapi pengaman auto-revert 15 detik, serta skala animasi global (0x, 0.5x, 1x).
 - **Aksi Massal (Batch)**: Mengubah status izin overlay untuk banyak aplikasi sekaligus dalam hitungan detik.
 - **Backup & Restore**: Simpan status konfigurasi perizinan ke clipboard teks sederhana dan pulihkan kapan saja.
+- **Device Care Lab**: Debloat bertingkat yang reversible, cache trim resmi Android, pembersihan cache selektif dengan root, serta Feature Lab untuk flag sistem Android yang legal. Paket kritis dilindungi dan nilai awal dapat dipulihkan.
 - **Lokal & Privat secara default**: Tidak mendeklarasikan `android.permission.INTERNET` dan tidak memuat iklan atau tracker. Data tetap lokal kecuali Anda sendiri menyalin atau mengekspornya.
 
 ### Unduh APK Resmi
@@ -68,6 +69,7 @@ It focuses on controlling `SYSTEM_ALERT_WINDOW` (*Display over other apps*) alon
 - **Safe Screen & Animation Tuning**: Adjust resolution and DPI (`wm size` / `wm density`) backed by a 15-second safety revert timer.
 - **Batch Actions**: Bulk allow, ignore, or reset overlay permissions across installed apps in seconds.
 - **Backup & Restore**: Export and import your permission configurations via plain-text clipboard format.
+- **Device Care Lab**: Tiered reversible debloat, Android's official cache trim, selective root cache cleanup, and a bounded Feature Lab for legitimate Android system flags. Critical packages are protected and original values can be restored.
 - **Local & private by default**: No `android.permission.INTERNET` declaration and no built-in telemetry, advertising, or trackers. Data stays on-device unless you copy or export it.
 
 ### Official Downloads

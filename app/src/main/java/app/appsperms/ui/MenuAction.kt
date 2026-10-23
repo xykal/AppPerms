@@ -9,6 +9,7 @@ enum class MenuAction {
     BATCH,
     TERMINAL,
     TWEAKS,
+    DEVICE_CARE,
     BACKUP,
     RESTORE,
     HISTORY,

@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.nav_batch -> handleMenu(MenuAction.BATCH)
                     R.id.nav_terminal -> handleMenu(MenuAction.TERMINAL)
                     R.id.nav_tweaks -> handleMenu(MenuAction.TWEAKS)
+                    R.id.nav_device_care -> handleMenu(MenuAction.DEVICE_CARE)
                     R.id.nav_backup -> handleMenu(MenuAction.BACKUP)
                     R.id.nav_restore -> handleMenu(MenuAction.RESTORE)
                     R.id.nav_history -> handleMenu(MenuAction.HISTORY)
@@ -456,6 +457,8 @@ class MainActivity : AppCompatActivity() {
             MenuAction.TERMINAL -> showTerminal()
 
             MenuAction.TWEAKS -> showTweaks()
+
+            MenuAction.DEVICE_CARE -> startActivity(Intent(this, DeviceCareActivity::class.java))
 
             MenuAction.BACKUP -> copyToClipboard(
                 viewModel.exportBackup(),
