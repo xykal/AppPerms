@@ -12,13 +12,18 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 CERT = "76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05"
+APP_VERSION = next(
+    line.split("=", 1)[1]
+    for line in (ROOT / "gradle.properties").read_text(encoding="utf-8").splitlines()
+    if line.startswith("APP_VERSION_NAME=")
+)
 
 
 class ReleaseTools(unittest.TestCase):
     def test_manifest_generator_emits_one_certificate_pinned_release(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            apk = root / "AppsPerms-1.8.0-stable-universal-release.apk"
+            apk = root / f"AppsPerms-{APP_VERSION}-stable-universal-release.apk"
             apk.write_bytes(b"PK\x03\x04test-release")
             output = root / "release.json"
             subprocess.run(
@@ -30,7 +35,7 @@ class ReleaseTools(unittest.TestCase):
                     "--channel",
                     "stable",
                     "--tag",
-                    "v1.8.0",
+                    f"v{APP_VERSION}",
                     "--source-commit",
                     "a" * 40,
                     "--published-utc",
@@ -54,13 +59,15 @@ class ReleaseTools(unittest.TestCase):
             self.assertEqual(artifact["signing_certificate_sha256"], CERT)
             self.assertEqual(
                 artifact["r2_key"],
-                "releases/1.8.0/AppsPerms-1.8.0-stable-universal-release.apk",
+                f"releases/{APP_VERSION}/"
+                f"AppsPerms-{APP_VERSION}-stable-universal-release.apk",
             )
             self.assertEqual(
                 artifact["urls"],
                 [
-                    "https://github.com/xykal/AppPerms/releases/download/v1.8.0/"
-                    "AppsPerms-1.8.0-stable-universal-release.apk"
+                    "https://github.com/xykal/AppPerms/releases/download/"
+                    f"v{APP_VERSION}/"
+                    f"AppsPerms-{APP_VERSION}-stable-universal-release.apk"
                 ],
             )
 
