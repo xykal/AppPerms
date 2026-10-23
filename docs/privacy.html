@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0E0E0E">
+  <title>AppsPerms Privacy</title>
+  <meta name="description" content="Privacy information for the local-processing AppsPerms Android app and its tracker-free static website.">
+  <link rel="canonical" href="https://appsperms.xyverse.my.id/privacy">
+  <style>
+    :root{color-scheme:dark;font:16px/1.7 system-ui,sans-serif;background:#0e0e0e;color:#ededed}
+    *{box-sizing:border-box}body{margin:0}main{width:min(760px,100%);margin:auto;padding:40px 22px 80px}
+    a{color:#ededed;text-underline-offset:3px}p,li{color:#b0b0b0}h1{line-height:1.15;margin-bottom:8px}
+    h2{font-size:1.15rem;margin-top:32px}.card{border:1px solid #2e2e2e;background:#161616;border-radius:14px;padding:18px;margin:22px 0}
+    .meta{color:#8a8a8a;font-size:.9rem}.back{display:inline-block;margin-bottom:28px}code{overflow-wrap:anywhere}
+    a:focus-visible{outline:2px solid #ededed;outline-offset:4px}
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← AppsPerms</a>
+  <h1>Privacy</h1>
+  <p class="meta">Effective 23 October 2026</p>
+
+  <div class="card">
+    <strong>Summary:</strong> the AppsPerms Android app does not request the Internet permission and has no advertising, analytics, or tracking SDK. Its website does not load analytics or tracking scripts.
+  </div>
+
+  <h2>Android app</h2>
+  <ul>
+    <li>App, package, AppOps, history, and settings data are processed on the device.</li>
+    <li>The app does not declare <code>android.permission.INTERNET</code>.</li>
+    <li>Shizuku or optional root access is used only for actions the user requests.</li>
+    <li>Privileged state is excluded from Android cloud backup and device transfer.</li>
+    <li>No telemetry, advertising identifier, analytics SDK, or remote account is used.</li>
+  </ul>
+
+  <h2>Website and downloads</h2>
+  <ul>
+    <li>The site is static and does not use Google Analytics or advertising scripts.</li>
+    <li>A local browser preference named <code>site_lang</code> remembers the selected language.</li>
+    <li>Cloudflare, GitHub, or the configured download host may process ordinary request data such as IP address, user agent, time, and requested file for delivery, abuse prevention, and security under their own policies.</li>
+    <li>Donation links open third-party services only after the user chooses them.</li>
+  </ul>
+
+  <h2>Verification and contact</h2>
+  <p>Release filenames, sizes, and SHA-256 values are published in <a href="/data/release.json">release.json</a>. Submit sensitive security reports through the repository's <a href="https://github.com/xykal/AppPerms/security/advisories/new" rel="noopener">private advisory form</a>; use <a href="https://github.com/xykal/AppPerms/issues" rel="noopener">GitHub Issues</a> only for non-sensitive privacy questions.</p>
+</main>
+</body>
+</html>

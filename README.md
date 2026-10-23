@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/version-1.8.0-orange.svg?style=flat-square)](https://github.com/xykal/AppPerms/releases)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
-[![VirusTotal](https://img.shields.io/badge/virustotal-0%2F67%20clean-brightgreen.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
+[![Release integrity](https://img.shields.io/badge/integrity-SHA--256%20published-blue.svg?style=flat-square)](https://appsperms.xyverse.my.id/#keamanan)
 [![Platform](https://img.shields.io/badge/platform-Shizuku%20%7C%20Root-informational.svg?style=flat-square)](https://shizuku.rikka.app/)
 [![Privacy](https://img.shields.io/badge/privacy-0%20internet%20permission-success.svg?style=flat-square)](https://appsperms.xyverse.my.id/)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/xykal/AppPerms/build.yml?branch=main&style=flat-square)](https://github.com/xykal/AppPerms/actions)
@@ -21,35 +21,36 @@ Fokus utama aplikasi ini adalah op `SYSTEM_ALERT_WINDOW` (*Display over other ap
 
 ### Fitur Utama
 
-- **Pemindaian Kilat (~150ms)**: Menggunakan lazy on-demand icon loading dengan status counter realtime ("Memeriksa aplikasi 48/312...").
-- **0ms Optimistic UI**: Perubahan status langsung tercermin di antarmuka seketika tanpa jeda, dengan mekanisme rollback otomatis jika eksekusi ditolak oleh sistem.
+- **Pemindaian Lokal yang Cepat**: Menggunakan lazy on-demand icon loading dengan status counter realtime ("Memeriksa aplikasi 48/312...").
+- **Optimistic UI**: Perubahan status langsung tercermin di antarmuka seketika tanpa jeda, dengan mekanisme rollback otomatis jika eksekusi ditolak oleh sistem.
 - **Terminal Shizuku**: Menjalankan perintah shell langsung dari perangkat dengan UID 2000 (shell) atau UID 0 (root) tanpa memerlukan kabel data atau PC wireless debugging.
 - **Safe Tuning Layar & Animasi**: Pengaturan resolusi dan DPI (`wm size` dan `wm density`) yang dilengkapi pengaman auto-revert 15 detik, serta skala animasi global (0x, 0.5x, 1x).
 - **Aksi Massal (Batch)**: Mengubah status izin overlay untuk banyak aplikasi sekaligus dalam hitungan detik.
 - **Backup & Restore**: Simpan status konfigurasi perizinan ke clipboard teks sederhana dan pulihkan kapan saja.
 - **Device Care Lab**: Debloat bertingkat yang reversible, cache trim resmi Android, pembersihan cache selektif dengan root, serta Feature Lab untuk flag sistem Android yang legal. Paket kritis dilindungi dan nilai awal dapat dipulihkan.
-- **100% Offline & Privat**: Nol (0) izin internet di `AndroidManifest.xml`. Data mustahil meninggalkan perangkat Anda.
+- **Lokal & Privat secara default**: Tidak mendeklarasikan `android.permission.INTERNET` dan tidak memuat iklan atau tracker. Data tetap lokal kecuali Anda sendiri menyalin atau mengekspornya.
 
 ### Unduh APK Resmi
 
-| Varian | Link Unduh Langsung | Mirror Cadangan | Catatan |
-|---|---|---|---|
-| Release APK (Rekomendasi) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed keystore resmi XyVerse, R8 minified (~2.2 MB) |
-| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Logging logcat aktif, unstripped (~7.2 MB) |
+| Artefak | Unduhan immutable | Catatan |
+|---|---|---|
+| Release APK (Rekomendasi) | [AppsPerms v1.8.0 universal](https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk) | Paket `app.appsperms`, ditandatangani sertifikat rilis resmi, R8 minified (~2.2 MB) |
+
+Build debug hanya artefak CI untuk pengujian dan tidak dipromosikan sebagai rilis publik.
 
 ### Website Resmi & Keamanan
 
 Website Resmi: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.id/)
 
-- Scan Antivirus VirusTotal: 0/67 Clean (100% Undetected).
+- Status VirusTotal ditampilkan hanya jika pemindaian rilis telah selesai dan SHA-256 cocok; jika belum, statusnya **Pending / Not scanned**.
 - Audit Keamanan: 0 permission internet di AndroidManifest.xml.
 - Keystore Resmi: Ditandatangani RSA 4096-bit resmi XyVerse.
 
-```
-SHA-256 : 82:A0:2C:AE:E2:7B:8B:9B:09:E7:00:B8:31:3D:D4:AD:E5:CF:9B:94:6B:01:BE:6C:54:EC:33:98:4A:B0:04:30
-SHA-1   : 99:55:67:5C:19:0C:BB:4B:0F:D5:08:94:74:08:D2:B8:92:22:69:FF
-MD5     : 86:4C:BF:D8:C3:9B:A3:F3:89:B8:5D:64:C2:A1:B7:D6
-Alias   : overlayops (CN=OverlayOps, OU=Release, O=xykal, C=ID)
+```text
+Signing certificate SHA-256: 76:FF:DC:65:E3:F8:C6:AE:F0:D3:FF:8B:75:09:9E:DE:33:63:81:30:5C:FB:2F:7D:DA:8D:29:D8:31:CC:AC:05
+Signing certificate SHA-1:   56:A5:36:1D:DC:B0:2A:54:22:81:8C:CD:84:73:AD:05:F4:7A:D6:32
+Signing certificate MD5:     3D:1B:7B:5A:49:0B:C6:A5:F4:D5:9A:68:22:5B:D5:48
+Subject: CN=OverlayOps, OU=Release, O=xykal, C=ID
 ```
 
 ---
@@ -62,21 +63,22 @@ It focuses on controlling `SYSTEM_ALERT_WINDOW` (*Display over other apps*) alon
 
 ### Highlights
 
-- **Sub-200ms App Scanning**: On-demand icon caching with a live progress indicator ("Checking apps 48/312...").
-- **0ms Optimistic UI**: Instant UI feedback on permission changes with automatic rollback on ROM-level rejection.
+- **Fast Local App Scanning**: On-demand icon caching with a live progress indicator ("Checking apps 48/312...").
+- **Optimistic UI**: Instant UI feedback on permission changes with automatic rollback on ROM-level rejection.
 - **Embedded Shizuku Terminal**: Run ADB shell commands directly on your device without a PC or wireless debugging setup.
 - **Safe Screen & Animation Tuning**: Adjust resolution and DPI (`wm size` / `wm density`) backed by a 15-second safety revert timer.
 - **Batch Actions**: Bulk allow, ignore, or reset overlay permissions across installed apps in seconds.
 - **Backup & Restore**: Export and import your permission configurations via plain-text clipboard format.
 - **Device Care Lab**: Tiered reversible debloat, Android's official cache trim, selective root cache cleanup, and a bounded Feature Lab for legitimate Android system flags. Critical packages are protected and original values can be restored.
-- **Zero Internet Permissions**: No `android.permission.INTERNET` declared. Zero telemetry, zero tracking, 100% on-device.
+- **Local & private by default**: No `android.permission.INTERNET` declaration and no built-in telemetry, advertising, or trackers. Data stays on-device unless you copy or export it.
 
 ### Official Downloads
 
-| Variant | Direct Download Link | Mirror | Notes |
-|---|---|---|---|
-| Release APK (Recommended) | [dl.appsperms.xyverse.my.id/AppsPerms-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Signed by official XyVerse RSA-4096 keystore, R8 minified |
-| Debug APK (Troubleshooting) | [dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk](https://dl.appsperms.xyverse.my.id/AppsPerms-debug-latest.apk) | [GitHub Releases](https://github.com/xykal/AppPerms/releases/latest) | Full logcat logging, unstripped |
+| Artifact | Immutable download | Notes |
+|---|---|---|
+| Release APK (Recommended) | [AppsPerms v1.8.0 universal](https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk) | Package `app.appsperms`, official release certificate, R8 minified (~2.2 MB) |
+
+Debug builds are CI-only test artifacts and are not promoted as public releases.
 
 Official Portal: [https://appsperms.xyverse.my.id/](https://appsperms.xyverse.my.id/)
 

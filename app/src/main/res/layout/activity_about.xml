@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:gravity="center"
-                    android:text="Kelola 19 izin tersembunyi AppOps via Shizuku tanpa root. 2.2MB, 0 internet, 100% offline."
+                    android:text="Kelola 19 izin tersembunyi AppOps via Shizuku tanpa root. Tanpa izin internet dan tanpa telemetry."
                     android:textColor="#9A9A9A"
                     android:textSize="13sp"
                     android:lineSpacingExtra="2dp" />
@@ -169,7 +169,7 @@
                             android:background="@drawable/bg_chip_small"
                             android:paddingHorizontal="14dp"
                             android:paddingVertical="7dp"
-                            android:text="⚡ Fast 150ms"
+                            android:text="⚡ Fast local scan"
                             android:textColor="#EDEDED"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -193,7 +193,7 @@
                             android:background="@drawable/bg_chip_small"
                             android:paddingHorizontal="14dp"
                             android:paddingVertical="7dp"
-                            android:text="📦 2.2MB"
+                            android:text="📦 Universal APK"
                             android:textColor="#EDEDED"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -216,7 +216,7 @@
                             android:background="@drawable/bg_chip_small"
                             android:paddingHorizontal="14dp"
                             android:paddingVertical="7dp"
-                            android:text="🌏 Offline 100%"
+                            android:text="🌏 Pemrosesan lokal"
                             android:textColor="#EDEDED"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -248,7 +248,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="0 izin internet di Manifest. Mustahil kirim data keluar. 100% offline, tanpa iklan, tanpa tracker. Bisa diverifikasi via VirusTotal &amp; SHA-256."
+                    android:text="Tidak ada izin internet di Manifest, telemetry, iklan, atau tracker. Cocokkan SHA-256 dan status pemindaian dengan manifest rilis di situs resmi."
                     android:textColor="#9A9A9A"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
@@ -278,7 +278,7 @@
                         android:background="@drawable/bg_chip_small"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="5dp"
-                        android:text="VirusTotal 0/67 Clean"
+                        android:text="Status pemindaian: lihat manifest rilis"
                         android:textColor="#4ADE80"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -377,7 +377,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="AppsPerms gratis selamanya, tanpa iklan. Donasi membantu server, domain, dan waktu pengembangan. Tidak wajib, tapi sangat berarti untuk tetap offline &amp; open source."
+                    android:text="AppsPerms gratis selamanya, tanpa iklan. Donasi membantu server, domain, dan waktu pengembangan. Tidak wajib, tapi sangat berarti agar tetap tanpa izin internet &amp; open source."
                     android:textColor="#9A9A9A"
                     android:textSize="12sp"
                     android:lineSpacingExtra="3dp" />
@@ -624,7 +624,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="AppsPerms · Built-in XyVerse by Kall · v1.8.0 · 2.2MB • 0 Internet • 100% Offline • Brand Kit Official"
+                android:text="AppsPerms · Built-in XyVerse by Kall · No Internet Permission • Open Source"
                 android:textColor="#6E6E6E"
                 android:textSize="11sp" />
         </LinearLayout>

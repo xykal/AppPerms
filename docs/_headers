@@ -1,50 +1,61 @@
-# Security & Caching Headers untuk AppsPerms
-# Cloudflare Pages _headers format
-
-/apk/*
-  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
-  Content-Type: application/vnd.android.package-archive
-  Content-Disposition: attachment
-  X-Content-Type-Options: nosniff
-  Access-Control-Allow-Origin: *
-
-/AppsPerms-latest.apk
-  Cache-Control: public, max-age=3600, s-maxage=86400
-  Content-Type: application/vnd.android.package-archive
-  Content-Disposition: attachment; filename="AppsPerms-latest.apk"
-  X-Content-Type-Options: nosniff
-
-/AppsPerms-debug-latest.apk
-  Cache-Control: public, max-age=3600, s-maxage=86400
-  Content-Type: application/vnd.android.package-archive
-  Content-Disposition: attachment; filename="AppsPerms-debug-latest.apk"
-
-/sitemap.xml
-  Cache-Control: public, max-age=3600, s-maxage=86400
-  Content-Type: application/xml; charset=utf-8
-  X-Robots-Tag: index, follow
-
-/robots.txt
-  Cache-Control: public, max-age=3600, s-maxage=86400
-  Content-Type: text/plain; charset=utf-8
-
-/googleb2a7847179613098.html
-  Cache-Control: public, max-age=3600
-  Content-Type: text/html; charset=utf-8
-
+# Global browser hardening. The site has no third-party scripts or analytics.
 /*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: interest-cohort=(), browsing-topics=()
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+
+# HTML and release discovery documents must revalidate after every deployment.
+/
+  Cache-Control: public, max-age=0, must-revalidate
   X-Robots-Tag: index, follow
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
-  Content-Type: text/html; charset=utf-8
+  X-Robots-Tag: index, follow
   Link: </sitemap.xml>; rel="sitemap"; type="application/xml"
 
-/thanks.html
+/privacy
   Cache-Control: public, max-age=0, must-revalidate
+  X-Robots-Tag: index, follow
+
+/privacy.html
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Robots-Tag: index, follow
+
+/thanks
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+
+/thanks.html
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+
+/404.html
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+
+/data/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex, nofollow
+
+# Pages hosts no APK binaries. These mutable compatibility paths are short-lived
+# redirects to the exact immutable GitHub Release asset.
+/apk/AppsPerms-latest.apk
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+
+/AppsPerms-latest.apk
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: index, follow
+
+/robots.txt
+  Cache-Control: public, max-age=3600, must-revalidate

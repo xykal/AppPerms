@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "version": "1.8.0",
+  "version_code": 10800,
+  "channel": "stable",
+  "tag": "v1.8.0",
+  "published_utc": "2026-09-25T18:54:48Z",
+  "source_commit": "984d94fee28c31dde66a4c407cb8b4f37c8ecaf8",
+  "android": {
+    "min_sdk": 24,
+    "minimum_version": "7.0",
+    "target_sdk": 34
+  },
+  "artifacts": {
+    "release": {
+      "public": true,
+      "filename": "AppsPerms-1.8.0-stable-universal-release.apk",
+      "package_id": "app.appsperms",
+      "bytes": 2314608,
+      "sha256": "c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80",
+      "r2_key": "releases/1.8.0/AppsPerms-1.8.0-stable-universal-release.apk",
+      "urls": [
+        "https://github.com/xykal/AppPerms/releases/download/v1.8.0/AppsPerms-1.8.0-stable-universal-release.apk"
+      ],
+      "signing_certificate_sha256": "76ffdc65e3f8c6aef0d3ff8b75099ede336381305cfb2f7dda8d29d831ccac05"
+    }
+  },
+  "virustotal": {
+    "status": "not_scanned",
+    "checked": false,
+    "detected": null,
+    "total": null,
+    "sha256": "c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80",
+    "permalink": "https://www.virustotal.com/gui/file/c7e83326a75b405bbb698be172e583333a5f149adb2906882153a2caf88beb80"
+  }
+}

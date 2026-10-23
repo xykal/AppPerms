@@ -1,21 +1,32 @@
 name = "appsperms-dl"
 main = "src/index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2026-10-22"
+workers_dev = false
 
-# Custom domain: dl.appsperms.xyverse.my.id
-# Setup di Cloudflare Dashboard -> Workers -> Custom Domains
-
-# R2 Bucket untuk hosting APK (opsional, kalau mau unlimited storage)
-# [[r2_buckets]]
-# binding = "APK_BUCKET"
-# bucket_name = "appsperms-apk"
+# `wrangler deploy --env production` provisions the custom hostname through
+# Workers Custom Domains instead of relying on a standalone proxied DNS record.
+[env.production]
+name = "appsperms-dl"
+routes = [
+  { pattern = "dl.appsperms.xyverse.my.id", custom_domain = true }
+]
 
 [vars]
-# Primary GitHub repo yang aktif (bukan yang suspend)
-GITHUB_REPO = "xykal/AppPerms"
-GITHUB_VERSION = "v1.7.3"
-# Fallback CDN
-PRIMARY_ORIGIN = "https://appsperms.xyverse.my.id"
+MAIN_SITE_URL = "https://appsperms.xyverse.my.id/"
+RELEASE_MANIFEST_URL = "https://appsperms.xyverse.my.id/data/release.json"
+MIRROR_TIMEOUT_MS = "8000"
 
-# [env.production]
-# routes = [{ pattern = "dl.appsperms.xyverse.my.id/*", zone_name = "xyverse.my.id" }]
+[env.production.vars]
+MAIN_SITE_URL = "https://appsperms.xyverse.my.id/"
+RELEASE_MANIFEST_URL = "https://appsperms.xyverse.my.id/data/release.json"
+MIRROR_TIMEOUT_MS = "8000"
+
+[[r2_buckets]]
+binding = "APK_BUCKET"
+bucket_name = "appsperms-apk"
+preview_bucket_name = "appsperms-apk-preview"
+
+[[env.production.r2_buckets]]
+binding = "APK_BUCKET"
+bucket_name = "appsperms-apk"
+preview_bucket_name = "appsperms-apk-preview"

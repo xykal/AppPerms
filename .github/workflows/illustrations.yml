@@ -1,57 +1,73 @@
-name: Illustration & web checks
+name: Web, release and Worker checks
 
 on:
+  # This workflow supplies a required status check, so it must run for every PR.
+  # Path filters would leave dependency-only PRs permanently blocked.
   pull_request:
-    paths:
-      - 'docs/**'
-      - 'design/illustrations/**'
-      - 'app/src/main/**'
-      - 'tests/**'
-      - 'tools/**'
-      - '.github/workflows/illustrations.yml'
   push:
-    branches: [main, master]
+    branches: [main]
     paths:
-      - 'docs/**'
-      - 'design/illustrations/**'
-      - 'app/src/main/**'
-      - 'tests/**'
-      - 'tools/**'
-      - '.github/workflows/illustrations.yml'
+      - "docs/**"
+      - "design/illustrations/**"
+      - "app/src/main/**"
+      - "tests/**"
+      - "tools/**"
+      - "scripts/**"
+      - "workers/**"
+      - "gradle.properties"
+      - "README.md"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: illustrations-${{ github.ref }}
+  group: web-worker-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  illustrations:
-    name: Transparent assets, Android resources & web smoke tests
+  checks:
+    name: Browser, metadata, assets and Worker tests
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          python-version: '3.12'
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
           cache: pip
           cache-dependency-path: tools/requirements-illustrations.txt
-      - name: Install test tools
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Install browser test tools
         run: |
           python -m pip install -r tools/requirements-illustrations.txt
           python -m playwright install --with-deps chromium
-      - name: Validate assets, XML and browser behavior
+
+      - name: Validate release metadata
+        run: bash scripts/check-version-sync.sh
+
+      - name: Test download Worker
+        working-directory: workers/dl-worker
+        run: npm run check
+
+      - name: Validate assets, HTML and browser behavior
         env:
           ILLUSTRATION_SCREENSHOTS: out/illustration-smoke
-        run: python -m unittest discover -s tests -p 'test_illustrations*.py' -v
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
       - name: Retain UI review screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: illustration-smoke
+          name: web-smoke-${{ github.sha }}
           path: out/illustration-smoke/*.png
           if-no-files-found: ignore
           retention-days: 7

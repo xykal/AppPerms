@@ -355,11 +355,11 @@
     <string name="history_cleared">Riwayat dibersihkan</string>
 
     <string name="about_version">Versi %1$s · build %2$d</string>
-    <string name="about_tagline">Kontrol AppOps Android secara ringan melalui Shizuku — tanpa root, iklan, pelacak, atau koneksi internet.</string>
+    <string name="about_tagline">Kontrol AppOps Android secara ringan melalui Shizuku — tanpa root permanen, iklan, pelacak, atau izin internet.</string>
     <string name="about_privacy_title">PRIVASI &amp; KEAMANAN</string>
     <string name="about_privacy_body">✓ Tidak meminta izin internet
-✓ Semua proses berlangsung di perangkat
-✓ Source code terbuka dan APK dipindai VirusTotal
+✓ Data aplikasi diproses lokal kecuali Anda menyalin atau mengekspornya
+✓ Source code terbuka; rilis resmi memuat SHA-256 dan identitas penanda tangan
 ✓ Perubahan dapat dikembalikan ke bawaan Android</string>
     <string name="about_website">Website</string>
     <string name="about_source">Source code</string>
