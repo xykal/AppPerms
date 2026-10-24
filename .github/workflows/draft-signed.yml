@@ -1,0 +1,179 @@
+name: Build signed draft candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: Existing unpublished draft tag name
+        required: true
+        default: v1.9.0
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: appsperms-signed-draft-${{ inputs.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    name: Build, verify and attach signed draft APK
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: production
+    steps:
+      - name: Checkout protected main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
+        with:
+          packages: "platforms;android-34 build-tools;34.0.0 platform-tools"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
+
+      - name: Validate exact unpublished draft
+        id: draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ inputs.tag_name }}
+        run: |
+          set -euo pipefail
+          [[ "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          VERSION=$(sed -n 's/^APP_VERSION_NAME=//p' gradle.properties)
+          CODE=$(sed -n 's/^APP_VERSION_CODE=//p' gradle.properties)
+          [[ "$TAG_NAME" == "v$VERSION" ]]
+          [[ "$CODE" =~ ^[0-9]+$ ]]
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG_NAME" >/dev/null 2>&1; then
+            echo "::error::Refusing a draft-candidate build after the protected tag exists"
+            exit 1
+          fi
+          mapfile -t IDS < <(
+            gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+              --jq ".[] | select(.draft == true and .tag_name == \"$TAG_NAME\") | .id"
+          )
+          [[ "${#IDS[@]}" -eq 1 ]]
+          RELEASE_ID=${IDS[0]}
+          TARGET=$(gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" --jq .target_commitish)
+          [[ "$TARGET" == "$GITHUB_SHA" ]] || {
+            echo "::error::Draft target $TARGET does not match checked-out main $GITHUB_SHA"
+            exit 1
+          }
+          {
+            echo "release_id=$RELEASE_ID"
+            echo "version=$VERSION"
+            echo "version_code=$CODE"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Restore release signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_BASE64"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          chmod 600 "$RUNNER_TEMP/release.jks"
+
+      - name: Test, lint and build signed candidate once
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/release.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          VERSION_CHANNEL: stable
+        run: |
+          set -euo pipefail
+          bash ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleRelease \
+            --no-daemon --console=plain --stacktrace
+
+      - name: Verify signed candidate identity
+        id: artifact
+        env:
+          EXPECTED_VERSION: ${{ steps.draft.outputs.version }}
+          EXPECTED_VERSION_CODE: ${{ steps.draft.outputs.version_code }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          mapfile -t RELEASES < <(find app/build/outputs/apk/release -type f -name '*-release.apk' | sort)
+          test "${#RELEASES[@]}" -eq 1
+          EXPECTED_NAME="AppsPerms-${EXPECTED_VERSION}-stable-universal-release.apk"
+          [[ "$(basename "${RELEASES[0]}")" == "$EXPECTED_NAME" ]]
+          cp "${RELEASES[0]}" "out/$EXPECTED_NAME"
+          APK="out/$EXPECTED_NAME"
+          APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+          AAPT="$ANDROID_HOME/build-tools/34.0.0/aapt"
+
+          "$APKSIGNER" verify --verbose --print-certs "$APK" | tee out/signing-certificate.txt
+          grep -Fq 'Verified using v2 scheme (APK Signature Scheme v2): true' out/signing-certificate.txt
+          grep -Fq 'Verified using v3 scheme (APK Signature Scheme v3): true' out/signing-certificate.txt
+          CERT_SHA=$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' out/signing-certificate.txt | head -n1)
+          EXPECTED_CERT=$(tr -d '[:space:]' < app/signing-certificate.sha256)
+          [[ "${CERT_SHA,,}" == "$EXPECTED_CERT" ]]
+
+          "$AAPT" dump badging "$APK" | tee out/apk-badging.txt
+          grep -Fq "package: name='app.appsperms' versionCode='$EXPECTED_VERSION_CODE' versionName='$EXPECTED_VERSION'" out/apk-badging.txt
+          "$AAPT" dump permissions "$APK" | tee out/apk-permissions.txt
+          ! grep -Fq android.permission.INTERNET out/apk-permissions.txt
+          "$AAPT" dump xmltree "$APK" AndroidManifest.xml | tee out/apk-manifest.txt
+          grep -Eq 'android:allowBackup.*0x0$' out/apk-manifest.txt
+          grep -Eq 'android:fullBackupContent.*0x0$' out/apk-manifest.txt
+          grep -Eq 'android:dataExtractionRules.*@0x' out/apk-manifest.txt
+          sha256sum "$APK" | tee out/SHA256SUMS.qa
+          {
+            echo "path=$APK"
+            echo "filename=$EXPECTED_NAME"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Attach and re-download exact signed bytes without publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ steps.draft.outputs.release_id }}
+          APK: ${{ steps.artifact.outputs.path }}
+          FILENAME: ${{ steps.artifact.outputs.filename }}
+        run: |
+          set -euo pipefail
+          mapfile -t ASSET_IDS < <(
+            gh api "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?per_page=100" \
+              --jq ".[] | select(.name == \"$FILENAME\") | .id"
+          )
+          if [[ "${#ASSET_IDS[@]}" -eq 0 ]]; then
+            RESPONSE="$RUNNER_TEMP/uploaded-asset.json"
+            curl --fail --silent --show-error \
+              -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -H "Content-Type: application/vnd.android.package-archive" \
+              --data-binary "@$APK" \
+              "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$FILENAME&label=Production-signed%20QA%20candidate" \
+              > "$RESPONSE"
+            ASSET_ID=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["id"])' "$RESPONSE")
+          elif [[ "${#ASSET_IDS[@]}" -eq 1 ]]; then
+            ASSET_ID=${ASSET_IDS[0]}
+          else
+            echo "::error::Draft contains duplicate canonical APK assets"
+            exit 1
+          fi
+          gh api -H 'Accept: application/octet-stream' \
+            "repos/$GITHUB_REPOSITORY/releases/assets/$ASSET_ID" > "$RUNNER_TEMP/downloaded.apk"
+          cmp "$APK" "$RUNNER_TEMP/downloaded.apk"
+          # Deliberately stop here: never create a tag or publish the draft.
+
+      - name: Retain verified signed candidate
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: signed-draft-${{ inputs.tag_name }}-${{ github.sha }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 30
