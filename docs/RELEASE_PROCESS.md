@@ -32,6 +32,20 @@ Configure these controls before the first hardened release:
 5. Complete the real-device/OEM test matrix.
 6. Create a signed, protected tag such as `v1.8.1` or `v1.8.1-beta`.
 
+## Signed draft candidate for device QA
+
+When real-device QA needs production signing before a public tag exists, run
+**Build signed draft candidate** against protected `main`. The workflow requires
+an existing unique draft whose tag name matches `APP_VERSION_NAME`, whose target
+is the exact checked-out commit, and for which no Git tag exists. It builds once
+inside the reviewed `production` Environment, verifies package/version,
+permissions, backup flags, v2/v3 signatures, and the pinned certificate, then
+attaches and re-downloads the canonical APK without publishing the draft.
+
+A debug QA asset must be removed before the protected tag is created. The normal
+release workflow remains authoritative and refuses unexpected or mismatched
+assets when publication later begins.
+
 ## Automated publication
 
 `.github/workflows/release.yml` then:

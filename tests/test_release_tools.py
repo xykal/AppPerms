@@ -132,6 +132,18 @@ class ReleaseTools(unittest.TestCase):
         )
         self.assertEqual(release_workflow.count("vars.R2_ENABLED == 'true'"), 2)
 
+    def test_signed_draft_workflow_cannot_publish_or_create_a_tag(self):
+        workflow = (ROOT / ".github/workflows/draft-signed.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("environment: production", workflow)
+        self.assertIn("git ls-remote --exit-code --tags", workflow)
+        self.assertIn("cmp \"$APK\" \"$RUNNER_TEMP/downloaded.apk\"", workflow)
+        self.assertNotIn("gh release edit", workflow)
+        self.assertNotIn("--draft=false", workflow)
+        self.assertNotIn("git tag ", workflow)
+
     def test_r2_uploader_is_idempotent_and_refuses_overwrite(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
